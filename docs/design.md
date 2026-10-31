@@ -182,8 +182,9 @@ records, per tenant:
 plus the step's free KV blocks and the wall time of the whole `schedule()`
 call. A bounded queue and a writer thread keep disk I/O off the scheduling
 thread. If the writer falls behind, records are counted as dropped instead of
-stalling the engine. `bench/report.py` turns these lines into the service
-timelines in the README.
+stalling the engine, and the next record that gets through carries the
+running total as `dropped`. `bench/report.py` turns these lines into the
+service timelines in the README.
 
 ## Limitations
 
