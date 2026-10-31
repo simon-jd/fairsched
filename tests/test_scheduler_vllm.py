@@ -5,6 +5,7 @@ Runs in the pinned container: ``scripts/test.sh``. Skipped where vLLM is absent.
 from __future__ import annotations
 
 import importlib.util
+import json
 import unittest
 
 HAVE_VLLM = importlib.util.find_spec("vllm") is not None
@@ -117,6 +118,20 @@ class SchedulerInVllmTest(unittest.TestCase):
         # for a moment and becomes vLLM's KV-pressure victim.
         self.assertGreater(self.light_tenant_under_kv_pressure("counter"), 0)
         self.assertEqual(self.light_tenant_under_kv_pressure("kv_share"), 0)
+
+    def test_step_log_records_gpu_work_per_tenant(self):
+        s = make_scheduler(mode="passthrough", budget=4096)
+        engine = Engine(s)
+        engine.add(make_request("A", 64, max_tokens=4))
+        engine.run_until_idle()
+        s.fairsched_log.close()
+        steps = [json.loads(line) for line in s.fairsched_log.path.read_text().splitlines()]
+        steps = [r for r in steps if r.get("type") == "step"]
+        self.assertEqual(steps[0]["work"]["A"], {"q": 64, "d": 0, "attn": 64 * 65 // 2})
+        for row in steps[1:]:
+            self.assertEqual((row["work"]["A"]["q"], row["work"]["A"]["d"]), (0, 1))
+        scheduled = sum(r["scheduled"]["A"]["prefill"] + r["scheduled"]["A"]["decode"] for r in steps)
+        self.assertEqual(sum(r["work"]["A"]["q"] + r["work"]["A"]["d"] for r in steps), scheduled)
 
     def test_abort_with_step_in_flight_marks_its_tokens_wasted(self):
         s = make_scheduler(mode="vtc")

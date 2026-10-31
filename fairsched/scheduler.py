@@ -71,6 +71,7 @@ class TenantSchedulerMixin:
         self.fairsched_pending: dict[int, int] = {}                      # id(SchedulerOutput) -> step
         self.fairsched_preempted: dict[str, int] = {}
         self.fairsched_finished: set[str] = set()                        # freed, metadata not yet dropped
+        self.fairsched_work: dict[str, dict[str, int]] = {}              # this step's GPU work, per tenant
 
     # Admission ---------------------------------------------------------------
 
@@ -84,6 +85,7 @@ class TenantSchedulerMixin:
         step = self.current_step + 1
         self.fairsched.begin_step(step)
         self.fairsched_preempted = {}
+        self.fairsched_work = {}
         started = time.perf_counter_ns()
         if self.fairsched_mode == "vtc":
             self.running[:] = self.fairsched.order_running(self.running)
@@ -117,6 +119,16 @@ class TenantSchedulerMixin:
                                   recompute_prefill=_overlap(done, start, min(end, prompt)),
                                   recompute_decode=_overlap(done, max(start, prompt), end))
             self.fairsched_executed[request_id] = _merge(done, start, end)
+            # What the GPU does for it, for fitting step time: decode steps
+            # (one new position after the prompt), query tokens run as prefill
+            # (prompt chunks and recompute), and causal attention pairs.
+            work = self.fairsched_work.setdefault(self.fairsched.requests[request_id]["tenant"],
+                                                  {"q": 0, "d": 0, "attn": 0})
+            if tokens == 1 and start >= prompt:
+                work["d"] += 1
+            else:
+                work["q"] += tokens
+            work["attn"] += tokens * start + tokens * (tokens + 1) // 2
         super()._update_after_schedule(scheduler_output)
 
     def _preempt_request(self, request, timestamp, drop_stale_output=False):
@@ -174,7 +186,7 @@ class TenantSchedulerMixin:
         waiting = self.waiting.counts() if self.fairsched_mode == "vtc" else self._fairsched_count(self.waiting)
         self.fairsched_log.write({
             "type": "step", "step": step, "t": time.time(), "sched_ns": elapsed_ns,
-            "scheduled": per_tenant, "running": running, "waiting": waiting,
+            "scheduled": per_tenant, "work": self.fairsched_work, "running": running, "waiting": waiting,
             "preempted": self.fairsched_preempted, "counters": dict(self.fairsched.counters),
             "accounts": dict(self.fairsched.accounts), "wasted": dict(self.fairsched.wasted),
             "free_blocks": self.kv_cache_manager.block_pool.get_num_free_blocks(),
