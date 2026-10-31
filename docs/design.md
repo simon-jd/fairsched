@@ -85,8 +85,8 @@ The plugin uses both phases without adding a decision point of its own:
   is not always the heavy tenant. The lift rule (below) restarts a returning
   tenant at the lowest backlogged counter, so a light tenant that keeps
   coming back can briefly lead, and then its newest request is the victim. In
-  the noisy-neighbour runs the interactive tenant lost 11–20 requests this way
-  (the heavy tenant 30–33); under FCFS it lost 0–1, under static priority 0.
+  the noisy-neighbour runs the interactive tenant lost 8–20 requests this way
+  (the heavy tenant 23–33); under FCFS it lost 0–8, under static priority 0.
 * **Admission.** The tenant queue decides which waiting request gets the
   leftover budget. Each admission *reserves* the request's remaining prefill
   cost on its tenant's counter for the rest of the step. Without that, one

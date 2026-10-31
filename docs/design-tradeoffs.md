@@ -4,7 +4,7 @@ fairsched comes down to a few choices about where fairness lives: inside the
 scheduler or in front of it, by reordering or by preempting, billed when work
 is scheduled or when it completes. Each section records one of them with the
 options it was weighed against and the price it pays, measured where a
-measurement exists. Numbers are from the README's three-seed runs (Qwen2.5-7B
+measurement exists. Numbers are from the README's repeated-seed runs (Qwen2.5-7B
 on one RTX 4090, vLLM 0.31.0); ranges are over seeds.
 
 ## Share the GPU by service received
@@ -19,7 +19,7 @@ quotas or concurrency caps at the gateway.
 **Why.** FCFS serves a tenant in proportion to what it sends: with three
 times the demand, the aggressive tenant took 75% of the GPU, and a 300-request
 burst pushed the interactive tenant's median time to first token to
-32.4–40.5 s. Static priority needs to know who is interactive and is all or
+28.8–40.5 s. Static priority needs to know who is interactive and is all or
 nothing between peers (1.00 : 0.00). Rate limits leave the GPU idle when the
 other tenant has nothing to send. A per-tenant concurrency cap at the gateway
 (16 in flight, one value tried, on the noisy-neighbour workload) kept the
@@ -31,9 +31,9 @@ TTFT at 0.39–0.50 s through the burst, and gave the remaining tenant
 everything once the other ran out of work.
 
 **Cost.** When the interactive tenant is known, priority does better
-(0.23–0.30 s median, 0.78 s p99 against VTC's 0.86–1.43 s). Alternating
-between backlogged tenants churns the KV cache, so throughput is 1.0% lower
-in the aggressive run and 2.0% lower with weights, matching the extra
+(0.23–0.30 s median, 0.70–0.78 s p99 against VTC's 0.86–1.43 s). Alternating
+between backlogged tenants churns the KV cache, so throughput is 0.5–1.1%
+lower in the aggressive run and 2.0% lower with weights, matching the extra
 recompute.
 
 ## A scheduler subclass, pinned to one vLLM version
@@ -101,7 +101,7 @@ the budget waits a step without losing its KV.
 **Cost.** The most-served tenant at a given moment is not always the heavy
 one. Right after its counter is lifted (next section), the light tenant can
 lead, and its newest request is then the victim: the interactive tenant lost
-11–20 requests this way in the noisy-neighbour runs (0–1 under FCFS, 0 under
+8–20 requests this way in the noisy-neighbour runs (0–8 under FCFS, 0 under
 priority). That may explain its p99 above priority's; the summaries count
 preemptions but do not tie them to particular slow requests.
 
@@ -195,8 +195,8 @@ than delaying the engine.
 
 **Decision.** The load generator sends each request at its scheduled time
 whether or not earlier ones have finished, and measures TTFT from that time.
-The FCFS arm runs the plugin in passthrough mode, and every workload runs
-three seeds.
+The FCFS arm runs the plugin in passthrough mode, and every arm runs three
+seeds (five for the two headline workloads).
 
 **Alternatives.** Closed-loop clients; vLLM without the plugin as the
 control; one seed.

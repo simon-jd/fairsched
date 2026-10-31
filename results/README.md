@@ -4,6 +4,9 @@
   `bench/report.py` from the raw run directories under `results/raw/`, which
   are not committed. The README's tables and plots come from these files.
 - `<workload>/*.png`: plots of seed 1 (`python3 -m bench.report ... --plots`).
+- `noisy_neighbor/` and `aggressive/` hold seeds 1–5 of their original arms;
+  seeds 4 and 5 were run in a later session than seeds 1–3, with the code of
+  that time (their `source_tree` says which).
 - `overhead/summary.json`: the `aggressive` workload rerun with vLLM without
   the plugin (`native`), the plugin in passthrough (`fcfs`) and VTC, three
   seeds each, interleaved by seed in one session

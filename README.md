@@ -2,7 +2,7 @@
 
 **Problem.** Tenants that share one vLLM engine are served in proportion to
 what they send. Under vLLM's FCFS, a 300-request burst from one tenant pushed
-another tenant's median time to first token (TTFT) to 32–41 s, and a tenant
+another tenant's median time to first token (TTFT) to 29–41 s, and a tenant
 sending three times the other's demand took 75% of the service. Static priority
 helps only if you know in advance who is interactive; between peers it gives
 one tenant everything.
@@ -16,18 +16,18 @@ A small Go gateway maps API keys to tenants.
 
 ![Billed service per tenant over time for two backlogged peers](results/aggressive/service.png)
 
-**Results** (Qwen2.5-7B on one RTX 4090; ranges over 3 seeds):
+**Results** (Qwen2.5-7B on one RTX 4090; ranges over 5 seeds):
 - **Peers split evenly.** With both tenants backlogged and one sending three
   times the other's demand, VTC splits service 0.50 : 0.50 (FCFS 0.25 : 0.75,
-  static priority 1.00 : 0.00 either way). *Cost:* 1.0% lower throughput,
-  with more preemption recompute than FCFS.
+  static priority 1.00 : 0.00 either way). *Cost:* 0.5–1.1% lower throughput
+  than FCFS, with more preemption recompute.
 - **A burst does not starve interactive traffic.** During the 300-request
   burst, the interactive tenant's median TTFT is 0.39–0.50 s, against
-  32.4–40.5 s under FCFS. *Cost:* VTC is not the fastest option for that
-  tenant. Static priority, told who is interactive, is 1.7× faster on the
+  28.8–40.5 s under FCFS. *Cost:* VTC is not the fastest option for that
+  tenant. Static priority, told who is interactive, is 1.5–1.8× faster on the
   median; a per-tenant concurrency cap of 16 at the gateway is 4–5× faster,
   though with a 2–2.4× higher p99 and the burst finishing 28–30 s later. VTC
-  also exposes the interactive tenant to 11–20 KV-pressure preemptions (0–1
+  also exposes the interactive tenant to 8–20 KV-pressure preemptions (0–8
   under FCFS).
 - **The plugin is cheap.** On a saturating trace, vLLM with the plugin in
   passthrough mode delivers 0.1–0.5% less throughput than without it, seed
@@ -46,7 +46,7 @@ The work here is the integration and the evaluation:
   modifying vLLM;
 - how to bill only the work that actually ran;
 - a post-mortem of an earlier design that livelocked;
-- three-seed experiments on an RTX 4090 that report VTC's costs as well as
+- repeated-seed experiments on an RTX 4090 that report VTC's costs as well as
   its wins, against vLLM's FCFS and priority policies and a gateway
   concurrency cap.
 
@@ -108,7 +108,9 @@ why enforcing fairness below the size of one request destroys work.
 - Load: the Go load generator replays seeded open-arrival traces through the
   gateway. Prompts are exact-length token IDs, and `ignore_eos` fixes output
   lengths.
-- Every workload ran with 3 seeds. In `noisy_neighbor` and `long_prompt` the
+- `noisy_neighbor` and `aggressive` ran with 5 seeds per arm (seeds 4 and 5
+  in a later session than 1–3), the other workloads and arms with 3. In
+  `noisy_neighbor` and `long_prompt` the
   seed changes tenant A's Poisson arrival times (and, in `noisy_neighbor`,
   which of B's requests are cancelled). In `aggressive` and `weighted` the
   arrival schedule is fixed and the seed changes only the prompt token IDs.
@@ -143,17 +145,20 @@ why enforcing fairness below the size of one request destroys work.
 
 | | FCFS | FCFS + gateway cap | Priority (A high) | VTC |
 |---|---|---|---|---|
-| A TTFT median | 32.4 – 40.5 s | 0.09 – 0.10 s | 0.23 – 0.30 s | 0.39 – 0.50 s |
-| A TTFT p99 | 90.9 – 92.0 s | 2.05 – 2.94 s | 0.78 s | 0.86 – 1.43 s |
-| B TTFT median | 45.7 – 46.3 s | 63.9 – 65.1 s | 48.8 – 50.2 s | 49.1 – 50.2 s |
-| B's burst finishes | 112 – 115 s | 142 – 147 s | 114 – 116 s | 114 – 118 s |
-| A requests preempted under KV pressure | 0 – 1 | 0 | 0 | 11 – 20 |
+| A TTFT median | 28.8 – 40.5 s | 0.09 – 0.10 s | 0.23 – 0.30 s | 0.39 – 0.50 s |
+| A TTFT p99 | 89.5 – 92.0 s | 2.05 – 2.94 s | 0.70 – 0.78 s | 0.86 – 1.43 s |
+| B TTFT median | 41.0 – 46.3 s | 63.9 – 65.1 s | 48.0 – 50.2 s | 48.4 – 50.2 s |
+| B's burst finishes | 112 – 115 s | 142 – 147 s | 113 – 116 s | 113 – 118 s |
+| A requests preempted under KV pressure | 0 – 8 | 0 | 0 | 8 – 20 |
+
+The gateway-cap column has 3 seeds, the others 5.
 
 ![Tenant A TTFT CDF, noisy neighbour, seed 1](results/noisy_neighbor/ttft_A.png)
 
 Under FCFS, A gets almost no service from t = 10 s until B's backlog drains
 near t = 100 s. Under VTC, A is served at its demand throughout. B pays with
-about 4 s more median TTFT, and its burst finishes 2–3 s later:
+2.4–8.0 s more median TTFT than under FCFS, and its burst finishes 0.6–2.7 s
+later (same seed):
 
 ![Billed service per tenant over time](results/noisy_neighbor/service.png)
 
@@ -184,22 +189,21 @@ sends 300, three times the demand. The weights are equal.
 | | FCFS | Priority (A high) | Priority (B high) | VTC |
 |---|---|---|---|---|
 | A : B share | 0.25 : 0.75 | 1.00 : 0.00 | 0.00 : 1.00 | **0.50 : 0.50** |
-| A TTFT median / p99 | 32.7 / 72.2 s | 4.8 / 16.1 s | 61.1 / 72.3 s | 16.6 / 33.6 s |
-| A's last request finishes | 78 s | 29 – 30 s | 78 – 79 s | 47 s |
-| B's last request finishes | 78 – 79 s | 78 s | 69 s | 79 s |
-| Output tokens/s (median) | 1,308 | 1,312 | 1,315 | 1,295 (−1.0%) |
+| A TTFT median / p99 | 32.6 / 72.0 s | 4.8 / 16.1 s | 61.0 / 72.4 s | 16.5 / 33.3 s |
+| A's last request finishes | 77.9 – 78.5 s | 29.2 – 29.5 s | 77.8 – 78.6 s | 46.3 – 46.8 s |
+| B's last request finishes | 77.9 – 78.5 s | 77.7 – 78.2 s | 68.6 – 69.4 s | 78.4 – 79.1 s |
+| Output tokens/s (median) | 1,309 | 1,312 | 1,314 | 1,295 |
 
-TTFT cells are medians over the 3 seeds; no cell varied by more than 0.9 s
-across seeds.
+TTFT cells are medians over the 5 seeds; no cell varied by more than 0.9 s
+across seeds. VTC's throughput is 0.5–1.1% below FCFS's with the same seed.
 - **FCFS** serves each tenant in proportion to what it sends.
 - **Static priority** is all or nothing between peers.
 - **VTC** splits service evenly until A runs out of work, then gives B
   everything.
 
-The 1.0% throughput cost matches the extra preemption recompute.
-Alternating between two backlogged tenants churns the KV cache: VTC billed
-68.0k–69.5k weighted tokens of recompute to `system`, against 59.4k–63.4k
-for FCFS.
+The throughput cost comes with extra preemption recompute. Alternating
+between two backlogged tenants churns the KV cache: VTC billed 68.0k–69.5k
+weighted tokens of recompute to `system`, against 59.4k–63.8k for FCFS.
 
 ![Aggressive tenant: billed service over time](results/aggressive/service.png)
 
@@ -375,8 +379,8 @@ toolchain.
   decode. It does not model attention cost growing with context length, and
   the weights were not calibrated against measured step times. "Share" is
   measured in the same billing units.
-- The evaluation is one RTX 4090, one model (Qwen2.5-7B) and three seeds per
-  arm, on synthetic traces in which all of a tenant's requests have the same
+- The evaluation is one RTX 4090, one model (Qwen2.5-7B) and three or five
+  seeds per arm, on synthetic traces in which all of a tenant's requests have the same
   shape. The gateway cap was run at one value (16).
 - Fairness acts on admission and token-budget order. A request already
   running a very long prefill keeps its chunks going. VTC accepts that

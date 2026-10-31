@@ -5,11 +5,11 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 seeds=(--seed 1 --seed 2 --seed 3)
-python3 -m bench.run noisy_neighbor fcfs priority vtc "${seeds[@]}"
+python3 -m bench.run noisy_neighbor fcfs priority vtc "${seeds[@]}" --seed 4 --seed 5
 python3 -m bench.run noisy_neighbor native          # no-plugin reference, one seed
 python3 -m bench.run noisy_neighbor fcfs-cap "${seeds[@]}"
 python3 -m bench.run aggressive native fcfs vtc --name overhead "${seeds[@]}"
-python3 -m bench.run aggressive fcfs priority priority-b vtc "${seeds[@]}"
+python3 -m bench.run aggressive fcfs priority priority-b vtc "${seeds[@]}" --seed 4 --seed 5
 python3 -m bench.run weighted fcfs vtc "${seeds[@]}"
 python3 -m bench.run long_prompt fcfs vtc "${seeds[@]}"
 .venv/bin/python -m bench.report noisy_neighbor aggressive weighted long_prompt --plots
