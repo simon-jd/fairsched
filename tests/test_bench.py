@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import shutil
 import tempfile
 import unittest
 
@@ -11,7 +12,9 @@ from bench.run import CAP_INFLIGHT, IMAGE, PINS, proxy_config
 
 class BenchConfigTest(unittest.TestCase):
     def config(self, arm):
-        return json.loads(proxy_config(arm, Path(tempfile.mkdtemp(prefix="fairsched-bench-"))).read_text())
+        run = Path(tempfile.mkdtemp(prefix="fairsched-bench-"))
+        self.addCleanup(shutil.rmtree, run)
+        return json.loads(proxy_config(arm, run).read_text())
 
     def test_cap_arm_limits_every_tenant_at_the_gateway(self):
         capped, plain = self.config("fcfs-cap"), self.config("fcfs")

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import shutil
 import tempfile
 import unittest
 
@@ -60,6 +61,7 @@ class ReportTest(unittest.TestCase):
 
     def _run_dir(self, meta):
         run = Path(tempfile.mkdtemp(prefix="fairsched-report-"))
+        self.addCleanup(shutil.rmtree, run)
         (run / "meta.json").write_text(json.dumps({"arm": "vtc", "seed": 1, **meta}))
         row = {**result("A", 0, 0.1, 1.0), "finished_unix_ns": S}
         (run / "client.jsonl").write_text(json.dumps(row) + "\n")

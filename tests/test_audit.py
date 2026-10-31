@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import shutil
 import tempfile
 import threading
 import time
@@ -21,7 +22,9 @@ def _wait(condition, timeout=5.0):
 
 class StepLogTest(unittest.TestCase):
     def test_drops_are_reported_while_running(self):
-        path = Path(tempfile.mkdtemp(prefix="fairsched-audit-")) / "steps.jsonl"
+        directory = Path(tempfile.mkdtemp(prefix="fairsched-audit-"))
+        self.addCleanup(shutil.rmtree, directory)
+        path = directory / "steps.jsonl"
         log = StepLog(path, capacity=1)
         gate = threading.Event()
         write = log._file.write
