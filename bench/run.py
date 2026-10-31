@@ -16,6 +16,8 @@ Arms:
   priority    vLLM priority scheduling, gateway gives tenant A the higher priority
   priority-b  the same with tenant B favoured
   vtc         the plugin's VTC policy
+  vtc-kv      VTC with preempt_order "kv_share" (vLLM's KV-pressure victim comes
+              from a tenant holding more than its share of the running KV)
 """
 from __future__ import annotations
 
@@ -38,7 +40,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PINS = json.loads((ROOT / "configs/pins.json").read_text())
 # Run the image by digest, so a re-pushed tag cannot change what is measured.
 IMAGE = PINS["image"].split(":")[0] + "@" + PINS["image_digest"]
-ARMS = ("native", "fcfs", "fcfs-cap", "priority", "priority-b", "vtc")
+ARMS = ("native", "fcfs", "fcfs-cap", "priority", "priority-b", "vtc", "vtc-kv")
 # Per-tenant in-flight cap of the fcfs-cap arm: 16 of noisy_neighbor's B requests
 # (2,304 tokens each) hold about 37k tokens, under half of the 84k-token KV cache.
 CAP_INFLIGHT = 16
@@ -87,7 +89,7 @@ def engine_command(arm: str, workload: str, run: Path) -> list[str]:
            "-v", f"{vllm_cache}:/root/.cache/vllm",
            "-e", "HF_HUB_OFFLINE=1", "-e", "PYTHONPATH=/workspace", "-e", "PYTHONDONTWRITEBYTECODE=1",
            "-e", "FAIRSCHED_OUTPUT=/fairsched-output", "-e", "FAIRSCHED_POLICY=/fairsched-output/policy.json",
-           "-e", f"FAIRSCHED_MODE={'vtc' if arm == 'vtc' else 'passthrough'}",
+           "-e", f"FAIRSCHED_MODE={'vtc' if arm.startswith('vtc') else 'passthrough'}",
            IMAGE, "--model", MODEL, "--revision", PINS["models"][MODEL],
            "--dtype", "bfloat16", "--max-model-len", "8192",
            # Desktop apps hold ~3.5 GiB of this 24 GiB card.
@@ -106,6 +108,14 @@ def engine_command(arm: str, workload: str, run: Path) -> list[str]:
         # null block), so 512 would not fit one max-length (8,192) request.
         cmd += ["--num-gpu-blocks-override", "520"]
     return cmd
+
+
+def policy_config(arm: str, workload: str) -> dict:
+    """The plugin's policy file for one run: the workload's weights, plus the arm's options."""
+    config = {"tenants": {t: {"weight": w} for t, w in WORKLOADS[workload].weights.items()}}
+    if arm == "vtc-kv":
+        config["preempt_order"] = "kv_share"
+    return config
 
 
 def proxy_config(arm: str, run: Path) -> Path:
@@ -166,8 +176,7 @@ def run_one(workload: str, arm: str, seed: int, name: str | None = None) -> Path
 def _run_locked(workload: str, arm: str, seed: int, run: Path) -> Path:
     subprocess.run(["docker", "rm", "-f", CONTAINER], capture_output=True)
     trace = write_trace(workload, seed, run / "trace.jsonl")
-    (run / "policy.json").write_text(json.dumps(
-        {"tenants": {t: {"weight": w} for t, w in WORKLOADS[workload].weights.items()}}))
+    (run / "policy.json").write_text(json.dumps(policy_config(arm, workload)))
     trees, dirty = source_tree()
     meta = {"workload": workload, "arm": arm, "seed": seed, "model": MODEL,
             "source_tree": trees, "source_dirty": dirty,

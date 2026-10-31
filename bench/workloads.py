@@ -41,6 +41,12 @@ WORKLOADS = {
         "Both tenants backlogged from t=0 with 200 requests each, 1024-token prompts and "
         "256 output tokens. A has weight 2, B weight 1.",
         {"A": 2.0, "B": 1.0}, 0.0),
+    "mixed_shapes": Workload(
+        "mixed_shapes",
+        "Both tenants backlogged from t=0 with different shapes and equal weights: A sends 200 "
+        "requests with 2048-token prompts and 32 output tokens (prefill-heavy), B 200 requests "
+        "with 128-token prompts and 512 output tokens (decode-heavy).",
+        {"A": 1.0, "B": 1.0}, 0.0),
     "long_prompt": Workload(
         "long_prompt",
         "B: 6 requests with 6144-token prompts and 128 output tokens at t=0 (the shape that "
@@ -89,6 +95,10 @@ def generate(name: str, seed: int) -> list[dict]:
         for i in range(200):
             rows.append(_row(rng, f"A-{i}", i * 0.002, "A", 1024, 256))
             rows.append(_row(rng, f"B-{i}", i * 0.002 + 0.001, "B", 1024, 256))
+    elif name == "mixed_shapes":
+        for i in range(200):
+            rows.append(_row(rng, f"A-{i}", i * 0.002, "A", 2048, 32))
+            rows.append(_row(rng, f"B-{i}", i * 0.002 + 0.001, "B", 128, 512))
     elif name == "long_prompt":
         for i in range(6):
             rows.append(_row(rng, f"B-{i}", i * 0.01, "B", 6144, 128))
