@@ -1,0 +1,14 @@
+{
+  "listen": "127.0.0.1:8080",
+  "write_timeout_ms": 30000,
+  "upstream": "http://127.0.0.1:8000",
+  "api_keys": {"local-A": "A", "local-B": "B", "local-C": "C"},
+  "tenants": {
+    "A": {"class": "interactive", "default_deadline_ms": 2000, "max_inflight": 16, "max_queued": 64, "priority": -1},
+    "B": {"class": "analysis", "default_deadline_ms": 15000, "max_inflight": 8, "max_queued": 32, "priority": 0},
+    "C": {"class": "batch", "default_deadline_ms": 0, "max_inflight": 8, "max_queued": 64, "priority": 1}
+  },
+  "snapshot_path": "",
+  "log_path": "logs/proxy.jsonl",
+  "priority_baseline": false
+}

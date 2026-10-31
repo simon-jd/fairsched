@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+build/
+dist/
+.cache/
+bin/
+.env
+fairsched-output/
+logs/
+
+# Raw experiment output stays on disk; results/<workload>/summary.json and PNGs are committed.
+/results/raw/

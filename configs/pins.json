@@ -1,0 +1,11 @@
+{
+  "image": "vllm/vllm-openai:v0.31.0",
+  "image_digest": "sha256:c1c9f6fd5c109ba7f0546a59f5b2f15fb87f64c77782e90a27b648b42a8e67c3",
+  "vllm": "0.31.0",
+  "go_image": "golang:1.26.8-bookworm",
+  "models": {
+    "Qwen/Qwen2.5-7B-Instruct": "a09a35458c702b33eeacc393d103063234e8bc28",
+    "Qwen/Qwen2.5-1.5B-Instruct": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
+  },
+  "gpu": "NVIDIA GeForce RTX 4090 (24 GB)"
+}

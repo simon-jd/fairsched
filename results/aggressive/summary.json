@@ -1,0 +1,965 @@
+{
+ "workload": "aggressive",
+ "runs": [
+  {
+   "arm": "fcfs",
+   "seed": 1,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 32717.189157,
+       "p90": 62142.678055,
+       "p99": 72207.93092
+      },
+      "e2e_ms": {
+       "p50": 45581.476833,
+       "p99": 77858.394016
+      },
+      "tpot_ms_p50": 49.70324212549019,
+      "output_tokens": 25600,
+      "last_finish_s": 78.201313892
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 32911.979653,
+       "p90": 62128.615456,
+       "p99": 72598.788033
+      },
+      "e2e_ms": {
+       "p50": 45781.344487,
+       "p99": 77888.592414
+      },
+      "tpot_ms_p50": 49.730873682352936,
+      "output_tokens": 76800,
+      "last_finish_s": 78.216175251
+     }
+    },
+    "makespan_s": 78.216175251,
+    "output_tokens_per_s": 1309.1921162265066
+   },
+   "engine": {
+    "steps": 1580,
+    "schedule_us": {
+     "p50": 2238.023,
+     "p99": 4472.882,
+     "mean": 1918.476901898734
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 59372.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 44,
+     "A": 24
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.2505,
+     "B": 0.7495
+    }
+   }
+  },
+  {
+   "arm": "fcfs",
+   "seed": 2,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 32596.393406,
+       "p90": 61505.805985,
+       "p99": 72006.840548
+      },
+      "e2e_ms": {
+       "p50": 45356.136475,
+       "p99": 77947.346283
+      },
+      "tpot_ms_p50": 49.50726007843137,
+      "output_tokens": 25600,
+      "last_finish_s": 78.289248569
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 32791.598432,
+       "p90": 62098.658223,
+       "p99": 72399.768067
+      },
+      "e2e_ms": {
+       "p50": 45545.513207,
+       "p99": 77977.055822
+      },
+      "tpot_ms_p50": 49.50609114901961,
+      "output_tokens": 76800,
+      "last_finish_s": 78.304457935
+     }
+    },
+    "makespan_s": 78.304457935,
+    "output_tokens_per_s": 1307.716095614908
+   },
+   "engine": {
+    "steps": 1583,
+    "schedule_us": {
+     "p50": 2153.448,
+     "p99": 4805.182,
+     "mean": 1820.885041061276
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 59778.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 54,
+     "A": 17
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.2507,
+     "B": 0.7493
+    }
+   }
+  },
+  {
+   "arm": "fcfs",
+   "seed": 3,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 32768.668603,
+       "p90": 61564.488357,
+       "p99": 72294.250006
+      },
+      "e2e_ms": {
+       "p50": 45600.648823,
+       "p99": 78166.766976
+      },
+      "tpot_ms_p50": 49.79550255294117,
+      "output_tokens": 25600,
+      "last_finish_s": 78.493224428
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 32969.531446,
+       "p90": 62570.3352,
+       "p99": 72489.962298
+      },
+      "e2e_ms": {
+       "p50": 45801.99698,
+       "p99": 78183.091621
+      },
+      "tpot_ms_p50": 49.86018019607843,
+      "output_tokens": 76800,
+      "last_finish_s": 78.525045344
+     }
+    },
+    "makespan_s": 78.525045344,
+    "output_tokens_per_s": 1304.0425452976099
+   },
+   "engine": {
+    "steps": 1581,
+    "schedule_us": {
+     "p50": 1555.777,
+     "p99": 3916.593,
+     "mean": 1646.526265654649
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 63377.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 45,
+     "A": 25
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.251,
+     "B": 0.749
+    }
+   }
+  },
+  {
+   "arm": "priority-b",
+   "seed": 1,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 61051.571895,
+       "p90": 71543.070509,
+       "p99": 72312.386742
+      },
+      "e2e_ms": {
+       "p50": 72698.02589,
+       "p99": 77535.82023
+      },
+      "tpot_ms_p50": 47.813660129411765,
+      "output_tokens": 25600,
+      "last_finish_s": 77.84217264
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 27720.000816,
+       "p90": 46503.202014,
+       "p99": 55472.291244
+      },
+      "e2e_ms": {
+       "p50": 40637.612646,
+       "p99": 68340.479538
+      },
+      "tpot_ms_p50": 49.55339655294117,
+      "output_tokens": 76800,
+      "last_finish_s": 68.8350593
+     }
+    },
+    "makespan_s": 77.84217264,
+    "output_tokens_per_s": 1315.482296127237
+   },
+   "engine": {
+    "steps": 1579,
+    "schedule_us": {
+     "p50": 538.554,
+     "p99": 3210.64,
+     "mean": 703.6603888537048
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 57711.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "A": 15,
+     "B": 52
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.0002,
+     "B": 0.9998
+    }
+   }
+  },
+  {
+   "arm": "priority-b",
+   "seed": 2,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 61452.402405,
+       "p90": 72150.646009,
+       "p99": 73114.70393
+      },
+      "e2e_ms": {
+       "p50": 73390.319167,
+       "p99": 78325.483673
+      },
+      "tpot_ms_p50": 49.54708694509804,
+      "output_tokens": 25600,
+      "last_finish_s": 78.634208847
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 28163.928913,
+       "p90": 46761.027516,
+       "p99": 55985.796365
+      },
+      "e2e_ms": {
+       "p50": 40864.177338,
+       "p99": 68907.797601
+      },
+      "tpot_ms_p50": 49.90517862352941,
+      "output_tokens": 76800,
+      "last_finish_s": 69.410588408
+     }
+    },
+    "makespan_s": 78.634208847,
+    "output_tokens_per_s": 1302.2322154883193
+   },
+   "engine": {
+    "steps": 1581,
+    "schedule_us": {
+     "p50": 2202.058,
+     "p99": 4859.229,
+     "mean": 1888.455825426945
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 63828.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 56,
+     "A": 14
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.0016,
+     "B": 0.9984
+    }
+   }
+  },
+  {
+   "arm": "priority-b",
+   "seed": 3,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 60904.215313,
+       "p90": 71329.477264,
+       "p99": 72213.809915
+      },
+      "e2e_ms": {
+       "p50": 72477.966137,
+       "p99": 77596.387668
+      },
+      "tpot_ms_p50": 48.766380070588234,
+      "output_tokens": 25600,
+      "last_finish_s": 77.893387668
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 27590.060968,
+       "p90": 46346.039098,
+       "p99": 55179.344065
+      },
+      "e2e_ms": {
+       "p50": 40407.549664,
+       "p99": 67946.17783
+      },
+      "tpot_ms_p50": 48.82781079607843,
+      "output_tokens": 76800,
+      "last_finish_s": 68.641838972
+     }
+    },
+    "makespan_s": 77.893387668,
+    "output_tokens_per_s": 1314.6173643962304
+   },
+   "engine": {
+    "steps": 1582,
+    "schedule_us": {
+     "p50": 1697.72,
+     "p99": 4057.584,
+     "mean": 1670.2595214917826
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 59333.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "A": 16,
+     "B": 57
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.0002,
+     "B": 0.9998
+    }
+   }
+  },
+  {
+   "arm": "priority",
+   "seed": 1,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 4760.851472,
+       "p90": 15280.726366,
+       "p99": 16228.632144
+      },
+      "e2e_ms": {
+       "p50": 17353.275154,
+       "p99": 28734.472277
+      },
+      "tpot_ms_p50": 49.108419101960784,
+      "output_tokens": 25600,
+      "last_finish_s": 29.22500653
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44548.708945,
+       "p90": 69441.016,
+       "p99": 72259.382222
+      },
+      "e2e_ms": {
+       "p50": 56975.721939,
+       "p99": 77844.237953
+      },
+      "tpot_ms_p50": 49.28197520784314,
+      "output_tokens": 76800,
+      "last_finish_s": 78.1558101
+     }
+    },
+    "makespan_s": 78.1558101,
+    "output_tokens_per_s": 1310.2032960694755
+   },
+   "engine": {
+    "steps": 1582,
+    "schedule_us": {
+     "p50": 2237.889,
+     "p99": 4308.804,
+     "mean": 1983.510221238938
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 56686.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 56,
+     "A": 13
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.9994,
+     "B": 0.0006
+    }
+   }
+  },
+  {
+   "arm": "priority",
+   "seed": 2,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 4789.882103,
+       "p90": 15166.246431,
+       "p99": 16139.305605
+      },
+      "e2e_ms": {
+       "p50": 17272.88007,
+       "p99": 29042.067279
+      },
+      "tpot_ms_p50": 48.98535538823529,
+      "output_tokens": 25600,
+      "last_finish_s": 29.534414894
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44675.146332,
+       "p90": 63057.754487,
+       "p99": 72336.806858
+      },
+      "e2e_ms": {
+       "p50": 57333.189879,
+       "p99": 77735.618427
+      },
+      "tpot_ms_p50": 50.55775131764706,
+      "output_tokens": 76800,
+      "last_finish_s": 78.062343207
+     }
+    },
+    "makespan_s": 78.062343207,
+    "output_tokens_per_s": 1311.7720503016824
+   },
+   "engine": {
+    "steps": 1578,
+    "schedule_us": {
+     "p50": 2234.394,
+     "p99": 4331.294,
+     "mean": 1919.8180101394169
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 58855.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 57,
+     "A": 11
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.9983,
+     "B": 0.0017
+    }
+   }
+  },
+  {
+   "arm": "priority",
+   "seed": 3,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 4845.975751,
+       "p90": 15309.112006,
+       "p99": 16082.359812
+      },
+      "e2e_ms": {
+       "p50": 17373.921314,
+       "p99": 28818.857282
+      },
+      "tpot_ms_p50": 49.15236340392157,
+      "output_tokens": 25600,
+      "last_finish_s": 29.306925397
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44681.329986,
+       "p90": 63109.136098,
+       "p99": 72471.009313
+      },
+      "e2e_ms": {
+       "p50": 57325.920926,
+       "p99": 77764.645559
+      },
+      "tpot_ms_p50": 50.028004027450976,
+      "output_tokens": 76800,
+      "last_finish_s": 78.077633332
+     }
+    },
+    "makespan_s": 78.077633332,
+    "output_tokens_per_s": 1311.5151629222285
+   },
+   "engine": {
+    "steps": 1578,
+    "schedule_us": {
+     "p50": 2264.591,
+     "p99": 4105.618,
+     "mean": 1930.7319150823826
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 59410.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 55,
+     "A": 13
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.9993,
+     "B": 0.0007
+    }
+   }
+  },
+  {
+   "arm": "vtc",
+   "seed": 1,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 16527.622344,
+       "p90": 31895.865099,
+       "p99": 33641.185714
+      },
+      "e2e_ms": {
+       "p50": 30033.450598,
+       "p99": 46334.058801
+      },
+      "tpot_ms_p50": 50.3721607254902,
+      "output_tokens": 25600,
+      "last_finish_s": 46.828945005
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 45475.183348,
+       "p90": 70716.931121,
+       "p99": 73453.946475
+      },
+      "e2e_ms": {
+       "p50": 58215.979517,
+       "p99": 78804.752696
+      },
+      "tpot_ms_p50": 50.02739245098039,
+      "output_tokens": 76800,
+      "last_finish_s": 79.117040032
+     }
+    },
+    "makespan_s": 79.117040032,
+    "output_tokens_per_s": 1294.2850232842745
+   },
+   "engine": {
+    "steps": 1579,
+    "schedule_us": {
+     "p50": 1680.404,
+     "p99": 4729.647,
+     "mean": 1734.594829639012
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 67984.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "A": 16,
+     "B": 56
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.5007,
+     "B": 0.4993
+    }
+   }
+  },
+  {
+   "arm": "vtc",
+   "seed": 2,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 16545.169668,
+       "p90": 31579.143435,
+       "p99": 33549.692377
+      },
+      "e2e_ms": {
+       "p50": 29881.463789,
+       "p99": 46100.403205
+      },
+      "tpot_ms_p50": 50.08899260784314,
+      "output_tokens": 25600,
+      "last_finish_s": 46.588395875
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 45461.945027,
+       "p90": 70374.576023,
+       "p99": 73167.771163
+      },
+      "e2e_ms": {
+       "p50": 58229.224508,
+       "p99": 78767.363591
+      },
+      "tpot_ms_p50": 49.6057349372549,
+      "output_tokens": 76800,
+      "last_finish_s": 79.092306544
+     }
+    },
+    "makespan_s": 79.092306544,
+    "output_tokens_per_s": 1294.6897678731073
+   },
+   "engine": {
+    "steps": 1582,
+    "schedule_us": {
+     "p50": 2237.103,
+     "p99": 4250.64,
+     "mean": 1900.2852686472818
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 68150.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 56,
+     "A": 15
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.5,
+     "B": 0.5
+    }
+   }
+  },
+  {
+   "arm": "vtc",
+   "seed": 3,
+   "source_tree": {
+    "fairsched": "2730fc60e19db3611a923fb468a3623917651865",
+    "bench": "77afaf06ad22d048573dda77d6f21fc1c096cd0c",
+    "cmd": "42dd5d06e0cb2c4f86862728c1bd4f80287cef59",
+    "proxy": "70d318c484b3dc898ccfb3f14f81a7d00d1a5260",
+    "loadgen": "492fdb7a9365008732dff53127de186492002e33",
+    "configs": "86c6b396c080549fc262061863047e9f22c45d23"
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 16766.751324,
+       "p90": 31582.013819,
+       "p99": 33329.429786
+      },
+      "e2e_ms": {
+       "p50": 30316.51444,
+       "p99": 46232.412777
+      },
+      "tpot_ms_p50": 50.591115274509804,
+      "output_tokens": 25600,
+      "last_finish_s": 46.720036031
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 45376.092011,
+       "p90": 70652.200813,
+       "p99": 73396.295849
+      },
+      "e2e_ms": {
+       "p50": 58098.605269,
+       "p99": 78761.007587
+      },
+      "tpot_ms_p50": 50.49428529019608,
+      "output_tokens": 76800,
+      "last_finish_s": 79.088457404
+     }
+    },
+    "makespan_s": 79.088457404,
+    "output_tokens_per_s": 1294.7527788653138
+   },
+   "engine": {
+    "steps": 1577,
+    "schedule_us": {
+     "p50": 2231.301,
+     "p99": 3974.987,
+     "mean": 1872.4999835129993
+    },
+    "billed": {
+     "A": 153400.0,
+     "B": 460200.0,
+     "system": 69543.0
+    },
+    "wasted": {
+     "A": 0.0,
+     "B": 0.0
+    },
+    "preemptions": {
+     "B": 59,
+     "A": 14
+    },
+    "min_free_blocks": 0,
+    "backlogged_share": {
+     "A": 0.4999,
+     "B": 0.5001
+    }
+   }
+  }
+ ]
+}

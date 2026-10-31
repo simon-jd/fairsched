@@ -1,0 +1,3 @@
+{"running_requests": 64, "native_us": 406, "passthrough_us": 532, "vtc_us": 538, "vtc_overhead_us": 132}
+{"running_requests": 128, "native_us": 785, "passthrough_us": 1035, "vtc_us": 1029, "vtc_overhead_us": 244}
+{"running_requests": 256, "native_us": 1681, "passthrough_us": 2150, "vtc_us": 2083, "vtc_overhead_us": 403}
