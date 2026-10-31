@@ -7,7 +7,7 @@ import shutil
 import tempfile
 import unittest
 
-from bench.run import CAP_INFLIGHT, IMAGE, PINS, policy_config, proxy_config
+from bench.run import CAP_INFLIGHT, FIT_W_D, IMAGE, PINS, policy_config, proxy_config
 from bench.workloads import generate
 
 
@@ -29,6 +29,10 @@ class BenchConfigTest(unittest.TestCase):
         self.assertEqual(policy_config("vtc-kv", "weighted"),
                          {"tenants": {"A": {"weight": 2.0}, "B": {"weight": 1.0}}, "preempt_order": "kv_share"})
         self.assertNotIn("preempt_order", policy_config("vtc", "weighted"))
+
+    def test_vtc_fit_arm_sets_the_fitted_decode_weight(self):
+        self.assertEqual(policy_config("vtc-fit", "mixed_shapes")["w_d"], FIT_W_D)
+        self.assertNotIn("w_d", policy_config("vtc", "mixed_shapes"))
 
     def test_mixed_shapes_gives_each_tenant_its_own_shape(self):
         rows = generate("mixed_shapes", 1)

@@ -18,6 +18,7 @@ Arms:
   vtc         the plugin's VTC policy
   vtc-kv      VTC with preempt_order "kv_share" (vLLM's KV-pressure victim comes
               from a tenant holding more than its share of the running KV)
+  vtc-fit     VTC with the decode weight from the step-time fit (FIT_W_D)
 """
 from __future__ import annotations
 
@@ -40,7 +41,11 @@ ROOT = Path(__file__).resolve().parents[1]
 PINS = json.loads((ROOT / "configs/pins.json").read_text())
 # Run the image by digest, so a re-pushed tag cannot change what is measured.
 IMAGE = PINS["image"].split(":")[0] + "@" + PINS["image_digest"]
-ARMS = ("native", "fcfs", "fcfs-cap", "priority", "priority-b", "vtc", "vtc-kv")
+ARMS = ("native", "fcfs", "fcfs-cap", "priority", "priority-b", "vtc", "vtc-kv", "vtc-fit")
+# Decode weight of the vtc-fit arm, prefill weight 1: the fitted marginal cost of
+# a decode step over that of a prefill token on mixed_shapes (0.0789 / 0.0809 ms,
+# results/mixed_shapes/gpu_time.json). VTC's default is 2.
+FIT_W_D = 0.97
 # Per-tenant in-flight cap of the fcfs-cap arm: 16 of noisy_neighbor's B requests
 # (2,304 tokens each) hold about 37k tokens, under half of the 84k-token KV cache.
 CAP_INFLIGHT = 16
@@ -115,6 +120,8 @@ def policy_config(arm: str, workload: str) -> dict:
     config = {"tenants": {t: {"weight": w} for t, w in WORKLOADS[workload].weights.items()}}
     if arm == "vtc-kv":
         config["preempt_order"] = "kv_share"
+    if arm == "vtc-fit":
+        config["w_d"] = FIT_W_D
     return config
 
 
