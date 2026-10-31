@@ -1,12 +1,44 @@
-# Fair multi-tenant scheduling for vLLM
+# fairsched: fair multi-tenant scheduling for vLLM
 
-An out-of-tree scheduler plugin for **vLLM 0.31.0** that shares one GPU
-between tenants by the service each has received, so one tenant's backlog
-cannot starve another's interactive traffic. The policy is the Virtual Token
-Counter (VTC) from Sheng et al., *Fairness in Serving Large Language Models*
-(OSDI 2024). This repository is an implementation of it inside a production
-engine. It also includes a small Go gateway that maps API keys to tenants,
-and an open-arrival load generator.
+**Problem.** Tenants that share one vLLM engine are served in proportion to
+what they send. Under vLLM's FCFS, a 300-request burst from one tenant pushed
+another tenant's median time to first token (TTFT) to 32–41 s, and a tenant
+sending three times the other's demand took 75% of the service. Static priority
+helps only if you know in advance who is interactive; between peers it gives
+one tenant everything.
+
+**Approach.** fairsched is an out-of-tree scheduler plugin for vLLM 0.31.0
+that implements the Virtual Token Counter (VTC; Sheng et al., *Fairness in
+Serving Large Language Models*, OSDI 2024). It orders admission and each
+step's token budget by the weighted service each tenant has received, bills
+only the tokens that actually ran, and never preempts a request on its own.
+A small Go gateway maps API keys to tenants.
+
+![Billed service per tenant over time for two backlogged peers](results/aggressive/service.png)
+
+**Results** (Qwen2.5-7B on one RTX 4090; ranges over 3 seeds):
+- **Peers split evenly.** With both tenants backlogged and one sending three
+  times the other's demand, VTC splits service 0.50 : 0.50 (FCFS 0.25 : 0.75,
+  static priority 1.00 : 0.00 either way). *Cost:* 1.0% lower throughput,
+  with more preemption recompute than FCFS.
+- **A burst does not starve interactive traffic.** During the 300-request
+  burst, the interactive tenant's median TTFT is 0.39–0.50 s, against
+  32.4–40.5 s under FCFS. *Cost:* VTC is not the fastest option for that
+  tenant. Static priority, told who is interactive, is 1.7× faster on the
+  median; a per-tenant concurrency cap of 16 at the gateway is 4–5× faster,
+  though with a 2–2.4× higher p99 and the burst finishing 28–30 s later. VTC
+  also exposes the interactive tenant to 11–20 KV-pressure preemptions (0–1
+  under FCFS).
+- **The plugin is cheap.** On a saturating trace, vLLM with the plugin in
+  passthrough mode delivers 0.1–0.5% less throughput than without it, seed
+  for seed. *Cost:* VTC gives up another 0.7% and recomputes more after
+  preemptions, and the hooks add 132–403 µs of CPU per scheduling step at
+  64–256 running requests.
+
+The limits, including that light-tenant preemption and an evaluation on one
+GPU, one model and synthetic traces, are under [Limitations](#limitations).
+
+## What is in this repository
 
 The work here is the integration and the evaluation:
 - where to hook a continuous-batching scheduler that has chunked prefill,
@@ -15,23 +47,8 @@ The work here is the integration and the evaluation:
 - how to bill only the work that actually ran;
 - a post-mortem of an earlier design that livelocked;
 - three-seed experiments on an RTX 4090 that report VTC's costs as well as
-  its wins.
-
-**Noisy neighbour, Qwen2.5-7B.** Tenant A sends interactive requests. At t = 10 s
-tenant B dumps 300 long requests. Values are ranges over 3 seeds:
-
-| Tenant A time to first token | vLLM FCFS | vLLM priority (A marked high) | VTC |
-|---|---|---|---|
-| median | 32.4 – 40.5 s | 0.23 – 0.30 s | 0.39 – 0.50 s |
-| p99 | 90.9 – 92.0 s | 0.78 s | 0.86 – 1.43 s |
-
-Static priority does better here: A's median TTFT is about 1.7× lower than
-under VTC (1.66–1.77× per seed), because priority was told who the
-interactive tenant is. When the tenants are peers that knowledge does not
-exist. Priority then gives one tenant everything, and VTC is the only arm
-that splits the GPU evenly ([aggressive tenant](#aggressive-tenant)).
-
-![Tenant A TTFT CDF](results/noisy_neighbor/ttft_A.png)
+  its wins, against vLLM's FCFS and priority policies and a gateway
+  concurrency cap.
 
 ## How it works
 
@@ -355,7 +372,12 @@ toolchain.
   restarts.
 - It refuses to run with speculative decoding, LoRA or KV connectors.
 - The cost model is VTC's linear one, with weights 1 for prefill and 2 for
-  decode. It does not model attention cost growing with context length.
+  decode. It does not model attention cost growing with context length, and
+  the weights were not calibrated against measured step times. "Share" is
+  measured in the same billing units.
+- The evaluation is one RTX 4090, one model (Qwen2.5-7B) and three seeds per
+  arm, on synthetic traces in which all of a tenant's requests have the same
+  shape. The gateway cap was run at one value (16).
 - Fairness acts on admission and token-budget order. A request already
   running a very long prefill keeps its chunks going. VTC accepts that
   bound in exchange for never throwing away work.
