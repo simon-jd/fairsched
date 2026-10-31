@@ -50,7 +50,9 @@ changing vLLM, which runs from its official container.
 `num_computed_tokens` semantics), so each vLLM upgrade needs the CPU tests
 rerun. The hooks add 132, 244 and 403 us of CPU per step at 64, 128 and 256
 running requests, about 0.5% of a 50 ms decode step at 128, and with async
-scheduling that time overlaps the previous step's GPU work.
+scheduling that time overlaps the previous step's GPU work. End to end, on a
+saturating trace, the plugin in passthrough mode delivers 0.1–0.5% less
+throughput than vLLM without it (per seed).
 
 ## Never preempt for fairness
 
@@ -198,8 +200,11 @@ control; one seed.
 **Why.** A closed loop slows its own arrivals when the server queues, which
 hides the queueing delay this project is about. With passthrough, logging and
 accounting cost the same in both arms, so a difference is the policy's. What
-passthrough itself costs against vLLM without the plugin is measured on the
-CPU (`bench/hook_overhead.py`). The open-loop noisy-neighbour trace cannot
-show it: every arm's seed-1 run gives 730.6–731.2 output tokens/s.
+passthrough itself costs against vLLM without the plugin is measured
+separately, on the CPU (`bench/hook_overhead.py`) and end to end on the
+saturating `aggressive` trace (`results/overhead/`): 0.1–0.5% lower
+throughput per seed. Open-loop traces cannot show it, because their arrival
+schedule sets the run length (every arm's seed-1 noisy-neighbour run gives
+730.6–731.2 output tokens/s).
 
-**Cost.** The full set of runs takes about 2.5 hours.
+**Cost.** The full set of runs takes about 3 hours.

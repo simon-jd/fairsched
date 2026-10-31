@@ -227,12 +227,32 @@ runner. Results are in `results/hook_overhead.jsonl`:
 - At 128 running requests a Qwen2.5-7B decode step takes about 50 ms
   (median TPOT in these runs), so the plugin adds about 0.5%.
 - With async scheduling this CPU time overlaps the previous step's GPU work.
-- End-to-end throughput on the noisy-neighbour trace cannot show this
-  overhead. The trace is open-loop, so its arrival schedule sets how long a
-  run lasts and the trace sets how many tokens it produces: every arm's
-  seed-1 run gives 730.6–731.2 output tokens/s, with no plugin, passthrough,
-  priority and VTC alike. There is no run without the plugin on a
-  saturating trace.
+
+End to end, the overhead has to be measured on a saturating trace. On the
+open-loop noisy-neighbour trace the arrival schedule sets how long a run
+lasts, so every arm's seed-1 run gives 730.6–731.2 output tokens/s, with or
+without the plugin. The `aggressive` workload saturates the engine instead:
+all 400 requests arrive in the first 0.3 s, so throughput is the engine's
+capacity. It was rerun with vLLM without the plugin, the plugin in
+passthrough and VTC, three seeds each, interleaved by seed in one session
+(`results/overhead/`):
+
+| | vLLM, no plugin | Plugin, passthrough | Plugin, VTC |
+|---|---|---|---|
+| Output tokens/s | 1,320 – 1,337 (median 1,331) | 1,318 – 1,331 (median 1,326) | 1,310 – 1,321 (median 1,316) |
+| Per seed, against the arm to the left | | −0.13% to −0.50% | −0.67% to −0.74% |
+| TPOT median | 48.5 – 49.2 ms | 48.7 – 49.3 ms | 49.2 – 50.0 ms |
+| TTFT median, A / B | 31.9 – 32.4 / 32.1 – 32.6 s | 32.1 – 32.2 / 32.3 – 32.8 s | 16.2 – 16.5 / 44.4 – 44.9 s |
+
+- The plugin's hooks and step log cost 0.1–0.5% of throughput (passthrough
+  against no plugin, same seed), smaller than the 1.3% spread across the
+  no-plugin seeds but in the same direction for every seed.
+- VTC costs another 0.7%. That is not all overhead: VTC also reorders the
+  work (A's TTFT halves, B's rises) and preempts more, recomputing 67.7k–68.0k
+  weighted tokens against 63.8k for passthrough.
+- These runs were made in a later session than the `aggressive` results
+  above and are 1.4–1.6% faster for the same arms, so compare arms within one
+  set.
 
 ## Reproduce
 
@@ -253,7 +273,7 @@ code builds in the pinned Go image.
    `python3 -m venv .venv && .venv/bin/pip install matplotlib==3.11.2`
    (`make .venv/bin/python`).
 4. **Runs.** `scripts/run-all.sh` (or `make bench`) runs every experiment
-   above, about 2.5 h. A single run is
+   above, about 3 h. A single run is
    `python3 -m bench.run noisy_neighbor vtc --seed 1`. Each run waits for an
    exclusive `flock` on `/var/tmp/rtx4090.lock` (`FAIRSCHED_GPU_LOCK`), refuses
    to start while another process holds more than 1 GiB of GPU memory, starts

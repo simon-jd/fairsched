@@ -4,6 +4,11 @@
   `bench/report.py` from the raw run directories under `results/raw/`, which
   are not committed. The README's tables and plots come from these files.
 - `<workload>/*.png`: plots of seed 1 (`python3 -m bench.report ... --plots`).
+- `overhead/summary.json`: the `aggressive` workload rerun with vLLM without
+  the plugin (`native`), the plugin in passthrough (`fcfs`) and VTC, three
+  seeds each, interleaved by seed in one session
+  (`python3 -m bench.run aggressive native fcfs vtc --name overhead ...`).
+  These runs are separate from `aggressive/summary.json`.
 - `hook_overhead.jsonl`: the CPU microbenchmark from `bench/hook_overhead.py`
   (a single run). It records no source revision.
 
