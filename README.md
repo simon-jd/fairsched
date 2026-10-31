@@ -265,11 +265,13 @@ which `scripts/fetch-models.sh --test-only` (`make test-model`) fetches.
 `make test-local` runs the first two without Docker, using a local Go
 toolchain.
 
-- **Policy, report and step log** (`tests/test_policy.py`,
-  `tests/test_report.py`, `tests/test_audit.py`, pure Python): the lift rule
+- **Policy, report, step log and runner** (`tests/test_policy.py`,
+  `tests/test_report.py`, `tests/test_audit.py`, `tests/test_bench.py`, pure
+  Python): the lift rule
   (waiting queue only), weighted shares, recompute and waste attribution,
   unlisted tenants, queue semantics matching vLLM's `FCFSRequestQueue`, the
-  report's percentiles, shares and timelines, and dropped-record reporting.
+  report's percentiles, shares and timelines, dropped-record reporting, and
+  the runner's gateway and image settings.
 - **Go** (`go test ./...`): the gateway's header stripping and tenant
   injection, streaming, cancellation, and the load generator.
 - **Real vLLM scheduler on CPU** (`tests/test_scheduler_vllm.py`), in the

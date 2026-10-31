@@ -11,6 +11,8 @@ defaults to the workload.
 Arms:
   native      vLLM FCFS, no plugin (overhead reference)
   fcfs        vLLM FCFS with the plugin in passthrough mode (same accounting/logging)
+  fcfs-cap    fcfs, and the gateway admits at most CAP_INFLIGHT requests per
+              tenant to the engine; the rest wait in the gateway's FIFO queue
   priority    vLLM priority scheduling, gateway gives tenant A the higher priority
   priority-b  the same with tenant B favoured
   vtc         the plugin's VTC policy
@@ -36,7 +38,10 @@ ROOT = Path(__file__).resolve().parents[1]
 PINS = json.loads((ROOT / "configs/pins.json").read_text())
 # Run the image by digest, so a re-pushed tag cannot change what is measured.
 IMAGE = PINS["image"].split(":")[0] + "@" + PINS["image_digest"]
-ARMS = ("native", "fcfs", "priority", "priority-b", "vtc")
+ARMS = ("native", "fcfs", "fcfs-cap", "priority", "priority-b", "vtc")
+# Per-tenant in-flight cap of the fcfs-cap arm: 16 of noisy_neighbor's B requests
+# (2,304 tokens each) hold about 37k tokens, under half of the 84k-token KV cache.
+CAP_INFLIGHT = 16
 ENGINE_PORT, PROXY_PORT = 8000, 8080
 CONTAINER = "fairsched-engine"
 # Other projects on this machine queue for the GPU on the same lock file.
@@ -104,7 +109,8 @@ def engine_command(arm: str, workload: str, run: Path) -> list[str]:
 
 
 def proxy_config(arm: str, run: Path) -> Path:
-    tenant = {"default_deadline_ms": 0, "max_inflight": 1024, "max_queued": 1024}
+    tenant = {"default_deadline_ms": 0, "max_inflight": CAP_INFLIGHT if arm == "fcfs-cap" else 1024,
+              "max_queued": 1024}
     config = {"listen": f"127.0.0.1:{PROXY_PORT}", "write_timeout_ms": 900_000,
               "upstream": f"http://127.0.0.1:{ENGINE_PORT}",
               "api_keys": {"key-A": "A", "key-B": "B"},
