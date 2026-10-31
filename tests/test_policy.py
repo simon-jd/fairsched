@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import random
 import unittest
 
-from fairsched.policy import SYSTEM, PolicyConfig, PolicyState, TenantPolicy
+from fairsched.policy import DEFAULT, SYSTEM, PolicyConfig, PolicyState, TenantPolicy
 from fairsched.intervals import merge, overlap
 from fairsched.queue import TenantRequestQueue
 
@@ -117,13 +117,31 @@ class PolicyTest(unittest.TestCase):
         self.assertEqual(state.accounts, {"A": 0.0, "B": 0.0, SYSTEM: 2.0})
         self.assertEqual(state.counters["A"], counter)     # history is not rewritten
 
-    def test_unknown_tenant_rejected(self):
-        with self.assertRaisesRegex(ValueError, "unknown tenant 'Z'"):
-            two_tenants().register(req("Z"))
+    def test_unknown_tenants_share_the_default_tenant(self):
+        state = two_tenants()
+        z, y, bad = req("Z", prompt=10), req("Y", prompt=10), req(["not", "a", "name"], prompt=10)
+        for r in (z, y, bad):
+            self.assertEqual(state.register(r)["tenant"], DEFAULT)
+        self.assertEqual(state.requests[z.request_id]["claimed_tenant"], "Z")
+        self.assertEqual(state.unknown_requests, 3)
+        # Billed and ordered like any tenant, at weight 1, but never as "Z" or "Y".
+        state.charge(z.request_id, 10, 0)
+        state.charge(y.request_id, 10, 0)
+        self.assertEqual(state.accounts[DEFAULT], 20.0)
+        self.assertEqual(state.counters[DEFAULT], 20.0)
+        self.assertNotIn("Z", state.counters)
+        queue = TenantRequestQueue(state)
+        a = req("A", prompt=10)
+        queue.add_request(a)
+        queue.add_request(req("Z", prompt=10))
+        self.assertIs(queue.pop_request(), a)       # A has been served less than default
 
     def test_missing_tenant_defaults(self):
         state = PolicyState()
-        self.assertEqual(state.register(req(None))["tenant"], "default")
+        meta = state.register(req(None))
+        self.assertEqual(meta["tenant"], "default")
+        self.assertNotIn("claimed_tenant", meta)
+        self.assertEqual(state.unknown_requests, 0)
 
     def test_order_running_puts_most_overserved_last(self):
         state = two_tenants()

@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 SYSTEM = "system"
+DEFAULT = "default"
 
 
 def _positive(value: float, name: str, *, zero: bool = False) -> None:
@@ -79,14 +80,24 @@ class PolicyConfig:
 
 
 def request_metadata(request: Any, config: PolicyConfig) -> dict[str, Any]:
-    """Tenant identity comes only from trusted ``vllm_xargs`` set by the gateway."""
+    """Tenant identity comes only from trusted ``vllm_xargs`` set by the gateway.
+
+    A request without a tenant, or naming one the policy does not list, is
+    served as the ``default`` tenant (weight 1 unless the policy lists it), and
+    an unlisted name is kept as ``claimed_tenant``. Raising instead would fail
+    the engine's ``add_request``. Mapping every unlisted name to one tenant
+    means a client that reaches the engine without the gateway cannot gain
+    share by inventing tenant names.
+    """
     extra = getattr(getattr(request, "sampling_params", None), "extra_args", None) or {}
-    tenant = extra.get("fairsched_tenant", "default")
-    if tenant not in config.tenants:
-        raise ValueError(f"unknown tenant {tenant!r}; configured: {sorted(config.tenants)}")
+    claimed = extra.get("fairsched_tenant")
+    tenant = claimed if isinstance(claimed, str) and claimed in config.tenants else DEFAULT
     request_id = str(request.request_id)
-    return {"request_id": request_id, "rid": str(extra.get("fairsched_rid", request_id)), "tenant": tenant,
+    meta = {"request_id": request_id, "rid": str(extra.get("fairsched_rid", request_id)), "tenant": tenant,
             "arrival_time": float(getattr(request, "arrival_time", 0.0))}
+    if claimed is not None and claimed != tenant:
+        meta["claimed_tenant"] = str(claimed)
+    return meta
 
 
 class PolicyState:
@@ -110,6 +121,19 @@ class PolicyState:
         # The paper's l: counter of the last tenant whose queue emptied, the
         # lift target when nobody is waiting.
         self.last_left = 0.0
+        # Requests that named a tenant the policy does not list (served as DEFAULT).
+        self.unknown_requests = 0
+
+    def weight(self, tenant: str) -> float:
+        policy = self.config.tenants.get(tenant)
+        return policy.weight if policy is not None else TenantPolicy().weight
+
+    def _add_tenant(self, tenant: str) -> None:
+        """Start tracking DEFAULT when the policy does not list it but a request needs it."""
+        self.counters[tenant] = 0.0
+        self.accounts[tenant] = 0.0
+        self.wasted[tenant] = 0.0
+        self.waiting[tenant] = 0
 
     @property
     def effective_counters(self) -> dict[str, float]:
@@ -132,6 +156,10 @@ class PolicyState:
             return meta
         meta = request_metadata(request, self.config)
         tenant = meta["tenant"]
+        if tenant not in self.counters:
+            self._add_tenant(tenant)
+        if "claimed_tenant" in meta:
+            self.unknown_requests += 1
         if not self.waiting[tenant]:
             queued = [self.counters[t] for t, n in self.waiting.items() if n]
             self.counters[tenant] = max(self.counters[tenant], min(queued) if queued else self.last_left)
@@ -170,8 +198,7 @@ class PolicyState:
         """Project an admitted request's prefill so the next pop sees its cost."""
         meta = self.register(request)
         remaining = max(0, int(request.num_prompt_tokens) - int(request.num_computed_tokens))
-        self.reservations[meta["request_id"]] = \
-            remaining * self.config.w_p / self.config.tenants[meta["tenant"]].weight
+        self.reservations[meta["request_id"]] = remaining * self.config.w_p / self.weight(meta["tenant"])
 
     def rollback(self, request_id: str) -> None:
         self.reservations.pop(str(request_id), None)
@@ -195,7 +222,7 @@ class PolicyState:
         self.accounts[tenant] += billed
         if system:
             self.accounts[SYSTEM] += system
-        delta = billed / c.tenants[tenant].weight
+        delta = billed / self.weight(tenant)
         self.counters[tenant] += delta
         if self.reservations:
             self.reservations.pop(request_id, None)

@@ -109,6 +109,17 @@ class SchedulerInVllmTest(unittest.TestCase):
         self.assertEqual(s.fairsched.wasted["A"], 2.0)   # one in-flight decode token, w_d = 2
         self.assertEqual(s.fairsched.requests, {})        # metadata released once nothing refers to it
 
+    def test_unknown_tenant_is_served_as_default(self):
+        for mode in ("vtc", "passthrough"):
+            s = make_scheduler(mode=mode)           # the policy lists only A and B
+            engine = Engine(s)
+            engine.add(make_request("Z", 32, max_tokens=4))
+            engine.add(make_request("A", 32, max_tokens=4))
+            engine.run_until_idle()
+            self.assertEqual(len(engine.finished), 2)
+            self.assertGreater(s.fairsched.accounts["default"], 0)
+            self.assertEqual(s.fairsched.unknown_requests, 1)
+
     def test_prefix_cache_hits_are_not_billed(self):
         s = make_scheduler(mode="vtc", budget=4096)
         engine = Engine(s)

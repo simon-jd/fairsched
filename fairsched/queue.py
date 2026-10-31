@@ -88,7 +88,7 @@ class TenantRequestQueue:
             tenant = self._tenant(selected)
             queues[tenant].popleft()
             remaining = max(0, int(selected.num_prompt_tokens) - int(selected.num_computed_tokens))
-            projected[tenant] += remaining * self.state.config.w_p / self.state.config.tenants[tenant].weight
+            projected[tenant] += remaining * self.state.config.w_p / self.state.weight(tenant)
             yield selected
 
     def counts(self) -> dict[str, int]:

@@ -75,7 +75,7 @@ class TenantSchedulerMixin:
     # Admission ---------------------------------------------------------------
 
     def add_request(self, request):
-        self.fairsched.register(request)   # rejects unknown tenants before vLLM sees them
+        self.fairsched.register(request)   # unlisted tenants are served as "default"
         super().add_request(request)
 
     # Scheduling --------------------------------------------------------------
@@ -177,7 +177,8 @@ class TenantSchedulerMixin:
             "scheduled": per_tenant, "running": running, "waiting": waiting,
             "preempted": self.fairsched_preempted, "counters": dict(self.fairsched.counters),
             "accounts": dict(self.fairsched.accounts), "wasted": dict(self.fairsched.wasted),
-            "free_blocks": self.kv_cache_manager.block_pool.get_num_free_blocks()})
+            "free_blocks": self.kv_cache_manager.block_pool.get_num_free_blocks(),
+            **({"unknown_requests": self.fairsched.unknown_requests} if self.fairsched.unknown_requests else {})})
 
     def _fairsched_count(self, requests) -> dict[str, int]:
         counts: dict[str, int] = {}

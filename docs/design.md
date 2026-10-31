@@ -156,6 +156,15 @@ always streams from the engine. It cancels the upstream request when the
 client disconnects, so cancellation reaches vLLM's abort path. It logs one
 terminal record per request.
 
+The gateway rejects unknown API keys (HTTP 401), and its configuration only
+accepts keys that map to a configured tenant. A request can still reach the
+engine with a tenant the plugin's policy does not list: the gateway and the
+policy may list different tenants, or a client may call vLLM directly. The
+plugin serves such a request as the `default` tenant (weight 1 unless the
+policy lists `default`) instead of failing vLLM's `add_request`, and the step
+log counts these requests in `unknown_requests`. All of them share that one
+tenant, so inventing tenant names gains no extra share.
+
 The load generator (`loadgen/`, `cmd/fairsched-loadgen`) replays open-arrival
 traces. Requests are sent at their scheduled time whether or not earlier ones
 have finished, so queueing shows up in latency instead of being hidden by a
