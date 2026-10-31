@@ -36,8 +36,12 @@ A small Go gateway maps API keys to tenants.
   preemptions, and the hooks add 132–403 µs of CPU per scheduling step at
   64–256 running requests.
 
-The limits, including that light-tenant preemption and an evaluation on one
-GPU, one model and synthetic traces, are under [Limitations](#limitations).
+VTC's billing weights are not this GPU's costs: with a prefill-heavy and a
+decode-heavy tenant, an even billed split gave the prefill-heavy one 53–54%
+of the fitted GPU time ([different request shapes](#different-request-shapes-and-what-a-token-costs)).
+That and the other limits, including the light-tenant preemption and an
+evaluation on one GPU, one model and synthetic traces, are under
+[Limitations](#limitations).
 
 ## What is in this repository
 
