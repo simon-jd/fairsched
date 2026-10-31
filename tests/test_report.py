@@ -1,9 +1,12 @@
 """Report math on tiny synthetic inputs."""
 from __future__ import annotations
 
+import json
+from pathlib import Path
+import tempfile
 import unittest
 
-from bench.report import backlogged_share, client_summary, percentile, service_timeline, step_summary
+from bench.report import backlogged_share, client_summary, percentile, service_timeline, step_summary, summarise_run
 
 S = 1_000_000_000
 
@@ -54,6 +57,28 @@ class ReportTest(unittest.TestCase):
     def test_service_timeline_bins_rates(self):
         steps = [step(0.0, {"A": 0}), step(0.5, {"A": 4}), step(2.5, {"A": 10})]
         self.assertEqual(service_timeline(steps, since=0.0, bin_s=2.0), {"A": [2.0, 3.0]})
+
+    def _run_dir(self, meta):
+        run = Path(tempfile.mkdtemp(prefix="fairsched-report-"))
+        (run / "meta.json").write_text(json.dumps({"arm": "vtc", "seed": 1, **meta}))
+        row = {**result("A", 0, 0.1, 1.0), "finished_unix_ns": S}
+        (run / "client.jsonl").write_text(json.dumps(row) + "\n")
+        return run
+
+    def test_summary_records_source_tree_not_commit(self):
+        tree = {"fairsched": "a" * 40}
+        s = summarise_run(self._run_dir({"source_tree": tree, "git_commit": "b" * 40}))
+        self.assertEqual(s["source_tree"], tree)
+        self.assertNotIn("git_commit", s)
+        self.assertNotIn("source_dirty", s)
+        dirty = summarise_run(self._run_dir({"source_tree": tree, "source_dirty": True}))
+        self.assertTrue(dirty["source_dirty"])
+
+    def test_older_run_keeps_the_source_tree_already_recorded(self):
+        run = self._run_dir({"git_commit": "b" * 40})
+        kept = {"fairsched": "c" * 40}
+        self.assertEqual(summarise_run(run, {("vtc", 1): kept})["source_tree"], kept)
+        self.assertIsNone(summarise_run(run)["source_tree"])
 
 
 if __name__ == "__main__":

@@ -135,10 +135,16 @@ def service_timeline(steps: list[dict], since: float, bin_s: float = 2.0) -> dic
     return {t: [b.get(i, 0.0) / bin_s for i in range(width)] for t, b in sorted(bins.items())}
 
 
-def summarise_run(run: Path) -> dict:
+def summarise_run(run: Path, previous: dict | None = None) -> dict:
+    """One run's summary. ``source_tree`` comes from the run's meta.json; a run
+    recorded before meta.json carried it keeps the value in ``previous``, the
+    existing summary's ``{(arm, seed): source_tree}``."""
     meta = json.loads((run / "meta.json").read_text())
-    summary = {"arm": meta["arm"], "seed": meta["seed"], "git_commit": meta["git_commit"],
-               "client": client_summary(load_client(run / "client.jsonl"))}
+    tree = meta.get("source_tree") or (previous or {}).get((meta["arm"], meta["seed"]))
+    summary = {"arm": meta["arm"], "seed": meta["seed"], "source_tree": tree}
+    if meta.get("source_dirty"):
+        summary["source_dirty"] = True
+    summary["client"] = client_summary(load_client(run / "client.jsonl"))
     steps = load_steps(run)
     summary["engine"] = step_summary(steps, meta.get("trace_start_unix"))
     return summary
@@ -147,10 +153,13 @@ def summarise_run(run: Path) -> dict:
 def summarise_workload(workload: str, plots: bool = False) -> Path:
     raw = ROOT / "results/raw" / workload
     runs = sorted(p for p in raw.iterdir() if (p / "meta.json").exists() and (p / "client.jsonl").exists())
-    summaries = [summarise_run(run) for run in runs]
     out = ROOT / "results" / workload
-    out.mkdir(parents=True, exist_ok=True)
     path = out / "summary.json"
+    previous = {}
+    if path.exists():
+        previous = {(r["arm"], r["seed"]): r.get("source_tree") for r in json.loads(path.read_text())["runs"]}
+    summaries = [summarise_run(run, previous) for run in runs]
+    out.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"workload": workload, "runs": summaries}, indent=1) + "\n")
     if plots:
         from bench.plots import plot_workload

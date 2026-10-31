@@ -39,6 +39,8 @@ ENGINE_PORT, PROXY_PORT = 8000, 8080
 CONTAINER = "fairsched-engine"
 # Other projects on this machine queue for the GPU on the same lock file.
 GPU_LOCK = Path(os.environ.get("FAIRSCHED_GPU_LOCK", "/var/tmp/rtx4090.lock"))
+# The directories whose code a run executes; their git tree hashes identify it.
+SOURCE_DIRS = ("fairsched", "bench", "cmd", "proxy", "loadgen", "configs")
 
 
 @contextmanager
@@ -58,6 +60,14 @@ def gpu_is_free(limit_mib: int = 1024) -> None:
     busy = [line for line in out.splitlines() if line.strip() and int(line.rsplit(",", 1)[1]) > limit_mib]
     if busy:
         sys.exit(f"GPU is in use, not starting: {busy}")
+
+
+def source_tree() -> tuple[dict[str, str], bool]:
+    """Tree hash of each source directory at HEAD, and whether any has uncommitted changes."""
+    def git(*args: str) -> str:
+        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
+    trees = {d: git("rev-parse", f"HEAD:{d}") for d in SOURCE_DIRS}
+    return trees, bool(git("status", "--porcelain", "--", *SOURCE_DIRS))
 
 
 def engine_command(arm: str, workload: str, run: Path) -> list[str]:
@@ -150,7 +160,9 @@ def _run_locked(workload: str, arm: str, seed: int, run: Path) -> Path:
     trace = write_trace(workload, seed, run / "trace.jsonl")
     (run / "policy.json").write_text(json.dumps(
         {"tenants": {t: {"weight": w} for t, w in WORKLOADS[workload].weights.items()}}))
+    trees, dirty = source_tree()
     meta = {"workload": workload, "arm": arm, "seed": seed, "model": MODEL,
+            "source_tree": trees, "source_dirty": dirty,
             "git_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True,
                                          text=True).stdout.strip(),
             "trace_sha256": hashlib.sha256(trace.read_bytes()).hexdigest(),

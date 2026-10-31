@@ -32,6 +32,9 @@ of which changes the behaviour those runs measured:
   that only `long_prompt` uses (512 blocks then, 520 now). The `long_prompt`
   runs used 520 blocks.
 
-New runs record the commit they ran from: `bench/run.py` writes `git_commit`
-to each run's `meta.json`, and `bench/report.py` copies it into
-`summary.json`.
+Runs made since then record `source_tree` themselves: `bench/run.py` writes
+the tree hashes at `HEAD` into each run's `meta.json`, together with
+`source_dirty`, which is true if any of those directories had uncommitted
+changes. `bench/report.py` copies both into `summary.json` (`source_dirty`
+only when true). For a run whose `meta.json` predates this, it keeps the
+`source_tree` already recorded for that arm and seed in `summary.json`.
