@@ -92,7 +92,8 @@ and `running[-1]`, vLLM's victim under KV pressure, is the newest request of
 the most-served tenant.
 
 **Alternatives.** Choose victims in the plugin; exempt short or interactive
-requests from preemption.
+requests from preemption; order the tail by KV held instead of service (now
+the `kv_share` option).
 
 **Why.** It adds no decision point: vLLM's preemption path, and its
 correctness, stay as they are, and an over-served tenant whose request misses
@@ -102,8 +103,13 @@ the budget waits a step without losing its KV.
 one. Right after its counter is lifted (next section), the light tenant can
 lead, and its newest request is then the victim: the interactive tenant lost
 8–20 requests this way in the noisy-neighbour runs (0–8 under FCFS, 0 under
-priority). That may explain its p99 above priority's; the summaries count
-preemptions but do not tie them to particular slow requests.
+priority). The `kv_share` order, which sends tenants over their weighted
+share of the running KV to the back, brought that to 0 in the same session
+(against 7–15), while the heavy tenant lost 4–8 more requests per seed. The
+interactive tenant's TTFT did not improve, so these preemptions are not what
+keeps its p99 above priority's. In the aggressive workload `kv_share` gave
+0.3–0.5% more throughput. It stays an option rather than the default because
+it moves preemptions to the heavy tenant without a measured latency gain.
 
 ## Lift a returning tenant's counter
 

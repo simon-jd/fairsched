@@ -28,7 +28,8 @@ A small Go gateway maps API keys to tenants.
   median; a per-tenant concurrency cap of 16 at the gateway is 4–5× faster,
   though with a 2–2.4× higher p99 and the burst finishing 28–30 s later. VTC
   also exposes the interactive tenant to 8–20 KV-pressure preemptions (0–8
-  under FCFS).
+  under FCFS). An optional victim order brings that to 0, but does not lower
+  the tenant's latency.
 - **The plugin is cheap.** On a saturating trace, vLLM with the plugin in
   passthrough mode delivers 0.1–0.5% less throughput than without it, seed
   for seed. *Cost:* VTC gives up another 0.7% and recomputes more after
@@ -67,7 +68,9 @@ are in [docs/design-tradeoffs.md](docs/design-tradeoffs.md)):
    - vLLM spends each step's token budget in that order.
    - Under KV pressure vLLM preempts `running[-1]`. That is now the newest
      request of whichever tenant is most over-served at that moment, which
-     can be the light tenant right after a lift (see the costs below).
+     can be the light tenant right after a lift (see the costs below). The
+     `kv_share` option takes the victim from a tenant over its share of the
+     KV instead ([below](#choosing-the-preemption-victim-by-kv-share)).
 3. **Billing.** `_update_after_schedule` charges each tenant, before positions
    advance, for the tokens vLLM actually scheduled that step:
    - prefill tokens at weight 1, decode tokens at weight 2;
@@ -176,9 +179,42 @@ workload and the KV cache; only one value was tried here.
 The preemption row is VTC's cost. Each time A's queue empties and a new
 request arrives, the lift puts A level with B's counter. For a moment A can
 then be the most-served tenant, and after the sort vLLM's KV-pressure victim
-is always the newest request of the most-served tenant. These preemptions are
-a plausible reason for A's p99 above priority's, but the summaries count
-preempted requests without saying which ones, so the data does not show it.
+is always the newest request of the most-served tenant. They are not what
+keeps A's p99 above priority's, though: removing them with the `kv_share`
+order (next section) left A's TTFT where it was.
+
+### Choosing the preemption victim by KV share
+
+With `preempt_order: "kv_share"` in the policy (arm `vtc-kv`), tenants
+holding more than their weighted share of the running requests' KV (counted
+as computed tokens) go to the back of `running`, keeping counter order inside
+each group. vLLM's victim is then the newest request of the highest-counter
+tenant among them, so a light tenant within its share is not preempted while
+a heavier one is running. The plugin still never preempts on its own. Both
+orders ran in one session, 3 seeds each (`results/kv_victim_*`):
+
+| | Noisy neighbour, counter | Noisy neighbour, kv_share | Aggressive, counter | Aggressive, kv_share |
+|---|---|---|---|---|
+| A requests preempted | 7 – 15 | **0** | 16 | 11 – 16 |
+| B requests preempted | 28 – 31 | 33 – 38 | 56 | 50 – 55 |
+| A TTFT median | 0.41 – 0.51 s | 0.33 – 0.56 s | 16.4 s | 16.3 – 16.5 s |
+| A TTFT p99 | 0.95 – 1.65 s | 0.95 – 1.73 s | 33.3 s | 32.6 – 32.8 s |
+| A : B share | 0.28 – 0.31 : 0.69 – 0.72 | 0.29 : 0.71 | 0.50 : 0.50 | 0.50 : 0.50 |
+| Output tokens/s | 731 – 802 | 731 – 802 | 1,304 – 1,306 | 1,310 – 1,311 |
+| Recompute billed to `system` | 36.1k – 40.6k | 35.7k – 42.8k | 68.0k | 64.5k |
+
+- In the noisy-neighbour workload the light tenant is no longer preempted,
+  and B absorbs 4–8 more preemptions per seed. A's TTFT does not improve: its
+  p99 is the same in two seeds and 0.08 s higher in the third.
+- In the aggressive workload both tenants are backlogged peers, so A is
+  sometimes over its KV share and still loses requests. Throughput is
+  0.3–0.5% higher per seed, with 5% less recompute.
+- The order also changes who gets the step's token budget first: an
+  over-share tenant's running requests now come after everyone else's.
+
+The default stays `counter`. `kv_share` moves preemptions from the light
+tenant to the heavy one without a measured latency gain, and every other
+result here uses the default.
 
 ### Aggressive tenant
 
@@ -349,6 +385,8 @@ toolchain.
     FCFS preempts the newly arrived tenant;
   - with three 6,144-token prompts and ten short requests in a small KV
     cache, every request finishes and none is preempted more than twice;
+  - with the `kv_share` order, a light tenant that the default order
+    preempts after a lift is not preempted;
   - recompute is billed to `system`;
   - aborting a request with a step in flight marks exactly that step's tokens
     as wasted;
@@ -385,5 +423,7 @@ toolchain.
 - Fairness acts on admission and token-budget order. A request already
   running a very long prefill keeps its chunks going. VTC accepts that
   bound in exchange for never throwing away work.
-- Under KV pressure the light tenant can be the victim, as the noisy-neighbour
-  results show.
+- Under KV pressure the light tenant can be the victim with the default
+  victim order, as the noisy-neighbour results show. The `kv_share` order
+  avoids that by preempting the heavy tenant more, and did not improve the
+  light tenant's latency.

@@ -87,6 +87,12 @@ The plugin uses both phases without adding a decision point of its own:
   coming back can briefly lead, and then its newest request is the victim. In
   the noisy-neighbour runs the interactive tenant lost 8–20 requests this way
   (the heavy tenant 23–33); under FCFS it lost 0–8, under static priority 0.
+  The policy option `preempt_order: "kv_share"` instead moves tenants that
+  hold more than their weighted share of the running requests' KV (computed
+  tokens) to the back, keeping counter order within each group, so the
+  victim comes from them. In the noisy-neighbour runs it took the
+  interactive tenant's preemptions to 0 and the heavy tenant's up by 4–8,
+  without changing the interactive tenant's TTFT.
 * **Admission.** The tenant queue decides which waiting request gets the
   leftover budget. Each admission *reserves* the request's remaining prefill
   cost on its tenant's counter for the rest of the step. Without that, one

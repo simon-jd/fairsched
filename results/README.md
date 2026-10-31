@@ -12,6 +12,9 @@
   seeds each, interleaved by seed in one session
   (`python3 -m bench.run aggressive native fcfs vtc --name overhead ...`).
   These runs are separate from `aggressive/summary.json`.
+- `kv_victim_noisy_neighbor/` and `kv_victim_aggressive/`: VTC with the
+  default preemption order (`vtc`) and with `preempt_order: "kv_share"`
+  (`vtc-kv`), three seeds each, interleaved in one session.
 - `noisy_neighbor/summary.json` also holds the `fcfs-cap` arm (FCFS with the
   gateway capping each tenant at 16 requests in flight), run in the same
   later session as `overhead/`.
