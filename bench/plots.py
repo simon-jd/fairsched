@@ -36,9 +36,10 @@ def plot_ttft_cdf(runs: dict[str, Path], tenant: str, path: Path) -> None:
     ax.set_xlabel(f"tenant {tenant} time to first token (s, log scale)")
     ax.set_ylabel("fraction of requests")
     ax.grid(alpha=0.3)
-    ax.legend(frameon=False, fontsize=8)
+    # Below the axes, so the legend never covers a curve.
+    ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=2)
     fig.tight_layout()
-    fig.savefig(path, dpi=150)
+    fig.savefig(path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
