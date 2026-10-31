@@ -13,15 +13,19 @@ on one RTX 4090, vLLM 0.31.0); ranges are over seeds.
 received, and admission serves the backlogged tenant with the smallest one
 (VTC, Sheng et al., OSDI 2024).
 
-**Alternatives.** vLLM's FCFS; vLLM's static priorities; rate limits or
-quotas at the gateway.
+**Alternatives.** vLLM's FCFS; vLLM's static priorities; rate limits,
+quotas or concurrency caps at the gateway.
 
 **Why.** FCFS serves a tenant in proportion to what it sends: with three
 times the demand, the aggressive tenant took 75% of the GPU, and a 300-request
 burst pushed the interactive tenant's median time to first token to
 32.4–40.5 s. Static priority needs to know who is interactive and is all or
 nothing between peers (1.00 : 0.00). Rate limits leave the GPU idle when the
-other tenant has nothing to send. VTC split the aggressive workload 0.50 :
+other tenant has nothing to send. A per-tenant concurrency cap at the gateway
+(16 in flight, one value tried, on the noisy-neighbour workload) kept the
+interactive tenant's median TTFT at 0.09–0.10 s with no preemptions, better
+than VTC, but its p99 was 2.05–2.94 s, and capping the heavy tenant's
+concurrency delayed the end of its burst from 114–118 s to 142–147 s. VTC split the aggressive workload 0.50 :
 0.50, gave 2 : 1 weights 0.67 : 0.33, kept the interactive tenant's median
 TTFT at 0.39–0.50 s through the burst, and gave the remaining tenant
 everything once the other ran out of work.

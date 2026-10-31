@@ -102,9 +102,14 @@ why enforcing fairness below the size of one request destroys work.
 - Arms:
   - **FCFS:** vLLM's scheduler with the plugin in passthrough mode, so
     accounting and logging match the VTC arm;
+  - **FCFS + gateway cap** (noisy neighbour only): FCFS as above, with the
+    gateway admitting at most 16 requests per tenant to the engine and
+    queueing the rest (its `max_inflight`). 16 of B's requests hold about 37k
+    tokens, under half of the KV cache. Only this one cap value was run;
   - **priority:** vLLM's native priority policy, with the gateway marking one
     tenant high;
-  - **VTC.**
+  - **VTC;**
+  - **no plugin** (overhead runs only): vLLM's FCFS without the plugin.
 - "Share" is each tenant's fraction of billed service over the steps in
   which both tenants had work waiting.
 - Per-run data is in `results/*/summary.json`
@@ -119,19 +124,32 @@ why enforcing fairness below the size of one request destroys work.
   tokens. The client cancels a random 20% of them after their second output
   chunk.
 
-| | FCFS | Priority (A high) | VTC |
-|---|---|---|---|
-| A TTFT median | 32.4 – 40.5 s | 0.23 – 0.30 s | 0.39 – 0.50 s |
-| A TTFT p99 | 90.9 – 92.0 s | 0.78 s | 0.86 – 1.43 s |
-| B TTFT median | 45.7 – 46.3 s | 48.8 – 50.2 s | 49.1 – 50.2 s |
-| B's burst finishes | 112 – 115 s | 114 – 116 s | 114 – 118 s |
-| A requests preempted under KV pressure | 0 – 1 | 0 | 11 – 20 |
+| | FCFS | FCFS + gateway cap | Priority (A high) | VTC |
+|---|---|---|---|---|
+| A TTFT median | 32.4 – 40.5 s | 0.09 – 0.10 s | 0.23 – 0.30 s | 0.39 – 0.50 s |
+| A TTFT p99 | 90.9 – 92.0 s | 2.05 – 2.94 s | 0.78 s | 0.86 – 1.43 s |
+| B TTFT median | 45.7 – 46.3 s | 63.9 – 65.1 s | 48.8 – 50.2 s | 49.1 – 50.2 s |
+| B's burst finishes | 112 – 115 s | 142 – 147 s | 114 – 116 s | 114 – 118 s |
+| A requests preempted under KV pressure | 0 – 1 | 0 | 0 | 11 – 20 |
+
+![Tenant A TTFT CDF, noisy neighbour, seed 1](results/noisy_neighbor/ttft_A.png)
 
 Under FCFS, A gets almost no service from t = 10 s until B's backlog drains
 near t = 100 s. Under VTC, A is served at its demand throughout. B pays with
 about 4 s more median TTFT, and its burst finishes 2–3 s later:
 
 ![Billed service per tenant over time](results/noisy_neighbor/service.png)
+
+**A concurrency cap at the gateway** is the obvious alternative to a
+scheduler. With each tenant limited to 16 requests in the engine (run later
+than the other arms, on the same traces), it beats VTC on two counts: A's
+median TTFT is 0.09–0.10 s, and nothing is preempted. It loses on the
+others. A's p99 is 2.05–2.94 s against VTC's 0.86–1.43 s. With at most 16 of
+B's requests running, B's median TTFT rises to 63.9–65.1 s and its burst
+finishes at 142–147 s, 28–30 s later than under VTC with the same seed, so
+the same work takes longer (625–661 output tokens/s over the run, against
+731–802 for the other arms). The cap is also a number that has to suit the
+workload and the KV cache; only one value was tried here.
 
 The preemption row is VTC's cost. Each time A's queue empties and a new
 request arrives, the lift puts A level with B's counter. For a moment A can
