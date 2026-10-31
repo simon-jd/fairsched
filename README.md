@@ -107,8 +107,9 @@ why enforcing fairness below the size of one request destroys work.
   - **VTC.**
 - "Share" is each tenant's fraction of billed service over the steps in
   which both tenants had work waiting.
-- Reproduce with `scripts/run-all.sh` (about 2.5 h). Per-run data is in
-  `results/*/summary.json`.
+- Per-run data is in `results/*/summary.json`
+  ([results/README.md](results/README.md)). To rerun, see
+  [Reproduce](#reproduce).
 
 ### Noisy neighbour
 
@@ -227,13 +228,49 @@ runner. Results are in `results/hook_overhead.jsonl`:
   priority and VTC alike. There is no run without the plugin on a
   saturating trace.
 
+## Reproduce
+
+Requirements: Linux with Docker and the NVIDIA Container Toolkit, one 24 GB
+GPU (the results are from an RTX 4090), `nvidia-smi`, and Python 3.12 or
+later on the host. The runner itself uses only the standard library; the
+engine runs in the vLLM image pinned by digest in `configs/pins.json`, and Go
+code builds in the pinned Go image.
+
+1. **Models.** `scripts/fetch-models.sh` (or `make models`) downloads the
+   pinned revision of Qwen2.5-7B-Instruct (about 15 GB) into
+   `.cache/huggingface`. The engine container mounts that directory and runs
+   with `HF_HUB_OFFLINE=1`, so the download must happen first.
+2. **Binaries.** `scripts/build-go.sh` (or `make build`) builds
+   `bin/fairsched-proxy` and `bin/fairsched-loadgen`, which the runner starts
+   for every run.
+3. **Plots.** `scripts/run-all.sh` draws the figures with `.venv/bin/python`:
+   `python3 -m venv .venv && .venv/bin/pip install matplotlib==3.11.2`
+   (`make .venv/bin/python`).
+4. **Runs.** `scripts/run-all.sh` (or `make bench`) runs every experiment
+   above, about 2.5 h. A single run is
+   `python3 -m bench.run noisy_neighbor vtc --seed 1`. Each run waits for an
+   exclusive `flock` on `/var/tmp/rtx4090.lock` (`FAIRSCHED_GPU_LOCK`), refuses
+   to start while another process holds more than 1 GiB of GPU memory, starts
+   its own engine with `--gpu-memory-utilization 0.83`, and writes raw output
+   to `results/raw/<workload>/<arm>-s<seed>/`. It never overwrites an existing
+   run directory.
+5. **Summaries.** `python3 -m bench.report <workload> ... [--plots]` rewrites
+   `results/<workload>/summary.json` (and the PNGs) from the raw runs.
+
 ## Testing
 
-`scripts/test.sh` runs three suites:
+`scripts/test.sh` (or `make test`) runs three suites, in this order. The
+first two need no model; the third needs the test model's `config.json`,
+which `scripts/fetch-models.sh --test-only` (`make test-model`) fetches.
+`make test-local` runs the first two without Docker, using a local Go
+toolchain.
 
-- **Policy** (`tests/test_policy.py`, pure Python): the lift rule (waiting
-  queue only), weighted shares, recompute and waste attribution, and queue
-  semantics matching vLLM's `FCFSRequestQueue`.
+- **Policy and report** (`tests/test_policy.py`, `tests/test_report.py`, pure
+  Python): the lift rule (waiting queue only), weighted shares, recompute and
+  waste attribution, queue semantics matching vLLM's `FCFSRequestQueue`, and
+  the report's percentiles, shares and timelines.
+- **Go** (`go test ./...`): the gateway's header stripping and tenant
+  injection, streaming, cancellation, and the load generator.
 - **Real vLLM scheduler on CPU** (`tests/test_scheduler_vllm.py`), in the
   pinned container with no GPU. It builds the real vLLM 0.31.0
   `AsyncScheduler`, KV cache manager, block pool and prefix cache, replaces
@@ -249,8 +286,6 @@ runner. Results are in `results/hook_overhead.jsonl`:
     as wasted;
   - prefix-cache hits are not billed;
   - 2:1 weights give a 2:1 split.
-- **Go** (`go test ./...`): the gateway's header stripping and tenant
-  injection, streaming, cancellation, and the load generator.
 
 ## Repository layout
 
