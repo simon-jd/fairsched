@@ -369,7 +369,7 @@ func runOne(parent context.Context, a Arrival, due time.Time, opt Options) Resul
 			}
 		}
 		if opt.BoundedRecords && (len(r.Events) >= int(body["max_tokens"].(float64))+2 || len(event.Tokens) > 64) {
-			return errors.New("bounded evidence event/token budget")
+			return errors.New("bounded_records_event_budget_exceeded")
 		}
 		if opt.BoundedRecords {
 			b, e := json.Marshal(event)
@@ -378,7 +378,7 @@ func runOne(parent context.Context, a Arrival, due time.Time, opt Options) Resul
 			}
 			recordedBytes += len(b) + 256
 			if len(b) > 65536-256 || recordedBytes > int(body["max_tokens"].(float64))*1024+2048 {
-				return errors.New("bounded evidence retained bytes")
+				return errors.New("bounded_records_byte_budget_exceeded")
 			}
 		}
 		r.Events = append(r.Events, event)
@@ -419,10 +419,10 @@ func runOne(parent context.Context, a Arrival, due time.Time, opt Options) Resul
 }
 
 func writeRecords(w io.Writer, r Result, maxTokens int) error {
-	// The finite original maximum is2048 tokens/request. Bound accepted bytes
+	// Bounded records allow at most 2048 tokens per request. Bound accepted bytes
 	// independently of event count, including malformed upstream data.
 	if maxTokens < 1 || maxTokens > 2048 {
-		return errors.New("bounded original output budget")
+		return errors.New("bounded_records_max_tokens_out_of_range")
 	}
 	budget := maxTokens*1024 + 4096
 	for i, e := range r.Events {
@@ -431,7 +431,7 @@ func writeRecords(w io.Writer, r Result, maxTokens int) error {
 			return err
 		}
 		if len(b) > 65536 || len(b)+1 > budget {
-			return errors.New("bounded client record/byte budget")
+			return errors.New("bounded_records_event_row_budget_exceeded")
 		}
 		budget -= len(b) + 1
 		if _, err = w.Write(append(b, '\n')); err != nil {
@@ -445,7 +445,7 @@ func writeRecords(w io.Writer, r Result, maxTokens int) error {
 		return err
 	}
 	if len(b) > 65536 || len(b)+1 > budget {
-		return errors.New("bounded client terminal budget")
+		return errors.New("bounded_records_terminal_row_budget_exceeded")
 	}
 	_, err = w.Write(append(b, '\n'))
 	return err

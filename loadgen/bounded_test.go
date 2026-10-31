@@ -12,7 +12,7 @@ import (
 
 type errorWriter struct{}
 
-func (errorWriter) Write(p []byte) (int, error) { return 0, errors.New("CPU audit IO first") }
+func (errorWriter) Write(p []byte) (int, error) { return 0, errors.New("write failed") }
 func TestBoundedRecordIOAndByteFailure(t *testing.T) {
 	r := Result{ID: "r", State: "completed", Events: []Event{{Data: "[DONE]"}}}
 	if err := writeRecords(errorWriter{}, r, 128); err == nil {
@@ -29,7 +29,7 @@ func TestBoundedRecordIOAndByteFailure(t *testing.T) {
 		t.Fatal("missing event or terminal")
 	}
 }
-func TestBoundedOriginalEventTransportActualRun(t *testing.T) {
+func TestBoundedRecordsActualRun(t *testing.T) {
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/event-stream")
 		output(w, `{"choices":[{"index":0,"token_ids":[7],"finish_reason":null}]}`)
@@ -54,5 +54,24 @@ func TestBoundedOriginalEventTransportActualRun(t *testing.T) {
 		if len(line) > 65536 || !json.Valid(line) {
 			t.Fatal("bad bounded JSON")
 		}
+	}
+}
+func TestBoundedRecordsRejectAStreamOverItsEventBudget(t *testing.T) {
+	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/event-stream")
+		for i := 0; i < 5; i++ { // max_tokens 1 allows at most 3 events
+			output(w, `{"choices":[{"index":0,"token_ids":[7],"finish_reason":null}]}`)
+		}
+		output(w, "[DONE]")
+	}))
+	defer s.Close()
+	a := arrival("r", 0)
+	a.Body = json.RawMessage(`{"stream":true,"max_tokens":1}`)
+	rs, err := Run(context.Background(), []Arrival{a}, Options{BaseURL: s.URL, Results: &bytes.Buffer{}, BoundedRecords: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rs) != 1 || rs[0].State != "error" || rs[0].Reason != "bounded_records_event_budget_exceeded" {
+		t.Fatal(rs)
 	}
 }
