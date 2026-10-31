@@ -2,11 +2,12 @@
 
     python3 -m bench.report noisy_neighbor          # all runs under results/raw/noisy_neighbor
     python3 -m bench.report noisy_neighbor --plots  # also write PNGs (needs matplotlib)
+    python3 -m bench.report overhead                # runs made with bench.run --name overhead
 
-Writes ``results/<workload>/summary.json`` (committed) from the raw run
-directories (not committed). Latency is client-observed: TTFT is first output
-chunk minus the request's scheduled arrival time, so queueing in the gateway
-and engine is included.
+Writes ``results/<name>/summary.json`` (committed) from the raw run
+directories under ``results/raw/<name>/`` (not committed). Latency is
+client-observed: TTFT is first output chunk minus the request's scheduled
+arrival time, so queueing in the gateway and engine is included.
 """
 from __future__ import annotations
 
@@ -150,10 +151,11 @@ def summarise_run(run: Path, previous: dict | None = None) -> dict:
     return summary
 
 
-def summarise_workload(workload: str, plots: bool = False) -> Path:
-    raw = ROOT / "results/raw" / workload
+def summarise_workload(name: str, plots: bool = False) -> Path:
+    raw = ROOT / "results/raw" / name
     runs = sorted(p for p in raw.iterdir() if (p / "meta.json").exists() and (p / "client.jsonl").exists())
-    out = ROOT / "results" / workload
+    workload = json.loads((runs[0] / "meta.json").read_text())["workload"] if runs else name
+    out = ROOT / "results" / name
     path = out / "summary.json"
     previous = {}
     if path.exists():
@@ -169,11 +171,11 @@ def summarise_workload(workload: str, plots: bool = False) -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("workloads", nargs="+")
+    parser.add_argument("names", nargs="+", help="directories under results/raw (usually the workload)")
     parser.add_argument("--plots", action="store_true")
     args = parser.parse_args()
-    for workload in args.workloads:
-        print(summarise_workload(workload, args.plots))
+    for name in args.names:
+        print(summarise_workload(name, args.plots))
 
 
 if __name__ == "__main__":

@@ -1,14 +1,16 @@
 """Run one (workload, arm, seed) experiment end to end on the local GPU.
 
     python3 -m bench.run noisy_neighbor vtc --seed 1
+    python3 -m bench.run aggressive native fcfs vtc --name overhead --seed 1
 
 Starts the pinned vLLM container (with the plugin, or native for ``native``),
 the Go gateway in front of it and the Go load generator, then tears everything
-down. Raw output goes to ``results/raw/<workload>/<arm>-s<seed>/``.
+down. Raw output goes to ``results/raw/<name>/<arm>-s<seed>/``, where the name
+defaults to the workload.
 
 Arms:
-  native    vLLM FCFS, no plugin (overhead reference)
-  fcfs      vLLM FCFS with the plugin in passthrough mode (same accounting/logging)
+  native      vLLM FCFS, no plugin (overhead reference)
+  fcfs        vLLM FCFS with the plugin in passthrough mode (same accounting/logging)
   priority    vLLM priority scheduling, gateway gives tenant A the higher priority
   priority-b  the same with tenant B favoured
   vtc         the plugin's VTC policy
@@ -142,10 +144,10 @@ def warm_up() -> None:
             r.read()
 
 
-def run_one(workload: str, arm: str, seed: int) -> Path:
+def run_one(workload: str, arm: str, seed: int, name: str | None = None) -> Path:
     if arm not in ARMS or workload not in WORKLOADS:
         raise SystemExit(f"unknown arm/workload: {arm}/{workload}")
-    run = ROOT / "results/raw" / workload / f"{arm}-s{seed}"
+    run = ROOT / "results/raw" / (name or workload) / f"{arm}-s{seed}"
     if run.exists():
         raise SystemExit(f"{run} exists; remove it to rerun")
     run.mkdir(parents=True)
@@ -204,11 +206,12 @@ def main() -> None:
     parser.add_argument("workload", choices=sorted(WORKLOADS))
     parser.add_argument("arms", nargs="+", choices=ARMS)
     parser.add_argument("--seed", type=int, action="append", help="repeatable; default 1")
+    parser.add_argument("--name", help="directory under results/raw (default: the workload)")
     args = parser.parse_args()
     for seed in args.seed or [1]:
         for arm in args.arms:
             print(f"== {args.workload} {arm} seed={seed}", flush=True)
-            print(run_one(args.workload, arm, seed), flush=True)
+            print(run_one(args.workload, arm, seed, args.name), flush=True)
 
 
 if __name__ == "__main__":
