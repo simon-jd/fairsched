@@ -41,6 +41,11 @@ class PolicyConfig:
     ``delta`` widens the "equally under-served" window when picking a tenant.
     ``charge_recompute`` and ``charge_wasted`` name who pays for tokens recomputed
     after preemption and for tokens computed for an already-cancelled request.
+    ``preempt_order`` decides which running request vLLM preempts under KV
+    pressure (see ``PolicyState.order_running``): ``"counter"`` (default) the
+    newest request of the tenant with the highest counter, ``"kv_share"`` the
+    newest request of the highest-counter tenant among those holding more than
+    their weighted share of the running requests' KV.
     """
     tenants: dict[str, TenantPolicy] = field(default_factory=lambda: {"default": TenantPolicy()})
     w_p: float = 1.0
@@ -48,6 +53,7 @@ class PolicyConfig:
     delta: float = 0.0
     charge_recompute: str = SYSTEM
     charge_wasted: str = "tenant"
+    preempt_order: str = "counter"
 
     def __post_init__(self) -> None:
         if not self.tenants or any(not isinstance(k, str) or not k or k == SYSTEM for k in self.tenants):
@@ -60,6 +66,8 @@ class PolicyConfig:
         for name in ("charge_recompute", "charge_wasted"):
             if getattr(self, name) not in {"tenant", SYSTEM}:
                 raise ValueError(f"{name} must be 'tenant' or 'system'")
+        if self.preempt_order not in {"counter", "kv_share"}:
+            raise ValueError("preempt_order must be 'counter' or 'kv_share'")
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -278,4 +286,19 @@ class PolicyState:
         ever preempting anything itself.
         """
         counters = self.effective_counters
-        return sorted(requests, key=lambda r: self._key(r, counters))
+        ordered = sorted(requests, key=lambda r: self._key(r, counters))
+        if self.config.preempt_order == "counter":
+            return ordered
+        # kv_share: tenants holding more than their weighted share of the
+        # running requests' KV go to the back, keeping counter order inside
+        # each group. The victim is then the newest request of the
+        # highest-counter tenant among them, never a tenant within its share
+        # while such a tenant is running. A light tenant just lifted to the top
+        # counter is therefore not preempted for a heavy tenant's KV growth.
+        held: dict[str, int] = {}
+        for r in ordered:
+            tenant = self.requests[str(r.request_id)]["tenant"]
+            held[tenant] = held.get(tenant, 0) + int(getattr(r, "num_computed_tokens", 0))
+        total, weights = sum(held.values()), sum(self.weight(t) for t in held)
+        over = {t for t, n in held.items() if total and n > total * self.weight(t) / weights}
+        return sorted(ordered, key=lambda r: self.requests[str(r.request_id)]["tenant"] in over)

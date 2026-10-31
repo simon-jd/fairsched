@@ -96,6 +96,28 @@ class SchedulerInVllmTest(unittest.TestCase):
         work = 3 * 6144 + 10 * 128
         self.assertLess(steps, 3 * work / 512 + 3 * 32)
 
+    def light_tenant_under_kv_pressure(self, order):
+        """B keeps 16 decodes and a queue against 120 KV blocks; a short A request arrives every 10 steps."""
+        engine = Engine(make_scheduler(mode="vtc", budget=512, num_blocks=120, preempt_order=order))
+        for _ in range(16):
+            engine.add(make_request("B", 256, max_tokens=256))
+        shorts = []
+        while engine.s.has_requests() or len(shorts) < 30:
+            if engine.step % 10 == 0 and len(shorts) < 30:
+                shorts.append(make_request("A", 32, max_tokens=16))
+                engine.add(shorts[-1])
+            engine.run_step()
+            self.assertLess(engine.step, 5000)
+        engine.drain()
+        self.assertEqual(len(engine.finished), 46)
+        return engine.preempted.count("A")
+
+    def test_kv_share_order_stops_preempting_the_lifted_light_tenant(self):
+        # With the counter order, a short A request lifted level with B leads
+        # for a moment and becomes vLLM's KV-pressure victim.
+        self.assertGreater(self.light_tenant_under_kv_pressure("counter"), 0)
+        self.assertEqual(self.light_tenant_under_kv_pressure("kv_share"), 0)
+
     def test_abort_with_step_in_flight_marks_its_tokens_wasted(self):
         s = make_scheduler(mode="vtc")
         engine = Engine(s)

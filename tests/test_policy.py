@@ -152,6 +152,31 @@ class PolicyTest(unittest.TestCase):
         state.charge(a1.request_id, 1000, 0)
         self.assertEqual(state.order_running([a2, a1, b1]), [b1, a1, a2])
 
+    def test_kv_share_order_protects_a_tenant_within_its_kv_share(self):
+        def running(order):
+            state = two_tenants(preempt_order=order)
+            b_old, b_new = req("B", computed=900), req("B", computed=800)
+            a_new = req("A", computed=40)
+            for r in (b_old, b_new, a_new):
+                state.register(r)
+            state.counters.update(A=50.0, B=40.0)   # A just lifted above B, as after a lift
+            return state.order_running([a_new, b_new, b_old]), (b_old, b_new, a_new)
+        ordered, (b_old, b_new, a_new) = running("counter")
+        self.assertIs(ordered[-1], a_new)             # the light tenant is the victim
+        ordered, (b_old, b_new, a_new) = running("kv_share")
+        self.assertEqual(ordered, [a_new, b_old, b_new])   # B holds 98% of the KV: its newest goes
+
+    def test_kv_share_order_uses_weights_and_keeps_counter_order(self):
+        state = two_tenants(weights=(3.0, 1.0), preempt_order="kv_share")
+        a1, a2, b1 = req("A", computed=600), req("A", computed=600), req("B", computed=400)
+        for r in (a1, a2, b1):
+            state.register(r)
+        state.counters.update(A=10.0, B=20.0)
+        # A holds 75% with a 75% share, B 25% with 25%: nobody is over, so counter order.
+        self.assertEqual(state.order_running([b1, a2, a1]), [a1, a2, b1])
+        with self.assertRaises(ValueError):
+            PolicyConfig(preempt_order="largest")
+
     def test_same_step_admissions_see_reserved_prefill(self):
         state = two_tenants()
         queue = TenantRequestQueue(state)
