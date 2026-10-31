@@ -32,6 +32,8 @@ from bench.workloads import MODEL, WORKLOADS, write as write_trace
 
 ROOT = Path(__file__).resolve().parents[1]
 PINS = json.loads((ROOT / "configs/pins.json").read_text())
+# Run the image by digest, so a re-pushed tag cannot change what is measured.
+IMAGE = PINS["image"].split(":")[0] + "@" + PINS["image_digest"]
 ARMS = ("native", "fcfs", "priority", "priority-b", "vtc")
 ENGINE_PORT, PROXY_PORT = 8000, 8080
 CONTAINER = "fairsched-engine"
@@ -69,7 +71,7 @@ def engine_command(arm: str, workload: str, run: Path) -> list[str]:
            "-e", "HF_HUB_OFFLINE=1", "-e", "PYTHONPATH=/workspace", "-e", "PYTHONDONTWRITEBYTECODE=1",
            "-e", "FAIRSCHED_OUTPUT=/fairsched-output", "-e", "FAIRSCHED_POLICY=/fairsched-output/policy.json",
            "-e", f"FAIRSCHED_MODE={'vtc' if arm == 'vtc' else 'passthrough'}",
-           PINS["image"], "--model", MODEL, "--revision", PINS["models"][MODEL],
+           IMAGE, "--model", MODEL, "--revision", PINS["models"][MODEL],
            "--dtype", "bfloat16", "--max-model-len", "8192",
            # Desktop apps hold ~3.5 GiB of this 24 GiB card.
            "--gpu-memory-utilization", "0.83",
