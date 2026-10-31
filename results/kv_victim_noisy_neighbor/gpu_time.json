@@ -1,0 +1,193 @@
+{
+ "workload": "noisy_neighbor",
+ "model": "interval_s = intercept_s + sum(coef_s[f] * f) for f in q (query tokens run as prefill), d (decode steps), attn (causal attention pairs)",
+ "r2_by_offset": {
+  "0": 0.6764,
+  "1": 0.9769,
+  "2": 0.6818,
+  "3": 0.6401
+ },
+ "fit": {
+  "offset": 1,
+  "intercept_s": 0.01569285898442594,
+  "coef_s": {
+   "q": 8.351077345405401e-05,
+   "d": 0.00014280314477109924,
+   "attn": 4.799941940317186e-09
+  },
+  "dropped": [],
+  "r2": 0.9769110416289535,
+  "median_abs_error_s": 0.0007673463471151339,
+  "intervals": 16862
+ },
+ "runs": [
+  {
+   "arm": "vtc-kv",
+   "seed": 1,
+   "gpu_share_backlogged": {
+    "A": 0.3094,
+    "B": 0.6906
+   },
+   "billed_share_backlogged": {
+    "A": 0.2886,
+    "B": 0.7114
+   },
+   "gpu_share_run": {
+    "A": 0.2721,
+    "B": 0.7279
+   },
+   "billed_share_run": {
+    "A": 0.1329,
+    "B": 0.8671
+   },
+   "gpu_s_run": {
+    "A": 33.094,
+    "B": 88.521
+   },
+   "billed_run": {
+    "A": 112752.0,
+    "B": 735676.0
+   }
+  },
+  {
+   "arm": "vtc-kv",
+   "seed": 2,
+   "gpu_share_backlogged": {
+    "A": 0.3045,
+    "B": 0.6955
+   },
+   "billed_share_backlogged": {
+    "A": 0.2928,
+    "B": 0.7072
+   },
+   "gpu_share_run": {
+    "A": 0.2632,
+    "B": 0.7368
+   },
+   "billed_share_run": {
+    "A": 0.1551,
+    "B": 0.8449
+   },
+   "gpu_s_run": {
+    "A": 31.684,
+    "B": 88.678
+   },
+   "billed_run": {
+    "A": 135702.0,
+    "B": 739206.0
+   }
+  },
+  {
+   "arm": "vtc-kv",
+   "seed": 3,
+   "gpu_share_backlogged": {
+    "A": 0.3041,
+    "B": 0.6959
+   },
+   "billed_share_backlogged": {
+    "A": 0.2908,
+    "B": 0.7092
+   },
+   "gpu_share_run": {
+    "A": 0.2624,
+    "B": 0.7376
+   },
+   "billed_share_run": {
+    "A": 0.1469,
+    "B": 0.8531
+   },
+   "gpu_s_run": {
+    "A": 31.91,
+    "B": 89.697
+   },
+   "billed_run": {
+    "A": 127542.0,
+    "B": 740716.0
+   }
+  },
+  {
+   "arm": "vtc",
+   "seed": 1,
+   "gpu_share_backlogged": {
+    "A": 0.3166,
+    "B": 0.6834
+   },
+   "billed_share_backlogged": {
+    "A": 0.2815,
+    "B": 0.7185
+   },
+   "gpu_share_run": {
+    "A": 0.276,
+    "B": 0.724
+   },
+   "billed_share_run": {
+    "A": 0.1329,
+    "B": 0.8671
+   },
+   "gpu_s_run": {
+    "A": 33.566,
+    "B": 88.049
+   },
+   "billed_run": {
+    "A": 112752.0,
+    "B": 735678.0
+   }
+  },
+  {
+   "arm": "vtc",
+   "seed": 2,
+   "gpu_share_backlogged": {
+    "A": 0.3343,
+    "B": 0.6657
+   },
+   "billed_share_backlogged": {
+    "A": 0.3062,
+    "B": 0.6938
+   },
+   "gpu_share_run": {
+    "A": 0.2685,
+    "B": 0.7315
+   },
+   "billed_share_run": {
+    "A": 0.1551,
+    "B": 0.8449
+   },
+   "gpu_s_run": {
+    "A": 32.324,
+    "B": 88.047
+   },
+   "billed_run": {
+    "A": 135702.0,
+    "B": 739206.0
+   }
+  },
+  {
+   "arm": "vtc",
+   "seed": 3,
+   "gpu_share_backlogged": {
+    "A": 0.3144,
+    "B": 0.6856
+   },
+   "billed_share_backlogged": {
+    "A": 0.2925,
+    "B": 0.7075
+   },
+   "gpu_share_run": {
+    "A": 0.2657,
+    "B": 0.7343
+   },
+   "billed_share_run": {
+    "A": 0.1469,
+    "B": 0.8531
+   },
+   "gpu_s_run": {
+    "A": 32.311,
+    "B": 89.287
+   },
+   "billed_run": {
+    "A": 127542.0,
+    "B": 740718.0
+   }
+  }
+ ]
+}

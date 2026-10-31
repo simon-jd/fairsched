@@ -150,7 +150,11 @@ made.
 
 **Cost.** Per-request interval sets and a ledger per in-flight step, released
 only when no step still refers to them. The cost model is linear and does not
-model attention growing with context length.
+model attention growing with context length, and its weights are not this
+GPU's. A step-time fit on the logged work (R² 0.977–0.998) puts a decode
+token at 0.97–1.71× a prefill token, depending on the workload, against
+VTC's 2×. With a prefill-heavy and a decode-heavy tenant, VTC's even billed
+split gave the prefill-heavy one 53–54% of the fitted GPU time.
 
 ## Tenant identity from the gateway, never from the client
 
@@ -217,4 +221,4 @@ throughput per seed. Open-loop traces cannot show it, because their arrival
 schedule sets the run length (every arm's seed-1 noisy-neighbour run gives
 730.6–731.2 output tokens/s).
 
-**Cost.** The full set of runs takes about 3 hours.
+**Cost.** The full set of runs takes about 4.5 hours.

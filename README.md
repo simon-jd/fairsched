@@ -258,6 +258,60 @@ has weight 2, B weight 1.
 Here the cost is larger. VTC preempted 72–87 requests against FCFS's 68–70,
 and recomputed 74.8k–90.3k weighted tokens against 59.4k–63.8k.
 
+### Different request shapes, and what a token costs
+
+**Workload.** Both tenants are backlogged from t = 0 with equal weights but
+different shapes. A sends 200 prefill-heavy requests (2,048-token prompts,
+32 output tokens), B 200 decode-heavy ones (128-token prompts, 512 output
+tokens). 3 seeds per arm, all in one session (`results/mixed_shapes/`).
+
+VTC's share is in its own billing units, prefill tokens at weight 1 and
+decode tokens at 2. To see what the GPU actually spent, `bench/gpu_time.py`
+fits each step's wall time to the work the step log records for it:
+
+    step time = c0 + cq · (query tokens run as prefill) + cd · (decode steps) + ca · (causal attention pairs)
+
+With async scheduling a step is logged while the one before it is still on
+the GPU, so the fit pairs step k's work with the interval between the next
+two log records. That alignment fits with R² = 0.997 and a median error of
+0.54 ms over 29,744 steps; pairing with the same or later intervals gives
+R² 0.63–0.68. Each step's time is then split between tenants in proportion
+to their predicted variable cost (the fixed c0 is shared the same way).
+
+| | FCFS | FCFS + gateway cap | VTC | VTC, kv_share |
+|---|---|---|---|---|
+| A : B share, billed (VTC units) | 0.72 : 0.28 | see below | **0.50 : 0.50** | 0.50 : 0.50 |
+| A : B share, fitted GPU time | 0.76 : 0.24 | see below | 0.53 – 0.54 : 0.46 – 0.47 | 0.54 : 0.46 |
+| A TTFT median | 21.8 – 21.9 s | 21.5 – 21.6 s | 34.1 – 34.2 s | 34.2 – 34.4 s |
+| B TTFT median | 21.4 s | 86.7 – 87.1 s | 2.6 – 2.8 s | 2.8 s |
+| A's last request finishes | 55.0 – 55.2 s | 43.7 – 44.0 s | 56.4 – 56.7 s | 56.6 – 56.7 s |
+| B's last request finishes | 64.4 – 64.6 s | 146.1 – 146.5 s | 63.3 – 63.6 s | 63.5 – 63.6 s |
+| Output tokens/s | 1,684 – 1,688 | 743 – 745 | 1,711 – 1,718 | 1,710 – 1,713 |
+
+- **The fitted costs are not VTC's 1:2.** On this workload the fit gives
+  14.6 ms per step plus 0.081 ms per prefill token, 0.079 ms per decode step
+  and 8.9 ns per attention pair, so at the margin a decode token costs about
+  the same as a prefill token (0.97×), not twice as much. Fitted separately,
+  the `aggressive` and `noisy_neighbor` runs give 1.49× and 1.71× (R² 0.998
+  and 0.977), with attention coefficients between 4.8 and 48 ns per pair, so
+  the ratio depends on the batch mix and no single pair of weights is right.
+- **So VTC's even split is not an even GPU split.** Its 0.50 : 0.50 in billed
+  units gave the prefill-heavy tenant 53–54% of the fitted GPU time: decode
+  is overpriced here, and the decode-heavy tenant gets less GPU than its
+  billed half. FCFS shows the same direction (0.72 billed, 0.76 GPU time).
+  VTC was not rerun with fitted weights.
+- VTC still does what it is for: B's median TTFT drops from 21.4 s to
+  2.6–2.8 s, A's rises from 21.8 s to 34.1–34.2 s, and throughput is 1.6%
+  higher than FCFS's.
+- **The cap fails on this mix.** With at most 16 of B's decode-heavy
+  requests in the engine, B's median TTFT is 86.7–87.1 s and the run takes
+  146 s instead of 64. Most of that time B decodes alone in batches of at
+  most 16, so its work costs 105 GPU-seconds against 22 under VTC. The billed
+  and GPU shares over steps where both tenants wait in the engine are not
+  comparable for this arm, because B's backlog sits in the gateway.
+
+![Mixed shapes: billed service over time](results/mixed_shapes/service.png)
+
 ### Long prompts under KV pressure
 
 **Workload.** Long prompts of the length that livelocked the earlier design
@@ -348,7 +402,7 @@ code builds in the pinned Go image.
    `python3 -m venv .venv && .venv/bin/pip install matplotlib==3.11.2`
    (`make .venv/bin/python`).
 4. **Runs.** `scripts/run-all.sh` (or `make bench`) runs every experiment
-   above, about 3 h. A single run is
+   above, about 4.5 h. A single run is
    `python3 -m bench.run noisy_neighbor vtc --seed 1`. Each run waits for an
    exclusive `flock` on `/var/tmp/rtx4090.lock` (`FAIRSCHED_GPU_LOCK`), refuses
    to start while another process holds more than 1 GiB of GPU memory, starts
@@ -356,7 +410,9 @@ code builds in the pinned Go image.
    to `results/raw/<workload>/<arm>-s<seed>/`. It never overwrites an existing
    run directory.
 5. **Summaries.** `python3 -m bench.report <workload> ... [--plots]` rewrites
-   `results/<workload>/summary.json` (and the PNGs) from the raw runs.
+   `results/<workload>/summary.json` (and the PNGs) from the raw runs, and
+   `python3 -m bench.gpu_time <workload>` writes the step-time fit and GPU-time
+   shares to `results/<workload>/gpu_time.json`.
 
 ## Testing
 
@@ -366,9 +422,10 @@ which `scripts/fetch-models.sh --test-only` (`make test-model`) fetches.
 `make test-local` runs the first two without Docker, using a local Go
 toolchain.
 
-- **Policy, report, step log and runner** (`tests/test_policy.py`,
-  `tests/test_report.py`, `tests/test_audit.py`, `tests/test_bench.py`, pure
-  Python): the lift rule
+- **Policy, report, step log, runner and step-time fit**
+  (`tests/test_policy.py`, `tests/test_report.py`, `tests/test_audit.py`,
+  `tests/test_bench.py`, `tests/test_gpu_time.py`, pure Python): the lift
+  rule
   (waiting queue only), weighted shares, recompute and waste attribution,
   unlisted tenants, queue semantics matching vLLM's `FCFSRequestQueue`, the
   report's percentiles, shares and timelines, dropped-record reporting, and
@@ -391,6 +448,7 @@ toolchain.
   - aborting a request with a step in flight marks exactly that step's tokens
     as wasted;
   - prefix-cache hits are not billed;
+  - the step log records each tenant's prefill, decode and attention work;
   - 2:1 weights give a 2:1 split.
 
 ## Repository layout
@@ -414,12 +472,14 @@ toolchain.
   restarts.
 - It refuses to run with speculative decoding, LoRA or KV connectors.
 - The cost model is VTC's linear one, with weights 1 for prefill and 2 for
-  decode. It does not model attention cost growing with context length, and
-  the weights were not calibrated against measured step times. "Share" is
-  measured in the same billing units.
+  decode. It does not model attention cost growing with context length.
+  Fitted step times put a decode token at 0.97–1.71× a prefill token
+  depending on the workload, so with mixed shapes an even billed split gave
+  the prefill-heavy tenant 53–54% of GPU time. "Share" in the tables is in
+  billing units unless it says GPU time.
 - The evaluation is one RTX 4090, one model (Qwen2.5-7B) and three or five
   seeds per arm, on synthetic traces in which all of a tenant's requests have the same
-  shape. The gateway cap was run at one value (16).
+  shape except in `mixed_shapes`. The gateway cap was run at one value (16).
 - Fairness acts on admission and token-budget order. A request already
   running a very long prefill keeps its chunks going. VTC accepts that
   bound in exchange for never throwing away work.

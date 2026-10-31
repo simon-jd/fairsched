@@ -15,6 +15,11 @@
 - `kv_victim_noisy_neighbor/` and `kv_victim_aggressive/`: VTC with the
   default preemption order (`vtc`) and with `preempt_order: "kv_share"`
   (`vtc-kv`), three seeds each, interleaved in one session.
+- `mixed_shapes/`: a prefill-heavy and a decode-heavy tenant under FCFS, the
+  gateway cap, VTC and VTC with `kv_share`, three seeds each, in one session.
+- `*/gpu_time.json` (`mixed_shapes`, `kv_victim_*`): the step-time fit from
+  `bench/gpu_time.py` and each run's GPU-time and billed shares. The fit is
+  over all runs of the set.
 - `noisy_neighbor/summary.json` also holds the `fcfs-cap` arm (FCFS with the
   gateway capping each tenant at 16 requests in flight), run in the same
   later session as `overhead/`.
