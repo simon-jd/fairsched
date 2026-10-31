@@ -21,8 +21,11 @@ The HTTP read deadline is cleared after a successful body read within the
 deadline. Set deadline to 0 for no TTFT deadline. Set `priority_baseline` to true to inject trusted
 priorities (A=-1, B=0, C=1 in the example). Otherwise the gateway strips priority.
 
-All client `fairsched*` keys, `vllm_xargs`, and `priority` fields are recursively
-removed, including fields inside `extra_body`. The gateway injects trusted
+Client `fairsched*` keys, `vllm_xargs`, and `priority` fields (any case) are
+removed from the top level of the body, where vLLM reads them, and from a
+top-level `extra_body` object. Nested content, such as message fields or a
+tool's JSON schema with a `priority` property, is forwarded unchanged. The
+gateway injects trusted
 top-level `vllm_xargs` containing `fairsched_tenant`, `fairsched_class`, `fairsched_rid`, and optional
 `fairsched_deadline_ms`. The latter is an **absolute Unix timestamp in milliseconds**.
 The gateway returns the generated join ID in `X-Fairsched-Request-ID`.

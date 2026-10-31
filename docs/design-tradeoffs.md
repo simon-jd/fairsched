@@ -142,8 +142,9 @@ model attention growing with context length.
 ## Tenant identity from the gateway, never from the client
 
 **Decision.** A Go gateway maps API keys to tenants. It strips every
-client-supplied `fairsched*`, `vllm_xargs` and `priority` field, including nested
-ones, injects a trusted `vllm_xargs`, always streams, and cancels the
+client-supplied `fairsched*`, `vllm_xargs` and `priority` field from the top
+level of the body (and a top-level `extra_body`), where vLLM reads them,
+injects a trusted `vllm_xargs`, always streams, and cancels the
 upstream request when the client disconnects.
 
 **Alternatives.** Trust a tenant field in the request; map keys inside vLLM's

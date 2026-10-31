@@ -148,8 +148,10 @@ still refers to them (`test_abort_with_step_in_flight_marks_its_tokens_wasted`).
 ## Gateway and load generator (Go)
 
 The gateway (`proxy/`, `cmd/fairsched-proxy`) maps API keys to tenants. It strips
-every client-supplied `fairsched*`, `vllm_xargs` and `priority` field, including
-nested ones, and injects a trusted `vllm_xargs` carrying the tenant. It
+every client-supplied `fairsched*`, `vllm_xargs` and `priority` field at the
+top level of the body (and in a top-level `extra_body`), where vLLM reads
+them, and leaves nested content such as tool schemas alone. It injects a
+trusted `vllm_xargs` carrying the tenant. It
 always streams from the engine. It cancels the upstream request when the
 client disconnects, so cancellation reaches vLLM's abort path. It logs one
 terminal record per request.

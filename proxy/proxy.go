@@ -123,23 +123,31 @@ func writeError(w http.ResponseWriter, status int, reason string) {
 	_ = json.NewEncoder(w).Encode(map[string]any{"error": map[string]any{"message": reason, "type": "fairsched_error", "code": reason}})
 }
 
-// sanitize recursively removes every fairsched-prefixed client field and every
-// vllm_xargs container, including nested extra_body wrappers. Only the new trusted
-// top-level vllm_xargs is forwarded. Client priority is never trusted either.
-func sanitize(v any) {
-	switch x := v.(type) {
-	case map[string]any:
-		for k, child := range x {
-			lower := strings.ToLower(k)
-			if strings.HasPrefix(lower, "fairsched") || lower == "vllm_xargs" || lower == "priority" {
-				delete(x, k)
-			} else {
-				sanitize(child)
-			}
+// routingField reports whether a client-supplied key could set the tenant, the
+// request identity or the priority: any fairsched-prefixed key, vllm_xargs
+// (vLLM passes it to the scheduler as SamplingParams.extra_args, where the
+// plugin reads the tenant) and priority. Matching ignores case.
+func routingField(k string) bool {
+	lower := strings.ToLower(k)
+	return strings.HasPrefix(lower, "fairsched") || lower == "vllm_xargs" || lower == "priority"
+}
+
+// sanitize removes routing fields from the top level of the request body, where
+// vLLM reads them, and from a top-level extra_body object, in case a client
+// sends the OpenAI SDK's wrapper literally. Nested content such as messages or
+// tool JSON schemas is forwarded unchanged, even when it uses these key names.
+// The gateway then adds its own trusted top-level vllm_xargs (and priority).
+func sanitize(request map[string]any) {
+	for k := range request {
+		if routingField(k) {
+			delete(request, k)
 		}
-	case []any:
-		for _, child := range x {
-			sanitize(child)
+	}
+	if extra, ok := request["extra_body"].(map[string]any); ok {
+		for k := range extra {
+			if routingField(k) {
+				delete(extra, k)
+			}
 		}
 	}
 }

@@ -114,6 +114,34 @@ func TestMetadataBoundaryAndNonstream(t *testing.T) {
 	assertLocalLifecycle(t, &logs, "", true)
 }
 
+func TestSanitizeStripsOnlyRoutingFields(t *testing.T) {
+	body := `{"priority":-5,"Priority":1,"fairsched_tenant":"x","FAIRSCHED_rid":"y","vllm_xargs":{"fairsched_tenant":"x"},
+		"extra_body":{"vllm_xargs":{"fairsched_tenant":"x"},"priority":3,"top_k":5},
+		"messages":[{"role":"user","content":"hi","priority":"keep"}],
+		"tools":[{"type":"function","function":{"name":"ticket","parameters":{"type":"object",
+			"properties":{"priority":{"type":"string"},"fairsched_queue":{"type":"string"},"vllm_xargs":{"type":"object"}}}}}]}`
+	var request map[string]any
+	if err := json.Unmarshal([]byte(body), &request); err != nil {
+		t.Fatal(err)
+	}
+	sanitize(request)
+	for _, k := range []string{"priority", "Priority", "fairsched_tenant", "FAIRSCHED_rid", "vllm_xargs"} {
+		if _, ok := request[k]; ok {
+			t.Errorf("top-level %s kept", k)
+		}
+	}
+	if extra := request["extra_body"].(map[string]any); len(extra) != 1 || extra["top_k"] != float64(5) {
+		t.Errorf("extra_body = %v", extra)
+	}
+	if request["messages"].([]any)[0].(map[string]any)["priority"] != "keep" {
+		t.Error("message field removed")
+	}
+	tool := request["tools"].([]any)[0].(map[string]any)["function"].(map[string]any)
+	if props := tool["parameters"].(map[string]any)["properties"].(map[string]any); len(props) != 3 {
+		t.Errorf("tool schema changed: %v", props)
+	}
+}
+
 func TestTTFTOnlyBeforeOutput(t *testing.T) {
 	for _, stream := range []bool{true, false} {
 		t.Run(map[bool]string{true: "stream", false: "nonstream"}[stream], func(t *testing.T) {
