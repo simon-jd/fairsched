@@ -96,7 +96,8 @@ the budget waits a step without losing its KV.
 one. Right after its counter is lifted (next section), the light tenant can
 lead, and its newest request is then the victim: the interactive tenant lost
 11–20 requests this way in the noisy-neighbour runs (0–1 under FCFS, 0 under
-priority), which is where its p99 above priority comes from.
+priority). That may explain its p99 above priority's; the summaries count
+preemptions but do not tie them to particular slow requests.
 
 ## Lift a returning tenant's counter
 

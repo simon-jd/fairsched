@@ -135,8 +135,10 @@ about 4 s more median TTFT, and its burst finishes 2–3 s later:
 
 The preemption row is VTC's cost. Each time A's queue empties and a new
 request arrives, the lift puts A level with B's counter. For a moment A can
-be the most-served tenant, and its newest request becomes vLLM's KV-pressure
-victim. That is where A's p99 above priority comes from.
+then be the most-served tenant, and after the sort vLLM's KV-pressure victim
+is always the newest request of the most-served tenant. These preemptions are
+a plausible reason for A's p99 above priority's, but the summaries count
+preempted requests without saying which ones, so the data does not show it.
 
 ### Aggressive tenant
 
@@ -197,10 +199,14 @@ and recomputed 74.8k–90.3k weighted tokens against 59.4k–63.8k.
 | Preemptions (all of tenant A) | 3 – 6 | **0** |
 | Fewest free KV blocks during the run | 0 | 60 – 76 |
 
-FCFS preempts the newest running request, which is A's fresh short request.
-VTC orders admission so the cache never runs out, and B's long requests
-finish at the same time. The earlier quantum-preemption design was not run
-on this configuration.
+Under FCFS, A's short requests wait behind B's long prompts: over the steps
+in which both tenants had requests waiting, A received none of the billed
+service (backlogged share 0.0 in every seed). When the cache ran out, vLLM
+also preempted 3–6 of A's requests, the newest running ones. The summaries do
+not separate how much each of the two adds to A's p99. VTC admits A ahead of
+B's queued prompts (backlogged share 0.09–0.14 for A), the cache never runs
+out, and B's long requests finish at the same time. The earlier
+quantum-preemption design was not run on this configuration.
 
 ### Scheduler overhead
 
