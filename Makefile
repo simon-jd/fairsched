@@ -28,6 +28,6 @@ test-model:
 	python3 -m venv .venv
 	.venv/bin/pip install matplotlib==3.11.2
 
-# Every experiment in the README (about 4.5 h on one RTX 4090; run make models first).
+# Every experiment in the README (about 5 h on one RTX 4090; run make models first).
 bench: build .venv/bin/python
 	scripts/run-all.sh

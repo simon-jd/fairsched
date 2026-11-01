@@ -156,6 +156,20 @@ token at 0.97–1.71× a prefill token, depending on the workload, against
 VTC's 2×. With a prefill-heavy and a decode-heavy tenant, VTC's even billed
 split gave the prefill-heavy one 53–54% of the fitted GPU time.
 
+Billing decode at the fitted ratio did not fix that. With `w_d = 0.97` the
+GPU-time split on the mixed workload swung past even to 0.40 : 0.60,
+because a marginal weight leaves out the fixed 12.7–14.6 ms each of its steps
+costs, and the interactive
+tenant in the noisy-neighbour workload got slower (median TTFT 0.51–0.56 s
+against 0.39–0.53 s, 21–23 preemptions against 8–25). The default stays 2.
+
+The plugin does not bill the fitted attention term (context length). Its
+coefficient moved tenfold between workloads (4.8–48 ns per query-key pair),
+so a billed value would be wrong for the next workload. It would also add a
+third term to every charge path: the admission reservation would have to
+project attention for prompt chunks not yet scheduled, and the recompute and
+waste reclassification would have to carry it too.
+
 ## Tenant identity from the gateway, never from the client
 
 **Decision.** A Go gateway maps API keys to tenants. It strips every
@@ -221,4 +235,4 @@ throughput per seed. Open-loop traces cannot show it, because their arrival
 schedule sets the run length (every arm's seed-1 noisy-neighbour run gives
 730.6–731.2 output tokens/s).
 
-**Cost.** The full set of runs takes about 4.5 hours.
+**Cost.** The full set of runs takes about 5 hours.

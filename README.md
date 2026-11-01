@@ -38,7 +38,8 @@ A small Go gateway maps API keys to tenants.
 
 VTC's billing weights are not this GPU's costs: with a prefill-heavy and a
 decode-heavy tenant, an even billed split gave the prefill-heavy one 53–54%
-of the fitted GPU time ([different request shapes](#different-request-shapes-and-what-a-token-costs)).
+of the fitted GPU time, and billing decode at its fitted marginal cost
+overshot to 40% ([different request shapes](#different-request-shapes-and-what-a-token-costs)).
 That and the other limits, including the light-tenant preemption and an
 evaluation on one GPU, one model and synthetic traces, are under
 [Limitations](#limitations).
@@ -316,6 +317,41 @@ to their predicted variable cost (the fixed c0 is shared the same way).
 
 ![Mixed shapes: billed service over time](results/mixed_shapes/service.png)
 
+**Billing decode at the fitted weight.** VTC with `w_d = 0.97` (arm
+`vtc-fit`) ran next to the default `w_d = 2` in one session, 3 seeds each
+(`results/fit_weights_*`; GPU time from each set's own fit, R² 0.998 and
+0.977):
+
+| | Mixed shapes, w_d = 2 | Mixed shapes, w_d = 0.97 | Noisy neighbour, w_d = 2 | Noisy neighbour, w_d = 0.97 |
+|---|---|---|---|---|
+| A : B share, billed | 0.50 : 0.50 | 0.50 : 0.50 | 0.29 – 0.31 : 0.69 – 0.71 | 0.27 – 0.30 : 0.70 – 0.73 |
+| A : B share, fitted GPU time | 0.53 – 0.54 : 0.46 – 0.47 | 0.40 : 0.60 | 0.32 – 0.34 : 0.66 – 0.68 | 0.29 – 0.31 : 0.69 – 0.71 |
+| A TTFT median | 34.0 – 34.2 s | 34.4 – 34.6 s | 0.39 – 0.53 s | 0.51 – 0.56 s |
+| A TTFT p99 | 54.8 – 55.1 s | 55.1 – 55.5 s | 0.95 – 1.74 s | 1.14 – 2.15 s |
+| B TTFT median | 2.6 – 2.8 s | 2.6 s | 48.7 – 49.8 s | 48.6 – 50.3 s |
+| B TTFT p99 | 28.3 – 28.5 s | 22.3 – 22.5 s | 97.6 – 99.2 s | 98.2 – 100.1 s |
+| Output tokens/s | 1,717 – 1,723 | 1,723 – 1,733 | 731 – 802 | 731 – 802 |
+| A requests preempted | 0 – 2 | 0 – 1 | 8 – 25 | 21 – 23 |
+
+- The GPU-time split does not land on 0.50 : 0.50; it overshoots to
+  0.40 : 0.60. The fitted weight is a marginal cost and leaves out the
+  12.7–14.6 ms that every step costs. In seed 1 the backlogged steps carried
+  88.7k of A's prefill tokens instead of 147.5k, with about the same number
+  of B's decode steps (64.5k against 63.6k), and each step's fixed cost is
+  attributed in proportion to its variable cost, so more of it lands on B.
+  The weight that evens GPU time here lies somewhere between 0.97 and 2; it
+  was not searched for. This session's refit also gave a ratio of 1.08, not
+  0.97.
+- On the mixed workload B gains (p99 TTFT 22.3–22.5 s instead of
+  28.3–28.5 s, throughput 0.0–0.9% higher per seed) and A's median TTFT rises
+  by 0.2–0.5 s.
+- On the noisy neighbour the interactive tenant gets slower: median TTFT
+  0.51–0.56 s and p99 1.14–2.15 s, with 21–23 preemptions. B's TTFT and the
+  throughput do not change.
+
+The default stays `w_d = 2`: a single fitted ratio did not equalize GPU time,
+and it slowed the interactive tenant.
+
 ### Long prompts under KV pressure
 
 **Workload.** Long prompts of the length that livelocked the earlier design
@@ -406,7 +442,7 @@ code builds in the pinned Go image.
    `python3 -m venv .venv && .venv/bin/pip install matplotlib==3.11.2`
    (`make .venv/bin/python`).
 4. **Runs.** `scripts/run-all.sh` (or `make bench`) runs every experiment
-   above, about 4.5 h. A single run is
+   above, about 5 h. A single run is
    `python3 -m bench.run noisy_neighbor vtc --seed 1`. Each run waits for an
    exclusive `flock` on `/var/tmp/rtx4090.lock` (`FAIRSCHED_GPU_LOCK`), refuses
    to start while another process holds more than 1 GiB of GPU memory, starts
@@ -479,8 +515,9 @@ toolchain.
   decode. It does not model attention cost growing with context length.
   Fitted step times put a decode token at 0.97–1.71× a prefill token
   depending on the workload, so with mixed shapes an even billed split gave
-  the prefill-heavy tenant 53–54% of GPU time. "Share" in the tables is in
-  billing units unless it says GPU time.
+  the prefill-heavy tenant 53–54% of GPU time; billing decode at the fitted
+  0.97 overshot to 40%. Attention (context length) is not billed. "Share" in
+  the tables is in billing units unless it says GPU time.
 - The evaluation is one RTX 4090, one model (Qwen2.5-7B) and three or five
   seeds per arm, on synthetic traces in which all of a tenant's requests have the same
   shape except in `mixed_shapes`. The gateway cap was run at one value (16).
