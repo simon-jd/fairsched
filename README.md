@@ -461,6 +461,12 @@ which `scripts/fetch-models.sh --test-only` (`make test-model`) fetches.
 `make test-local` runs the first two without Docker, using a local Go
 toolchain.
 
+CI (`.github/workflows/ci.yml`) runs only the first two suites. The real-vLLM
+scheduler tests, the only ones that exercise the plugin inside vLLM, skip
+there because vLLM is not installed, so a change that
+breaks the plugin's vLLM integration passes CI. Run `scripts/test.sh` before
+relying on such a change.
+
 - **Policy, report, step log, runner and step-time fit**
   (`tests/test_policy.py`, `tests/test_report.py`, `tests/test_audit.py`,
   `tests/test_bench.py`, `tests/test_gpu_time.py`, pure Python): the lift
