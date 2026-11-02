@@ -11,8 +11,10 @@ defaults to the workload.
 Arms:
   native      vLLM FCFS, no plugin (overhead reference)
   fcfs        vLLM FCFS with the plugin in passthrough mode (same accounting/logging)
-  fcfs-cap    fcfs, and the gateway admits at most CAP_INFLIGHT requests per
-              tenant to the engine; the rest wait in the gateway's FIFO queue
+  fcfs-cap    fcfs, and the gateway admits at most 16 requests per tenant to
+              the engine; the rest wait in the gateway's FIFO queue
+  fcfs-cap4, fcfs-cap8, fcfs-cap32
+              the same with a cap of 4, 8 or 32 (CAP_INFLIGHT)
   priority    vLLM priority scheduling, gateway gives tenant A the higher priority
   priority-b  the same with tenant B favoured
   vtc         the plugin's VTC policy
@@ -41,14 +43,16 @@ ROOT = Path(__file__).resolve().parents[1]
 PINS = json.loads((ROOT / "configs/pins.json").read_text())
 # Run the image by digest, so a re-pushed tag cannot change what is measured.
 IMAGE = PINS["image"].split(":")[0] + "@" + PINS["image_digest"]
-ARMS = ("native", "fcfs", "fcfs-cap", "priority", "priority-b", "vtc", "vtc-kv", "vtc-fit")
+ARMS = ("native", "fcfs", "fcfs-cap", "fcfs-cap4", "fcfs-cap8", "fcfs-cap32", "priority", "priority-b",
+        "vtc", "vtc-kv", "vtc-fit")
 # Decode weight of the vtc-fit arm, prefill weight 1: the fitted marginal cost of
 # a decode step over that of a prefill token on mixed_shapes (0.0789 / 0.0809 ms,
 # results/mixed_shapes/gpu_time.json). VTC's default is 2.
 FIT_W_D = 0.97
-# Per-tenant in-flight cap of the fcfs-cap arm: 16 of noisy_neighbor's B requests
-# (2,304 tokens each) hold about 37k tokens, under half of the 84k-token KV cache.
-CAP_INFLIGHT = 16
+# Per-tenant in-flight cap of the gateway-cap arms. fcfs-cap's 16 of
+# noisy_neighbor's B requests (2,304 tokens each) hold about 37k tokens, under
+# half of the 84k-token KV cache; 32 of them hold about 74k.
+CAP_INFLIGHT = {"fcfs-cap": 16, "fcfs-cap4": 4, "fcfs-cap8": 8, "fcfs-cap32": 32}
 ENGINE_PORT, PROXY_PORT = 8000, 8080
 CONTAINER = "fairsched-engine"
 # Other projects on this machine queue for the GPU on the same lock file.
@@ -126,7 +130,7 @@ def policy_config(arm: str, workload: str) -> dict:
 
 
 def proxy_config(arm: str, run: Path) -> Path:
-    tenant = {"default_deadline_ms": 0, "max_inflight": CAP_INFLIGHT if arm == "fcfs-cap" else 1024,
+    tenant = {"default_deadline_ms": 0, "max_inflight": CAP_INFLIGHT.get(arm, 1024),
               "max_queued": 1024}
     config = {"listen": f"127.0.0.1:{PROXY_PORT}", "write_timeout_ms": 900_000,
               "upstream": f"http://127.0.0.1:{ENGINE_PORT}",

@@ -11,8 +11,11 @@ import matplotlib.pyplot as plt  # noqa: E402
 
 from bench.report import load_client, load_steps, service_timeline  # noqa: E402
 
-ARM_ORDER = ["native", "fcfs", "fcfs-cap", "priority", "priority-b", "vtc", "vtc-kv", "vtc-fit"]
+ARM_ORDER = ["native", "fcfs", "fcfs-cap4", "fcfs-cap8", "fcfs-cap", "fcfs-cap32",
+             "priority", "priority-b", "vtc", "vtc-kv", "vtc-fit"]
 ARM_LABEL = {"native": "vLLM FCFS (no plugin)", "fcfs": "vLLM FCFS", "fcfs-cap": "vLLM FCFS, gateway cap 16/tenant",
+             "fcfs-cap4": "vLLM FCFS, gateway cap 4/tenant", "fcfs-cap8": "vLLM FCFS, gateway cap 8/tenant",
+             "fcfs-cap32": "vLLM FCFS, gateway cap 32/tenant",
              "priority": "vLLM priority (A high)", "priority-b": "vLLM priority (B high)", "vtc": "VTC (this project)",
              "vtc-kv": "VTC, kv_share victim order", "vtc-fit": "VTC, fitted decode weight"}
 TENANT_COLOR = {"A": "#2f6fb0", "B": "#d1762b"}

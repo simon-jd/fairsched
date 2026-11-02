@@ -20,10 +20,16 @@ class BenchConfigTest(unittest.TestCase):
     def test_cap_arm_limits_every_tenant_at_the_gateway(self):
         capped, plain = self.config("fcfs-cap"), self.config("fcfs")
         for tenant in ("A", "B"):
-            self.assertEqual(capped["tenants"][tenant]["max_inflight"], CAP_INFLIGHT)
+            self.assertEqual(capped["tenants"][tenant]["max_inflight"], 16)
             self.assertEqual(plain["tenants"][tenant]["max_inflight"], 1024)
             self.assertEqual(capped["tenants"][tenant]["max_queued"], 1024)   # queued, not rejected
         self.assertFalse(capped["priority_baseline"])
+
+    def test_cap_sweep_arms_set_their_own_cap(self):
+        for arm, cap in (("fcfs-cap4", 4), ("fcfs-cap8", 8), ("fcfs-cap32", 32)):
+            self.assertEqual(CAP_INFLIGHT[arm], cap)
+            for tenant in ("A", "B"):
+                self.assertEqual(self.config(arm)["tenants"][tenant]["max_inflight"], cap)
 
     def test_vtc_kv_arm_sets_the_kv_share_order(self):
         self.assertEqual(policy_config("vtc-kv", "weighted"),
