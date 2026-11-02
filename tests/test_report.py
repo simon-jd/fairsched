@@ -76,6 +76,24 @@ class ReportTest(unittest.TestCase):
         dirty = summarise_run(self._run_dir({"source_tree": tree, "source_dirty": True}))
         self.assertTrue(dirty["source_dirty"])
 
+    def test_summary_records_start_time_and_gpu_state(self):
+        run = self._run_dir({"trace_start_unix": 1000.04})
+        (run / "gpu.csv").write_text(
+            "2026/11/02 10:00:00.000, 99, 19000, 2700, 10501, 61, 410.5, P2\n"
+            "2026/11/02 10:00:00.500, 98, 19000, 2610, 10501, 66, 420.0, P2\n"
+            "2026/11/02 10:00:01.000, 97, 19000, 2650, 10501, 64, 400.0, P2\n")
+        s = summarise_run(run)
+        self.assertEqual(s["started_unix"], 1000.0)
+        self.assertEqual(s["gpu"]["samples"], 3)
+        self.assertEqual(s["gpu"]["sm_clock_mhz"], {"p50": 2650.0, "min": 2610.0})
+        self.assertEqual(s["gpu"]["temperature_c"]["max"], 66.0)
+        self.assertEqual(s["gpu"]["pstates"], ["P2"])
+
+    def test_three_column_gpu_log_has_no_gpu_summary(self):
+        run = self._run_dir({})
+        (run / "gpu.csv").write_text("2026/11/02 10:00:00.000, 99, 19000\n")
+        self.assertNotIn("gpu", summarise_run(run))
+
     def test_older_run_keeps_the_source_tree_already_recorded(self):
         run = self._run_dir({"git_commit": "b" * 40})
         kept = {"fairsched": "c" * 40}

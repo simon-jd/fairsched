@@ -136,6 +136,29 @@ def service_timeline(steps: list[dict], since: float, bin_s: float = 2.0) -> dic
     return {t: [b.get(i, 0.0) / bin_s for i in range(width)] for t, b in sorted(bins.items())}
 
 
+def gpu_summary(path: Path) -> dict | None:
+    """SM clock, temperature and power over a run, from the runner's gpu.csv.
+
+    Runs recorded before the runner sampled clocks have only three columns and
+    get no summary.
+    """
+    rows = []
+    if path.exists():
+        for line in path.read_text().splitlines():
+            fields = [f.strip() for f in line.split(",")]
+            if len(fields) >= 8:
+                try:
+                    rows.append((float(fields[3]), float(fields[5]), float(fields[6]), fields[7]))
+                except ValueError:
+                    continue
+    if not rows:
+        return None
+    sm, temp, power, pstate = zip(*rows)
+    return {"samples": len(rows), "sm_clock_mhz": {"p50": percentile(sm, 50), "min": min(sm)},
+            "temperature_c": {"p50": percentile(temp, 50), "max": max(temp)},
+            "power_w": {"p50": percentile(power, 50)}, "pstates": sorted(set(pstate))}
+
+
 def summarise_run(run: Path, previous: dict | None = None) -> dict:
     """One run's summary. ``source_tree`` comes from the run's meta.json; a run
     recorded before meta.json carried it keeps the value in ``previous``, the
@@ -145,6 +168,11 @@ def summarise_run(run: Path, previous: dict | None = None) -> dict:
     summary = {"arm": meta["arm"], "seed": meta["seed"], "source_tree": tree}
     if meta.get("source_dirty"):
         summary["source_dirty"] = True
+    if meta.get("trace_start_unix") is not None:
+        summary["started_unix"] = round(meta["trace_start_unix"], 1)
+    gpu = gpu_summary(run / "gpu.csv")
+    if gpu is not None:
+        summary["gpu"] = gpu
     summary["client"] = client_summary(load_client(run / "client.jsonl"))
     steps = load_steps(run)
     summary["engine"] = step_summary(steps, meta.get("trace_start_unix"))

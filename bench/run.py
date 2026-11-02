@@ -54,6 +54,9 @@ FIT_W_D = 0.97
 # half of the 84k-token KV cache; 32 of them hold about 74k.
 CAP_INFLIGHT = {"fcfs-cap": 16, "fcfs-cap4": 4, "fcfs-cap8": 8, "fcfs-cap32": 32}
 ENGINE_PORT, PROXY_PORT = 8000, 8080
+# Sampled every 500 ms into gpu.csv during the trace. Clocks cannot be locked on
+# this machine, so each run records what they were.
+GPU_QUERY = "timestamp,utilization.gpu,memory.used,clocks.sm,clocks.mem,temperature.gpu,power.draw,pstate"
 CONTAINER = "fairsched-engine"
 # Other projects on this machine queue for the GPU on the same lock file.
 GPU_LOCK = Path(os.environ.get("FAIRSCHED_GPU_LOCK", "/var/tmp/rtx4090.lock"))
@@ -204,7 +207,7 @@ def _run_locked(workload: str, arm: str, seed: int, run: Path) -> Path:
                                  stdout=open(run / "proxy.out", "w"), stderr=subprocess.STDOUT)
         time.sleep(1)
         warm_up()
-        gpu = subprocess.Popen(["nvidia-smi", "--query-gpu=timestamp,utilization.gpu,memory.used",
+        gpu = subprocess.Popen(["nvidia-smi", f"--query-gpu={GPU_QUERY}",
                                 "--format=csv,noheader,nounits", "-lms", "500"], stdout=gpu_log)
         meta["trace_start_unix"] = time.time()
         loadgen = subprocess.run([str(ROOT / "bin/fairsched-loadgen"), "-url", f"http://127.0.0.1:{PROXY_PORT}",
