@@ -48,7 +48,8 @@ container to catch interface drift.
 | `schedule()` | Sorts `self.running` by tenant counter before calling the native `schedule()`. |
 | `_update_after_schedule()` | Bills the tokens the native scheduler actually scheduled this step. |
 | `update_from_output()` | Reclassifies work for requests that ended while their step was on the GPU. |
-| `_preempt_request()`, `_free_request()` | Count preemptions; mark tenants idle. |
+| `_preempt_request()` | Counts KV-pressure preemptions per tenant. |
+| `_free_request()` | Drops the finished request's admission reservation and queues its metadata for release once no in-flight step bills it. Whether a tenant is idle is decided by its waiting queue, not here. |
 
 ## VTC in one paragraph
 
