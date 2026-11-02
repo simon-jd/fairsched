@@ -33,8 +33,8 @@ A small Go gateway maps API keys to tenants.
 - **The plugin is cheap.** On a saturating trace, vLLM with the plugin in
   passthrough mode delivers 0.1–0.5% less throughput than without it, seed
   for seed. *Cost:* VTC gives up another 0.7% and recomputes more after
-  preemptions, and the hooks add 132–403 µs of CPU per scheduling step at
-  64–256 running requests.
+  preemptions, and the hooks add 0.17–0.57 ms of CPU per scheduling step at
+  64–256 running requests (0.17–0.67 ms with VTC; medians of 5 runs).
 
 VTC's billing weights are not this GPU's costs: with a prefill-heavy and a
 decode-heavy tenant, an even billed split gave the prefill-heavy one 53–54%
@@ -383,20 +383,30 @@ quantum-preemption design was not run on this configuration.
 
 `bench/hook_overhead.py` measures CPU time per `schedule()` +
 `update_from_output()` call in the real vLLM scheduler, with a stubbed model
-runner. Results are in `results/hook_overhead.jsonl`:
+runner. `scripts/hook-overhead.sh` ran it five times at commit `e6f4f47`,
+each run in a fresh container with the three variants measured in a rotated
+order (`results/hook_overhead.jsonl`; every row records the commit and tree
+hashes). Medians over the five runs, with the range of the per-run
+differences against native:
 
-| Running requests | vLLM native | Plugin, passthrough | Plugin, VTC | Added per step |
-|---|---|---|---|---|
-| 64 | 406 µs | 532 µs | 538 µs | 132 µs |
-| 128 | 785 µs | 1,035 µs | 1,029 µs | 244 µs |
-| 256 | 1,681 µs | 2,150 µs | 2,083 µs | 403 µs |
+| Running requests | vLLM native | Plugin, passthrough | Plugin, VTC | Added by passthrough | Added by VTC |
+|---|---|---|---|---|---|
+| 64 | 428 µs | 585 µs | 599 µs | 170 µs (92 – 182) | 172 µs (165 – 379) |
+| 128 | 825 µs | 1,112 µs | 1,135 µs | 287 µs (269 – 321) | 311 µs (289 – 348) |
+| 256 | 1,689 µs | 2,217 µs | 2,389 µs | 572 µs (350 – 619) | 674 µs (388 – 1,171) |
 
-- Almost all of the added time is in the hooks themselves: sorting
-  `running`, billing and the per-step log. This is a single run, and the VTC
-  decisions add nothing it can resolve on top of passthrough (VTC even came
-  out below passthrough at 128 and 256 requests).
+- Most of the added time is in the hooks, which passthrough runs too:
+  sorting `running`, billing and the per-step log. VTC's decisions add
+  2–102 µs more at the median, inside the run-to-run range of the
+  passthrough cost at every size.
+- The host was shared with other work (1-minute load average 8.3–9.2 on
+  32 CPUs), and single runs differ by up to 3× (VTC at 256 requests:
+  388–1,171 µs added).
+- An earlier single run, with no source revision recorded, reported only VTC
+  minus native (132–403 µs) as the added cost. Passthrough minus native in
+  that run was 126–469 µs, so the hook cost was understated at 256 requests.
 - At 128 running requests a Qwen2.5-7B decode step takes about 50 ms
-  (median TPOT in these runs), so the plugin adds about 0.5%.
+  (median TPOT in these runs), so the hooks add about 0.6%.
 - With async scheduling this CPU time overlaps the previous step's GPU work.
 
 End to end, the overhead has to be measured on a saturating trace. On the

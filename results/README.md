@@ -30,8 +30,10 @@
   quantum-preemption design's livelocked run ([docs/livelock.md](../docs/livelock.md)),
   written by `scripts/livelock_summary.py`. The log and that design's code are
   not in this repository; the file records their SHA-256.
-- `hook_overhead.jsonl`: the CPU microbenchmark from `bench/hook_overhead.py`
-  (a single run). It records no source revision.
+- `hook_overhead.jsonl`: the CPU microbenchmark from `bench/hook_overhead.py`,
+  five runs from `scripts/hook-overhead.sh`, one row per run and batch size,
+  each with the commit, tree hashes, the order the variants ran in and the
+  host's load average.
 
 ## `source_tree`
 
