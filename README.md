@@ -98,12 +98,15 @@ flowchart LR
 The plugin never preempts a request on its own. An earlier design did, and
 on a deliberately overloaded run with 6,144-token prompts it **livelocked**:
 - no request produced a token before the 90 s client timeout;
-- in the part of the run its step log covers, the policy preempted 678 times
-  and 99.5% of the prefill tokens it dispatched recomputed positions already
-  computed once.
+- over the run's 2,036 logged steps the policy preempted 678 times, and
+  99.5% of the prefill tokens it dispatched recomputed positions already
+  computed once ([summary of the step log](results/livelock/summary.json),
+  with its hash and the hash of that design's source; neither the log nor
+  that code is in this repository).
 
-Plain FCFS also timed out on that workload with the same limits, so the run
-shows where the policy's work went, not that FCFS would have finished. [docs/livelock.md](docs/livelock.md) explains
+Plain FCFS also failed that workload: with the same limits its requests hit
+the same timeout. So the run shows where the policy's work went, not that
+FCFS would have finished. [docs/livelock.md](docs/livelock.md) explains
 why enforcing fairness below the size of one request destroys work.
 
 ## Results

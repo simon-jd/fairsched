@@ -1,0 +1,153 @@
+{
+ "source": "step log of the earlier quantum-preemption design (not in this repository)",
+ "design": {
+  "scheduler_py_sha256": "8c6906d87395c8079e031174ef6709c7a4ce23d441b29fb3b3d69dd73ef339cd",
+  "package_manifest_sha256": "ba64aa66558d720d5c53236ffe97bdb6ede12f5baa6ef99fdbb194fc52a6c6dd",
+  "package_files": [
+   "__init__.py",
+   "admission.py",
+   "audit.py",
+   "cleanup.py",
+   "cost.py",
+   "kv_capacity.py",
+   "kv_lifecycle.py",
+   "policy.py",
+   "queue.py",
+   "scheduler.py",
+   "service.py"
+  ]
+ },
+ "run": {
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "max_num_batched_tokens": 512,
+  "max_model_len": 8192,
+  "prefix_caching": false,
+  "client_timeout_ms": 90000
+ },
+ "policy_version": "p1-original9-vtc-minimum2-v1",
+ "policy": {
+  "charge_recompute": "tenant",
+  "charge_wasted": "tenant",
+  "deadline_enabled": false,
+  "delta": 0.0,
+  "minimum_service_dispatches": 2,
+  "version": "p1-original9-vtc-minimum2-v1",
+  "w_d": 1.0,
+  "w_p": 1.0,
+  "weights": {
+   "A": 1.0,
+   "B": 1.0,
+   "C": 1.0
+  }
+ },
+ "num_blocks": 513,
+ "step_log": {
+  "files": 11047,
+  "manifest_sha256": "4a3b673c463e2678afef21e2483eec4cc6c7477e66f0c3a545cf9827c2013a96",
+  "index_sha256": "963ca25eb515322e97a0dbfd191b636e389e44998811ec2bd365627ebf9ca9d3",
+  "footer_rows": 41429,
+  "footer_closed": true,
+  "footer_first_error": true
+ },
+ "steps": 2036,
+ "step_seq_range": [
+  1,
+  2036
+ ],
+ "steps_span_s": 90.0,
+ "policy_preemptions": 678,
+ "native_preemptions": 0,
+ "requests_scheduled": 3,
+ "per_request": {
+  "resource-0": {
+   "tenant": "A",
+   "prefill": 347136,
+   "decode": 0,
+   "recompute_prefill": 346112,
+   "steps": 678
+  },
+  "resource-1": {
+   "tenant": "B",
+   "prefill": 347648,
+   "decode": 0,
+   "recompute_prefill": 345600,
+   "steps": 679
+  },
+  "resource-2": {
+   "tenant": "C",
+   "prefill": 347136,
+   "decode": 0,
+   "recompute_prefill": 345088,
+   "steps": 678
+  }
+ },
+ "prefill_tokens": 1041920,
+ "recompute_prefill_tokens": 1036800,
+ "recompute_fraction": 0.9951,
+ "decode_tokens": 0,
+ "terminal": [
+  {
+   "request_id": "resource-0",
+   "tenant": "A",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  },
+  {
+   "request_id": "resource-1",
+   "tenant": "B",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  },
+  {
+   "request_id": "resource-2",
+   "tenant": "C",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  },
+  {
+   "request_id": "resource-3",
+   "tenant": "A",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  },
+  {
+   "request_id": "resource-4",
+   "tenant": "B",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  },
+  {
+   "request_id": "resource-5",
+   "tenant": "C",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  },
+  {
+   "request_id": "resource-6",
+   "tenant": "A",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  },
+  {
+   "request_id": "resource-7",
+   "tenant": "B",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  },
+  {
+   "request_id": "resource-survivor",
+   "tenant": "A",
+   "status": "FINISHED_ABORTED",
+   "output_tokens": 0,
+   "step_seq": 2035
+  }
+ ]
+}

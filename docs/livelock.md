@@ -23,8 +23,10 @@ up to 2,048 output tokens. One request had a 256-token prompt.
 On the client side, **0 of 9** requests completed: all hit the 90 s client
 timeout, and no output token arrived.
 
-The scheduler's step log from the run was only partly saved (2,036 steps).
-Over those steps:
+The scheduler's step log has a record for each of the run's 2,036 steps,
+from the first to the abort of all nine requests at 90.0 s. Its writer
+flagged an error in its footer, which is why the log was earlier described
+as partial; the step records themselves are contiguous. Over those steps:
 
 | | Result |
 |---|---|
@@ -34,9 +36,17 @@ Over those steps:
 | Dispatched prefill tokens that re-executed a position already computed | 99.5% (1,036,800 of 1,041,920) |
 | Decode tokens | 0 |
 
-These are token counts from a partial log, not GPU-time measurements, and
-the log is not in this repository. The other six requests were never
-scheduled in the logged steps; the three that were held the KV cache.
+These are token counts, not GPU-time measurements. vLLM itself preempted
+nothing; all 678 preemptions were the policy's. The log and the earlier
+design's code are not in this repository.
+[results/livelock/summary.json](../results/livelock/summary.json) holds the
+counts per request, the policy settings the log records (`w_p = w_d = 1`,
+`charge_recompute = "tenant"`, two guaranteed dispatches, 513 KV blocks
+including vLLM's null block), the SHA-256 of the log's files and index, and
+the SHA-256 of the design's `scheduler.py` and of its whole package
+(policy version `p1-original9-vtc-minimum2-v1`).
+`scripts/livelock_summary.py` computed it from the run directory. The other
+six requests were never scheduled; the three that were held the KV cache.
 
 The workload was overloaded by construction: one request's full 8,192-token
 context needed the entire KV cache. Plain FCFS also failed it with these

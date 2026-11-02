@@ -68,8 +68,8 @@ itself runs out of KV blocks.
 as an earlier version did.
 
 **Why.** That version livelocked on a deliberately overloaded run with
-6,144-token prompts: no request finished, and in the part of the run its
-step log covers it preempted 678 times, 99.5% of the prefill tokens it
+6,144-token prompts: no request finished, and over the run's 2,036 logged
+steps it preempted 678 times, 99.5% of the prefill tokens it
 dispatched were recompute, and no decode token ran
 ([livelock.md](livelock.md)). FCFS also timed out on that workload, so the
 run shows a mechanism rather than a measured regression: the fairness window

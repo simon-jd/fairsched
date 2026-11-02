@@ -26,6 +26,10 @@
 - `noisy_neighbor/summary.json` also holds the `fcfs-cap` arm (FCFS with the
   gateway capping each tenant at 16 requests in flight), run in the same
   later session as `overhead/`.
+- `livelock/summary.json`: counts and hashes from the step log of the earlier
+  quantum-preemption design's livelocked run ([docs/livelock.md](../docs/livelock.md)),
+  written by `scripts/livelock_summary.py`. The log and that design's code are
+  not in this repository; the file records their SHA-256.
 - `hook_overhead.jsonl`: the CPU microbenchmark from `bench/hook_overhead.py`
   (a single run). It records no source revision.
 
