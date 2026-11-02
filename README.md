@@ -304,7 +304,6 @@ to their predicted variable cost (the fixed c0 is shared the same way).
   units gave the prefill-heavy tenant 53–54% of the fitted GPU time: decode
   is overpriced here, and the decode-heavy tenant gets less GPU than its
   billed half. FCFS shows the same direction (0.72 billed, 0.76 GPU time).
-  VTC was not rerun with fitted weights.
 - VTC still does what it is for: B's median TTFT drops from 21.4 s to
   2.6–2.8 s, A's rises from 21.8 s to 34.1–34.2 s, and throughput is 1.6%
   higher than FCFS's.

@@ -55,8 +55,11 @@ container to catch interface drift.
 Each tenant *t* has a counter *c_t* of weighted service received, divided by
 the tenant's weight. A step that runs *p* prefill tokens and *d* decode tokens
 for tenant *t* adds `(w_p·p + w_d·d) / weight_t` to *c_t*. The defaults are
-`w_p = 1` and `w_d = 2`, as in the paper; a decode token costs roughly twice a
-prompt token per unit of useful work. Admission always serves the backlogged
+`w_p = 1` and `w_d = 2`, as in the paper. They are not this GPU's costs: a
+step-time fit on the logged work puts a decode token at 0.97–1.71× a prefill
+token, depending on the workload
+([README](../README.md#different-request-shapes-and-what-a-token-costs)).
+Admission always serves the backlogged
 tenant with the smallest counter. When a tenant goes from idle to backlogged,
 its counter is **lifted** to the smallest counter among backlogged tenants, or
 to the last departing tenant's counter if nobody is backlogged. Without the
