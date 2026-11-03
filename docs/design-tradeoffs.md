@@ -36,9 +36,9 @@ ran out of work.
 
 **Cost.** When the interactive tenant is known, priority does better
 (0.23–0.30 s median, 0.70–0.78 s p99 against VTC's 0.86–1.43 s). Alternating
-between backlogged tenants churns the KV cache, so throughput is 0.5–1.1%
-lower in the aggressive run and 2.0% lower with weights, matching the extra
-recompute.
+between backlogged tenants churns the KV cache, so throughput is 0.53% lower
+in the aggressive workload (95% interval 0.23–0.83%, six seeds with the run
+order rotated) and 2.0% lower with weights, matching the extra recompute.
 
 ## A scheduler subclass, pinned to one vLLM version
 
@@ -59,8 +59,10 @@ changing vLLM, which runs from its official container.
 rerun. The hooks add 132, 244 and 403 us of CPU per step at 64, 128 and 256
 running requests, about 0.5% of a 50 ms decode step at 128, and with async
 scheduling that time overlaps the previous step's GPU work. End to end, on a
-saturating trace, the plugin in passthrough mode delivers 0.1–0.5% less
-throughput than vLLM without it (per seed).
+saturating trace with the run order rotated over six seeds, passthrough
+mode's throughput is within 0.11% of vLLM without the plugin, seed for seed,
+and the mean gap (−0.035%, 95% interval −0.10% to +0.03%) is not resolved
+from zero.
 
 ## Never preempt for fairness
 
@@ -111,8 +113,10 @@ priority). The `kv_share` order, which sends tenants over their weighted
 share of the running KV to the back, brought that to 0 in the same session
 (against 7–15), while the heavy tenant lost 4–8 more requests per seed. The
 interactive tenant's TTFT did not improve, so these preemptions are not what
-keeps its p99 above priority's. In the aggressive workload `kv_share` gave
-0.3–0.5% more throughput. It stays an option rather than the default because
+keeps its p99 above priority's. In the aggressive workload `kv_share` was
+faster in each of six seeds with the order alternated, by 0.68% on average
+(95% interval 0.13–1.23%); its two largest gaps came with a higher GPU clock
+in the `kv_share` run. It stays an option rather than the default because
 it moves preemptions to the heavy tenant without a measured latency gain.
 
 ## Lift a returning tenant's counter
@@ -234,8 +238,8 @@ hides the queueing delay this project is about. With passthrough, logging and
 accounting cost the same in both arms, so a difference is the policy's. What
 passthrough itself costs against vLLM without the plugin is measured
 separately, on the CPU (`bench/hook_overhead.py`) and end to end on the
-saturating `aggressive` trace (`results/overhead/`): 0.1–0.5% lower
-throughput per seed. Open-loop traces cannot show it, because their arrival
+saturating `aggressive` trace (`results/overhead_rotated/`): within 0.11%
+per seed, not resolved from zero. Open-loop traces cannot show it, because their arrival
 schedule sets the run length (every arm's seed-1 noisy-neighbour run gives
 730.6–731.2 output tokens/s).
 
