@@ -30,9 +30,10 @@ A small Go gateway maps API keys to tenants.
   also exposes the interactive tenant to 8–20 KV-pressure preemptions (0–8
   under FCFS). An optional victim order brings that to 0, but does not lower
   the tenant's latency.
-- **The plugin is cheap.** On a saturating trace, vLLM with the plugin in
-  passthrough mode delivers 0.1–0.5% less throughput than without it, seed
-  for seed. *Cost:* VTC gives up another 0.7% and recomputes more after
+- **The plugin is cheap, to within about 1%.** On a saturating trace,
+  passthrough mode and VTC both stay within 1.3% of vLLM's throughput
+  without the plugin, seed for seed. Smaller differences are not resolved:
+  the arms always ran in the same order. *Cost:* VTC recomputes more after
   preemptions, and the hooks add 0.17–0.57 ms of CPU per scheduling step at
   64–256 running requests (0.17–0.67 ms with VTC; medians of 5 runs).
 
@@ -215,8 +216,10 @@ orders ran in one session, 3 seeds each (`results/kv_victim_*`):
   and B absorbs 4–8 more preemptions per seed. A's TTFT does not improve: its
   p99 is the same in two seeds and 0.08 s higher in the third.
 - In the aggressive workload both tenants are backlogged peers, so A is
-  sometimes over its KV share and still loses requests. Throughput is
-  0.3–0.5% higher per seed, with 5% less recompute.
+  sometimes over its KV share and still loses requests. It recomputes 5%
+  less. Throughput is 0.3–0.5% higher per seed, but that is not resolved:
+  the `counter` run went first in every seed, so run order could account for
+  a gap of that size.
 - The order also changes who gets the step's token budget first: an
   over-share tenant's running requests now come after everyone else's.
 
@@ -239,7 +242,8 @@ sends 300, three times the demand. The weights are equal.
 | Output tokens/s (median) | 1,309 | 1,312 | 1,314 | 1,295 |
 
 TTFT cells are medians over the 5 seeds; no cell varied by more than 0.9 s
-across seeds. VTC's throughput is 0.5–1.1% below FCFS's with the same seed.
+across seeds. VTC's throughput is 0.5–1.1% below FCFS's with the same seed;
+VTC ran last in every seed, so a gap below about 1% is not resolved.
 - **FCFS** serves each tenant in proportion to what it sends.
 - **Static priority** is all or nothing between peers.
 - **VTC** splits service evenly until A runs out of work, then gives B
@@ -425,10 +429,13 @@ passthrough and VTC, three seeds each, interleaved by seed in one session
 | TPOT median | 48.5 – 49.2 ms | 48.7 – 49.3 ms | 49.2 – 50.0 ms |
 | TTFT median, A / B | 31.9 – 32.4 / 32.1 – 32.6 s | 32.1 – 32.2 / 32.3 – 32.8 s | 16.2 – 16.5 / 44.4 – 44.9 s |
 
-- The plugin's hooks and step log cost 0.1–0.5% of throughput (passthrough
-  against no plugin, same seed), smaller than the 1.3% spread across the
-  no-plugin seeds but in the same direction for every seed.
-- VTC costs another 0.7%. That is not all overhead: VTC also reorders the
+- Passthrough came out 0.1–0.5% below no plugin and VTC another 0.7%
+  below passthrough, seed for seed. Neither is resolved below about 1%: the
+  passthrough gap is smaller than the 1.3% spread across the no-plugin seeds,
+  and every seed ran the arms in the same order (no plugin, passthrough,
+  VTC) with each run's trace slightly longer than the one before (76.7, 77.1
+  and 77.6 s in seed 1), so the order alone could produce gaps of this size.
+- VTC's gap is not all overhead in any case: VTC also reorders the
   work (A's TTFT halves, B's rises) and preempts more, recomputing 67.7k–68.0k
   weighted tokens against 63.8k for passthrough.
 - These runs were made in a later session than the `aggressive` results
