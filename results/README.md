@@ -38,6 +38,11 @@
 - `noisy_neighbor/summary.json` also holds the `fcfs-cap` arm (FCFS with the
   gateway capping each tenant at 16 requests in flight), run in the same
   later session as `overhead/`.
+- `cap_sweep/summary.json`: the `noisy_neighbor` workload with the gateway
+  cap at 4, 8, 16 and 32 requests per tenant (`fcfs-cap4`, `fcfs-cap8`,
+  `fcfs-cap`, `fcfs-cap32`), seeds 1–5, in one later session with the arm
+  order rotated per seed. Its FCFS and VTC baselines are the
+  `noisy_neighbor/` runs with the same seeds.
 - `livelock/summary.json`: counts and hashes from the step log of the earlier
   quantum-preemption design's livelocked run ([docs/livelock.md](../docs/livelock.md)),
   written by `scripts/livelock_summary.py`. The log and that design's code are

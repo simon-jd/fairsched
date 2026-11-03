@@ -21,14 +21,18 @@ times the demand, the aggressive tenant took 75% of the GPU, and a 300-request
 burst pushed the interactive tenant's median time to first token to
 28.8–40.5 s. Static priority needs to know who is interactive and is all or
 nothing between peers (1.00 : 0.00). Rate limits leave the GPU idle when the
-other tenant has nothing to send. A per-tenant concurrency cap at the gateway
-(16 in flight, one value tried, on the noisy-neighbour workload) kept the
-interactive tenant's median TTFT at 0.09–0.10 s with no preemptions, better
-than VTC, but its p99 was 2.05–2.94 s, and capping the heavy tenant's
-concurrency delayed the end of its burst from 114–118 s to 142–147 s. VTC split the aggressive workload 0.50 :
-0.50, gave 2 : 1 weights 0.67 : 0.33, kept the interactive tenant's median
-TTFT at 0.39–0.50 s through the burst, and gave the remaining tenant
-everything once the other ran out of work.
+other tenant has nothing to send. A per-tenant concurrency cap at the gateway,
+swept at 4, 8, 16 and 32 in flight on the noisy-neighbour workload, preempted
+nothing at any value. At 32 it beat VTC on both tenants' median TTFT (the
+interactive tenant's 13–63% lower) with the burst finishing within 2.1 s of
+VTC's, but the interactive tenant's p99 was 4.17–6.06 s against VTC's
+0.86–1.43 s. At 16 that tenant's median was 0.09–0.15 s and its p99
+1.67–2.98 s, and capping the heavy tenant delayed the end of its burst from
+113–118 s to 142–147 s; at 8 and 4 the burst ended after 194 s and 313 s.
+VTC split the aggressive workload 0.50 : 0.50, gave 2 : 1 weights
+0.67 : 0.33, kept the interactive tenant's median TTFT at 0.39–0.50 s
+through the burst, and gave the remaining tenant everything once the other
+ran out of work.
 
 **Cost.** When the interactive tenant is known, priority does better
 (0.23–0.30 s median, 0.70–0.78 s p99 against VTC's 0.86–1.43 s). Alternating
