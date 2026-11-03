@@ -15,6 +15,18 @@
 - `kv_victim_noisy_neighbor/` and `kv_victim_aggressive/`: VTC with the
   default preemption order (`vtc`) and with `preempt_order: "kv_share"`
   (`vtc-kv`), three seeds each, interleaved in one session.
+- `overhead_rotated/` and `kv_victim_rotated/`: the same two comparisons on
+  the `aggressive` workload repeated with six seeds and the arm order rotated
+  per seed (each of `native`, `fcfs`, `vtc` first, second and third in two
+  seeds; `vtc` and `vtc-kv` each first in three), the two sets interleaved
+  by seed in one session (`python3 -m bench.run aggressive native fcfs vtc
+  --name overhead_rotated --seed 1`, with the arms in the seed's order).
+  Each `paired.json` is the seed-for-seed throughput comparison from
+  `bench/paired.py`
+  (`python3 -m bench.paired overhead_rotated fcfs:native vtc:fcfs vtc:native`,
+  `python3 -m bench.paired kv_victim_rotated vtc-kv:vtc`): per-seed
+  differences, their mean and 95% t interval, each run's position in its
+  seed, the mean effect of position, and the GPU clock and temperature.
 - `mixed_shapes/`: a prefill-heavy and a decode-heavy tenant under FCFS, the
   gateway cap, VTC and VTC with `kv_share`, three seeds each, in one session.
 - `fit_weights_mixed_shapes/` and `fit_weights_noisy_neighbor/`: VTC with the

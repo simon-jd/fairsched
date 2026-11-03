@@ -16,11 +16,12 @@ A small Go gateway maps API keys to tenants.
 
 ![Billed service per tenant over time for two backlogged peers](results/aggressive/service.png)
 
-**Results** (Qwen2.5-7B on one RTX 4090; ranges over 5 seeds):
+**Results** (Qwen2.5-7B on one RTX 4090; ranges over 5 seeds unless stated):
 - **Peers split evenly.** With both tenants backlogged and one sending three
   times the other's demand, VTC splits service 0.50 : 0.50 (FCFS 0.25 : 0.75,
-  static priority 1.00 : 0.00 either way). *Cost:* 0.5–1.1% lower throughput
-  than FCFS, with more preemption recompute.
+  static priority 1.00 : 0.00 either way). *Cost:* 0.53% lower throughput
+  than FCFS (95% interval 0.23–0.83%, 6 seeds with the run order rotated),
+  with more preemption recompute.
 - **A burst does not starve interactive traffic.** During the 300-request
   burst, the interactive tenant's median TTFT is 0.39–0.50 s, against
   28.8–40.5 s under FCFS. *Cost:* VTC is not the fastest option for that
@@ -30,12 +31,13 @@ A small Go gateway maps API keys to tenants.
   also exposes the interactive tenant to 8–20 KV-pressure preemptions (0–8
   under FCFS). An optional victim order brings that to 0, but does not lower
   the tenant's latency.
-- **The plugin is cheap, to within about 1%.** On a saturating trace,
-  passthrough mode and VTC both stay within 1.3% of vLLM's throughput
-  without the plugin, seed for seed. Smaller differences are not resolved:
-  the arms always ran in the same order. *Cost:* VTC recomputes more after
-  preemptions, and the hooks add 0.17–0.57 ms of CPU per scheduling step at
-  64–256 running requests (0.17–0.67 ms with VTC; medians of 5 runs).
+- **The plugin is cheap.** On a saturating trace, with the arm order rotated
+  over 6 seeds, passthrough mode is within 0.11% of vLLM's throughput without
+  the plugin, seed for seed, and the mean gap (−0.035%, 95% interval −0.10%
+  to +0.03%) is not resolved from zero. VTC is 0.53% below passthrough
+  (0.23–0.83%). *Cost:* VTC recomputes more after preemptions, and the hooks
+  add 0.17–0.57 ms of CPU per scheduling step at 64–256 running requests
+  (0.17–0.67 ms with VTC; medians of 5 runs).
 
 VTC's billing weights are not this GPU's costs: with a prefill-heavy and a
 decode-heavy tenant, an even billed split gave the prefill-heavy one 53–54%
@@ -121,7 +123,8 @@ why enforcing fairness below the size of one request destroys work.
   gateway. Prompts are exact-length token IDs, and `ignore_eos` fixes output
   lengths.
 - `noisy_neighbor` and `aggressive` ran with 5 seeds per arm (seeds 4 and 5
-  in a later session than 1–3), the other workloads and arms with 3. In
+  in a later session than 1–3), the rotated-order overhead and `kv_share`
+  reruns with 6, the other workloads and arms with 3. In
   `noisy_neighbor` and `long_prompt` the
   seed changes tenant A's Poisson arrival times (and, in `noisy_neighbor`,
   which of B's requests are cancelled). In `aggressive` and `weighted` the
@@ -217,9 +220,15 @@ orders ran in one session, 3 seeds each (`results/kv_victim_*`):
   p99 is the same in two seeds and 0.08 s higher in the third.
 - In the aggressive workload both tenants are backlogged peers, so A is
   sometimes over its KV share and still loses requests. It recomputes 5%
-  less. Throughput is 0.3–0.5% higher per seed, but that is not resolved:
-  the `counter` run went first in every seed, so run order could account for
-  a gap of that size.
+  less. Throughput was 0.3–0.5% higher per seed with `counter` always run
+  first. Rerun over 6 seeds with the order alternated
+  (`results/kv_victim_rotated/`, compared with `bench/paired.py`),
+  `kv_share` was faster in every seed: +0.68% on average, 95% interval
+  +0.13% to +1.23%. The two largest gaps, +1.58% and +1.05% in seeds 1 and
+  2, came with a 30 MHz higher median SM clock and a 5–8 °C lower peak
+  temperature in the `kv_share` run; in seeds 3–6, at an equal or lower
+  clock, the gap is +0.29% to +0.43%. So `kv_share` is resolved as faster,
+  but its size within that interval is not.
 - The order also changes who gets the step's token budget first: an
   over-share tenant's running requests now come after everyone else's.
 
@@ -242,8 +251,9 @@ sends 300, three times the demand. The weights are equal.
 | Output tokens/s (median) | 1,309 | 1,312 | 1,314 | 1,295 |
 
 TTFT cells are medians over the 5 seeds; no cell varied by more than 0.9 s
-across seeds. VTC's throughput is 0.5–1.1% below FCFS's with the same seed;
-VTC ran last in every seed, so a gap below about 1% is not resolved.
+across seeds. VTC's throughput is 0.5–1.1% below FCFS's with the same seed,
+with VTC run last in every seed. With the order rotated over 6 seeds the gap
+is 0.53% (95% interval 0.23–0.83%; [Scheduler overhead](#scheduler-overhead)).
 - **FCFS** serves each tenant in proportion to what it sends.
 - **Static priority** is all or nothing between peers.
 - **VTC** splits service evenly until A runs out of work, then gives B
@@ -418,29 +428,44 @@ open-loop noisy-neighbour trace the arrival schedule sets how long a run
 lasts, so every arm's seed-1 run gives 730.6–731.2 output tokens/s, with or
 without the plugin. The `aggressive` workload saturates the engine instead:
 all 400 requests arrive in the first 0.3 s, so throughput is the engine's
-capacity. It was rerun with vLLM without the plugin, the plugin in
-passthrough and VTC, three seeds each, interleaved by seed in one session
-(`results/overhead/`):
+capacity. It was run with vLLM without the plugin, the plugin in
+passthrough and VTC, six seeds in one session, with the order of the three
+arms rotated so that each arm ran first, second and third in two seeds each
+(`results/overhead_rotated/`). `bench/paired.py` compares the arms seed for
+seed and gives a 95% t interval for the mean difference
+(`results/overhead_rotated/paired.json`); a gap whose interval includes zero
+is called unresolved.
 
 | | vLLM, no plugin | Plugin, passthrough | Plugin, VTC |
 |---|---|---|---|
-| Output tokens/s | 1,320 – 1,337 (median 1,331) | 1,318 – 1,331 (median 1,326) | 1,310 – 1,321 (median 1,316) |
-| Per seed, against the arm to the left | | −0.13% to −0.50% | −0.67% to −0.74% |
-| TPOT median | 48.5 – 49.2 ms | 48.7 – 49.3 ms | 49.2 – 50.0 ms |
-| TTFT median, A / B | 31.9 – 32.4 / 32.1 – 32.6 s | 32.1 – 32.2 / 32.3 – 32.8 s | 16.2 – 16.5 / 44.4 – 44.9 s |
+| Output tokens/s | 1,313 – 1,334 (median 1,318) | 1,313 – 1,335 (median 1,317) | 1,306 – 1,321 (median 1,311) |
+| Per seed, against the arm to the left | | −0.11% to +0.04% | −1.03% to −0.18% |
+| Mean (95% interval) | | −0.035% (−0.10% to +0.03%) | −0.53% (−0.83% to −0.23%) |
+| TPOT median | 48.6 – 49.4 ms | 48.6 – 49.4 ms | 49.1 – 50.1 ms |
+| TTFT median, A / B | 32.0 – 32.6 / 32.2 – 32.8 s | 31.9 – 32.8 / 32.1 – 32.8 s | 16.2 – 16.6 / 44.5 – 45.0 s |
 
-- Passthrough came out 0.1–0.5% below no plugin and VTC another 0.7%
-  below passthrough, seed for seed. Neither is resolved below about 1%: the
-  passthrough gap is smaller than the 1.3% spread across the no-plugin seeds,
-  and every seed ran the arms in the same order (no plugin, passthrough,
-  VTC) with each run's trace slightly longer than the one before (76.7, 77.1
-  and 77.6 s in seed 1), so the order alone could produce gaps of this size.
+- **Passthrough against no plugin is unresolved.** The interval spans zero:
+  if the hooks cost throughput end to end, it is less than about 0.1% here.
+- **VTC against passthrough is resolved:** 0.53% lower, slower in all six
+  seeds (0.56% below no plugin, interval 0.29–0.83%).
+- Run order does not account for either: averaged over seeds, a seed's
+  first, second and third runs are +0.05%, −0.10% and +0.04% from that
+  seed's mean.
+- Each arm's throughput spreads 1.1–1.7% across seeds, more than these gaps.
+  That spread moves with the GPU's state, which cannot be locked: the median
+  SM clock was 2,610–2,640 MHz in seeds 1–2 and 2,565–2,595 MHz in seeds 3–6,
+  with peaks of 75–83 °C. It acts on all arms of a seed alike, which is why
+  the comparison is paired.
+- An earlier set with the arms in a fixed order (no plugin, passthrough,
+  VTC; three seeds, `results/overhead/`) had passthrough 0.13–0.50% below
+  no plugin. That gap did not reproduce with the order rotated. Its VTC gap,
+  0.67–0.74% below passthrough, is inside the interval above.
 - VTC's gap is not all overhead in any case: VTC also reorders the
   work (A's TTFT halves, B's rises) and preempts more, recomputing 67.7k–68.0k
   weighted tokens against 63.8k for passthrough.
-- These runs were made in a later session than the `aggressive` results
-  above and are 1.4–1.6% faster for the same arms, so compare arms within one
-  set.
+- Throughput also differs between sessions for the same arm (the fixed-order
+  set's no-plugin median is 1.0% above this set's), so compare arms within
+  one set.
 
 ## Reproduce
 
@@ -546,7 +571,7 @@ relying on such a change.
   the prefill-heavy tenant 53–54% of GPU time; billing decode at the fitted
   0.97 overshot to 40%. Attention (context length) is not billed. "Share" in
   the tables is in billing units unless it says GPU time.
-- The evaluation is one RTX 4090, one model (Qwen2.5-7B) and three or five
+- The evaluation is one RTX 4090, one model (Qwen2.5-7B) and three to six
   seeds per arm, on synthetic traces in which all of a tenant's requests have the same
   shape except in `mixed_shapes`. The gateway cap was run at one value (16).
 - Fairness acts on admission and token-budget order. A request already

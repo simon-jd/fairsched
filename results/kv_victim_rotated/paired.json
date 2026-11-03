@@ -1,0 +1,121 @@
+{
+ "workload": "aggressive",
+ "source": "results/kv_victim_rotated/summary.json",
+ "metric": "client.output_tokens_per_s",
+ "difference": "100 * (a / b - 1) per seed, percent",
+ "interval": "two-sided 95% Student t interval of the mean difference over seeds; resolved means the interval excludes zero",
+ "seeds": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6
+ ],
+ "arms": {
+  "vtc": {
+   "output_tokens_per_s": [
+    1314.05,
+    1318.39,
+    1310.18,
+    1306.52,
+    1306.83,
+    1306.11
+   ],
+   "median": 1308.51,
+   "spread_pct": 0.938,
+   "position": [
+    1,
+    2,
+    2,
+    1,
+    1,
+    2
+   ],
+   "sm_clock_mhz_p50": [
+    2610.0,
+    2610.0,
+    2595.0,
+    2565.0,
+    2565.0,
+    2565.0
+   ],
+   "temperature_c_max": [
+    81.0,
+    79.0,
+    82.0,
+    83.0,
+    83.0,
+    83.0
+   ]
+  },
+  "vtc-kv": {
+   "output_tokens_per_s": [
+    1334.81,
+    1332.19,
+    1315.8,
+    1311.19,
+    1311.74,
+    1309.9
+   ],
+   "median": 1313.77,
+   "spread_pct": 1.896,
+   "position": [
+    2,
+    1,
+    1,
+    2,
+    2,
+    1
+   ],
+   "sm_clock_mhz_p50": [
+    2640.0,
+    2640.0,
+    2580.0,
+    2565.0,
+    2565.0,
+    2565.0
+   ],
+   "temperature_c_max": [
+    73.0,
+    74.0,
+    82.0,
+    83.0,
+    83.0,
+    83.0
+   ]
+  }
+ },
+ "position_effect_pct": {
+  "1": -0.045,
+  "2": 0.045
+ },
+ "pairs": [
+  {
+   "a": "vtc-kv",
+   "b": "vtc",
+   "diff_pct": [
+    1.58,
+    1.047,
+    0.429,
+    0.358,
+    0.376,
+    0.29
+   ],
+   "mean_pct": 0.68,
+   "ci95_pct": [
+    0.133,
+    1.227
+   ],
+   "resolved": true,
+   "a_ran_first": [
+    false,
+    true,
+    true,
+    false,
+    false,
+    true
+   ]
+  }
+ ]
+}
