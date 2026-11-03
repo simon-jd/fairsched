@@ -7,7 +7,7 @@ test:
 
 # Only what needs no Docker: the pure-Python tests and the Go tests with a local Go toolchain.
 test-local:
-	python3 -m unittest tests.test_policy tests.test_report tests.test_audit tests.test_bench tests.test_gpu_time
+	python3 -m unittest tests.test_policy tests.test_report tests.test_audit tests.test_bench tests.test_gpu_time tests.test_paired
 	go vet ./proxy/... ./loadgen/... ./cmd/...
 	go test ./proxy/... ./loadgen/... ./cmd/...
 

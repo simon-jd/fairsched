@@ -472,6 +472,8 @@ code builds in the pinned Go image.
    `results/<workload>/summary.json` (and the PNGs) from the raw runs, and
    `python3 -m bench.gpu_time <workload>` writes the step-time fit and GPU-time
    shares to `results/<workload>/gpu_time.json`.
+   `python3 -m bench.paired <name> <arm>:<arm> ...` compares arms seed for
+   seed on throughput and writes `results/<name>/paired.json`.
 
 ## Testing
 
@@ -487,14 +489,15 @@ there because vLLM is not installed, so a change that
 breaks the plugin's vLLM integration passes CI. Run `scripts/test.sh` before
 relying on such a change.
 
-- **Policy, report, step log, runner and step-time fit**
+- **Policy, report, step log, runner, step-time fit and paired comparison**
   (`tests/test_policy.py`, `tests/test_report.py`, `tests/test_audit.py`,
-  `tests/test_bench.py`, `tests/test_gpu_time.py`, pure Python): the lift
-  rule
+  `tests/test_bench.py`, `tests/test_gpu_time.py`, `tests/test_paired.py`,
+  pure Python): the lift rule
   (waiting queue only), weighted shares, recompute and waste attribution,
   unlisted tenants, queue semantics matching vLLM's `FCFSRequestQueue`, the
-  report's percentiles, shares and timelines, dropped-record reporting, and
-  the runner's gateway and image settings.
+  report's percentiles, shares and timelines, dropped-record reporting, the
+  runner's gateway and image settings, and the paired differences' intervals
+  and run positions.
 - **Go** (`go test ./...`): the gateway's header stripping and tenant
   injection, streaming, cancellation, and the load generator.
 - **Real vLLM scheduler on CPU** (`tests/test_scheduler_vllm.py`), in the
@@ -526,7 +529,7 @@ relying on such a change.
 | `fairsched/audit.py` | per-step JSONL log |
 | `proxy/`, `cmd/fairsched-proxy` | Go gateway: API key → tenant, trusted `vllm_xargs`, streaming, cancellation |
 | `loadgen/`, `cmd/fairsched-loadgen` | Go open-arrival load generator with per-chunk timestamps |
-| `bench/` | workloads, experiment runner, report, plots, hook overhead |
+| `bench/` | workloads, experiment runner, report, plots, step-time fit, paired comparison, hook overhead |
 | `docs/` | [design](docs/design.md), [design trade-offs](docs/design-tradeoffs.md), [livelock post-mortem](docs/livelock.md) |
 
 ## Limitations
