@@ -56,8 +56,9 @@ changing vLLM, which runs from its official container.
 
 **Cost.** The hooks depend on internals (`running`, `waiting`, hook names,
 `num_computed_tokens` semantics), so each vLLM upgrade needs the CPU tests
-rerun. The hooks add 132, 244 and 403 us of CPU per step at 64, 128 and 256
-running requests, about 0.5% of a 50 ms decode step at 128, and with async
+rerun. With VTC the plugin adds 172, 311 and 674 us of CPU per step at 64,
+128 and 256 running requests (medians of 5 runs, `results/hook_overhead.jsonl`),
+about 0.6% of a 50 ms decode step at 128, and with async
 scheduling that time overlaps the previous step's GPU work. End to end, on a
 saturating trace with the run order rotated over six seeds, passthrough
 mode's throughput is within 0.11% of vLLM without the plugin, seed for seed,
