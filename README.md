@@ -15,42 +15,45 @@ step's token budget by the weighted service each tenant has received, bills
 only the tokens that actually ran, and never preempts a request on its own.
 A small Go gateway maps API keys to tenants.
 
-![Billed service per tenant over time for two backlogged peers](results/aggressive/service.png)
+**Scope:** one RTX 4090; Qwen2.5-7B-Instruct BF16 on vLLM 0.31.0 (vLLM is
+not modified); synthetic, seeded two-tenant traces.
 
-**Results** (Qwen2.5-7B on one RTX 4090; ranges over 5 seeds unless stated):
-- **Peers split evenly.** With both tenants backlogged and one sending three
-  times the other's demand, VTC splits service 0.50 : 0.50 (FCFS 0.25 : 0.75,
-  static priority 1.00 : 0.00 either way). *Cost:* 0.53% lower throughput
-  than FCFS (95% interval 0.23–0.83%, 6 seeds with the run order rotated),
-  with more preemption recompute.
-- **A burst does not starve interactive traffic.** During the 300-request
-  burst, the interactive tenant's median TTFT is 0.39–0.50 s, against
-  28.8–40.5 s under FCFS. *Cost:* VTC is not the fastest option for that
-  tenant. Static priority, told who is interactive, is 1.5–1.8× faster on the
-  median. A per-tenant concurrency cap at the gateway, swept from 4 to 32,
-  beats VTC's medians at 32: A's is 13–63% lower and B's 1.7–3.0 s lower,
-  with no preemptions and the burst done within 2.1 s of VTC's. VTC wins on
-  A's p99 (0.86–1.43 s against 4.17–6.06 s). A cap of 16 cuts A's median
-  further but finishes B's burst 28–33 s later; at 8 or 4, B's median TTFT
-  rises by 42 s or more, and at 4 A queues too. VTC also exposes the
-  interactive tenant to 8–20 KV-pressure preemptions (0–8 under FCFS). An
-  optional victim order brings that to 0, but does not lower the tenant's
-  latency.
-- **The plugin is cheap.** On a saturating trace, with the arm order rotated
-  over 6 seeds, passthrough mode is within 0.11% of vLLM's throughput without
-  the plugin, seed for seed, and the mean gap (−0.035%, 95% interval −0.10%
-  to +0.03%) is not resolved from zero. VTC is 0.53% below passthrough
-  (0.23–0.83%). *Cost:* VTC recomputes more after preemptions, and the hooks
-  add 0.17–0.57 ms of CPU per scheduling step at 64–256 running requests
-  (0.17–0.67 ms with VTC; medians of 5 runs).
+Ranges are over seeds; bold marks the better side:
 
-VTC's billing weights are not this GPU's costs: with a prefill-heavy and a
-decode-heavy tenant, an even billed split gave the prefill-heavy one 53–54%
-of the fitted GPU time, and billing decode at its fitted marginal cost
-overshot to 40% ([different request shapes](#different-request-shapes-and-what-a-token-costs)).
-That and the other limits, including the light-tenant preemption and an
-evaluation on one GPU, one model and synthetic traces, are under
-[Limitations](#limitations).
+| Workload and measure | VTC | Baseline | Seeds |
+|---|---|---|---|
+| Two backlogged peers, B sends 3× A's demand: A's share of billed service | **0.50** | 0.25, FCFS | 5 |
+| 300-request burst from B: A's median TTFT | **0.39 – 0.50 s** | 28.8 – 40.5 s, FCFS | 5 |
+| Same burst: A's median TTFT | 0.39 – 0.50 s | **0.23 – 0.30 s**, static priority, A marked high | 5 |
+| Same burst: A's median TTFT | 0.39 – 0.50 s | **0.15 – 0.36 s**, gateway cap of 32 requests per tenant | 5 |
+| Same burst: A's p99 TTFT | **0.86 – 1.43 s** | 4.17 – 6.06 s, gateway cap of 32 | 5 |
+| Saturating trace: output tokens/s, median over seeds | 1,311 | **1,317**, FCFS | 6, arm order rotated |
+
+Rows 1–3 come from `results/aggressive/summary.json` and
+`results/noisy_neighbor/summary.json`, rows 4–5 from
+`results/cap_sweep/summary.json` (against the same seeds' VTC runs), row 6
+from `results/overhead_rotated/paired.json`. FCFS is vLLM's scheduler with
+the plugin in passthrough mode.
+
+**Limitations**
+- Not the fastest option for the interactive tenant (rows 3–5). Static
+  priority has to be told who is interactive. A cap of 32 also gives B a
+  1.7–3.0 s lower median TTFT than VTC; VTC wins only on A's tail. Smaller
+  caps delay B's burst by 28 s or more ([cap sweep](#noisy-neighbour)).
+- Throughput is 0.53% below FCFS on a saturating trace (paired over 6 seeds,
+  95% interval 0.23–0.83%), with more preemption recompute.
+- The light tenant is preempted under KV pressure: 8–20 of A's requests per
+  burst run, against 0–8 under FCFS. The optional `kv_share` victim order
+  brings that to 0 but does not lower A's latency.
+- VTC's billing weights are not this GPU's costs. With a prefill-heavy and a
+  decode-heavy tenant, an even billed split gave the prefill-heavy one 53–54%
+  of the fitted GPU time ([request shapes](#different-request-shapes-and-what-a-token-costs)).
+- One GPU, one model, synthetic traces, pinned to vLLM 0.31.0
+  ([all limitations](#limitations)).
+
+[How it works](#how-it-works) · [Design trade-offs](docs/design-tradeoffs.md) ·
+[Full results](#results) · [Livelock post-mortem](docs/livelock.md) ·
+[Reproduce](#reproduce)
 
 ## What is in this repository
 
@@ -184,6 +187,12 @@ near t = 100 s. Under VTC, A is served at its demand throughout. B pays with
 later (same seed):
 
 ![Billed service per tenant over time](results/noisy_neighbor/service.png)
+
+**Static priority** with A marked high is faster for A than VTC in every
+seed. A's median TTFT is 1.5–1.8× lower (0.23–0.30 s), and its p99 is lower
+too (0.70–0.78 s). It has to be told which tenant is interactive, and between
+backlogged peers it gives one tenant everything
+([aggressive tenant](#aggressive-tenant)).
 
 **A concurrency cap at the gateway** is the obvious alternative to a
 scheduler. With each tenant limited to 16 requests in the engine, it beats
