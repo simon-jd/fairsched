@@ -1,12 +1,37 @@
 # Results
 
+## Run history
+
+Each set of runs, in the order it was committed. Commit and date are when
+the file, or that set of runs inside it, was committed to this repository.
+The runs in `fe04a1f` were made before this history starts, at an earlier
+revision of the code (see [`source_tree`](#source_tree)).
+
+| File | Commit | Date | What it measured | Seeds |
+|---|---|---|---|---|
+| `noisy_neighbor/summary.json` | `fe04a1f` | 2026-10-30 | Noisy neighbour: FCFS, priority (A high), VTC; vLLM without the plugin (`native`) on one seed | 1–3 (`native`: 1) |
+| `aggressive/summary.json` | `fe04a1f` | 2026-10-30 | Aggressive tenant: FCFS, priority with A high and with B high, VTC | 1–3 |
+| `weighted/summary.json` | `fe04a1f` | 2026-10-30 | Weighted shares (A 2, B 1): FCFS, VTC | 1–3 |
+| `long_prompt/summary.json` | `fe04a1f` | 2026-10-30 | Long prompts under KV pressure: FCFS, VTC | 1–3 |
+| `hook_overhead.jsonl`, first version | `fe04a1f` | 2026-10-30 | Hook CPU time, one run, no source revision recorded. It reported only VTC minus native (132–403 µs) as the added cost; passthrough minus native was 126–469 µs, so it understated the hook cost at 256 requests. Replaced in `f9dc819` | 1 run |
+| `noisy_neighbor/summary.json` | `4e2c702` | 2026-10-31 | Noisy neighbour with the gateway cap at 16 (`fcfs-cap`) | 1–3 |
+| `overhead/summary.json` | `f60b1b1` | 2026-10-31 | `aggressive` with no plugin, passthrough and VTC in a fixed order | 1–3 |
+| `noisy_neighbor/summary.json`, `aggressive/summary.json` | `0105127` | 2026-10-31 | Seeds 4 and 5 of each file's first arms (not `fcfs-cap` or `native`), run in a later session than seeds 1–3 with the code of that time (their `source_tree` says which) | 4–5 |
+| `kv_victim_noisy_neighbor/`, `kv_victim_aggressive/` `summary.json` | `a371fda` | 2026-10-31 | VTC with the default and the `kv_share` victim order, interleaved | 1–3 |
+| `mixed_shapes/`, `kv_victim_*/gpu_time.json` | `6ab7b69` | 2026-10-31 | Prefill-heavy and decode-heavy tenants: FCFS, gateway cap 16, VTC, VTC with `kv_share`; the step-time fit | 1–3 |
+| `fit_weights_mixed_shapes/`, `fit_weights_noisy_neighbor/` | `9c623eb` | 2026-10-31 | VTC with `w_d = 2` and with the fitted `w_d = 0.97` | 1–3 |
+| `hook_overhead.jsonl` | `f9dc819` | 2026-11-02 | Hook CPU time, five runs at commit `e6f4f47`, variant order rotated | 5 runs |
+| `livelock/summary.json` | `c8bb1a2` | 2026-11-02 | Counts from the earlier design's step log; the log and that design's code are not committed | 1 run |
+| `overhead_rotated/`, `kv_victim_rotated/` | `2d7a9c2` | 2026-11-02 | `aggressive` with the arm order rotated: no plugin, passthrough and VTC; VTC and VTC with `kv_share`; `paired.json` | 1–6 |
+| `cap_sweep/summary.json` | `0b20d12` | 2026-11-02 | Noisy neighbour with the gateway cap at 4, 8, 16 and 32, arm order rotated | 1–5 |
+
+## Files
+
 - `<workload>/summary.json`: one entry per (arm, seed) run, written by
   `bench/report.py` from the raw run directories under `results/raw/`, which
   are not committed. The README's tables and plots come from these files.
 - `<workload>/*.png`: plots of seed 1 (`python3 -m bench.report ... --plots`).
-- `noisy_neighbor/` and `aggressive/` hold seeds 1–5 of their original arms;
-  seeds 4 and 5 were run in a later session than seeds 1–3, with the code of
-  that time (their `source_tree` says which).
+- `noisy_neighbor/` and `aggressive/` hold seeds 1–5 of their original arms.
 - `overhead/summary.json`: the `aggressive` workload rerun with vLLM without
   the plugin (`native`), the plugin in passthrough (`fcfs`) and VTC, three
   seeds each, interleaved by seed in one session

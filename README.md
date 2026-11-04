@@ -137,10 +137,10 @@ fairness below the size of one request destroys work.
 - Load: the Go load generator replays seeded open-arrival traces through the
   gateway. Prompts are exact-length token IDs, and `ignore_eos` fixes output
   lengths.
-- `noisy_neighbor` and `aggressive` ran with 5 seeds per arm (seeds 4 and 5
-  in a later session than 1–3), the gateway-cap sweep with 5, the
-  rotated-order overhead and `kv_share` reruns with 6, the other workloads
-  and arms with 3. In
+- `noisy_neighbor` and `aggressive` ran with 5 seeds per arm, the
+  gateway-cap sweep with 5, the rotated-order overhead and `kv_share` reruns
+  with 6, the other workloads and arms with 3
+  ([run history](results/README.md#run-history)). In
   `noisy_neighbor` and `long_prompt` the
   seed changes tenant A's Poisson arrival times (and, in `noisy_neighbor`,
   which of B's requests are cancelled). In `aggressive` and `weighted` the
@@ -184,7 +184,7 @@ fairness below the size of one request destroys work.
 | A requests preempted under KV pressure | 0 – 8 | 0 | 0 | 8 – 20 |
 
 The gateway-cap column is the cap-16 arm of the sweep below
-(`results/cap_sweep/`), run in a later session on the same traces.
+(`results/cap_sweep/`), on the same traces.
 
 ![Tenant A TTFT CDF, noisy neighbour, seed 1](results/noisy_neighbor/ttft_A.png)
 
@@ -213,10 +213,12 @@ arms).
 
 **Other cap values.** The cap was swept at 4, 8, 16 and 32 requests per
 tenant on seeds 1–5, the seeds VTC ran, in one session with the arm order
-rotated per seed (`results/cap_sweep/`). The FCFS and VTC runs are from the
-earlier sessions; the sweep's cap-16 runs reproduce the earlier cap-16 runs
-of seeds 1–3 (`results/noisy_neighbor/`) to within 0.01 s of A's median
-TTFT, 0.17 s of its p99 and 0.24 s of the burst's finish.
+rotated per seed (`results/cap_sweep/`). The FCFS and VTC columns are the
+`noisy_neighbor/` runs, made separately
+([run history](results/README.md#run-history)). The sweep's cap-16 runs
+reproduce the first cap-16 runs of seeds 1–3 (`results/noisy_neighbor/`) to
+within 0.01 s of A's median TTFT, 0.17 s of its p99 and 0.24 s of the
+burst's finish.
 
 | | Cap 4 | Cap 8 | Cap 16 | Cap 32 | No cap (FCFS) | VTC |
 |---|---|---|---|---|---|---|
@@ -452,10 +454,11 @@ quantum-preemption design was not run on this configuration.
 
 `bench/hook_overhead.py` measures CPU time per `schedule()` +
 `update_from_output()` call in the real vLLM scheduler, with a stubbed model
-runner. `scripts/hook-overhead.sh` ran it five times at commit `e6f4f47`,
-each run in a fresh container with the three variants measured in a rotated
-order (`results/hook_overhead.jsonl`; every row records the commit and tree
-hashes). Medians over the five runs, with the range of the per-run
+runner. `scripts/hook-overhead.sh` ran it five times, each run in a fresh
+container with the three variants measured in a rotated order
+(`results/hook_overhead.jsonl`; every row records the commit and tree
+hashes, and [results/README.md](results/README.md#run-history) lists the
+earlier single run it replaced). Medians over the five runs, with the range of the per-run
 differences against native:
 
 | Running requests | vLLM native | Plugin, passthrough | Plugin, VTC | Added by passthrough | Added by VTC |
@@ -471,9 +474,6 @@ differences against native:
 - The host was shared with other work (1-minute load average 8.3–9.2 on
   32 CPUs), and single runs differ by up to 3× (VTC at 256 requests:
   388–1,171 µs added).
-- An earlier single run, with no source revision recorded, reported only VTC
-  minus native (132–403 µs) as the added cost. Passthrough minus native in
-  that run was 126–469 µs, so the hook cost was understated at 256 requests.
 - At 128 running requests a Qwen2.5-7B decode step takes about 50 ms
   (median TPOT in these runs), so the hooks add about 0.6%.
 - With async scheduling this CPU time overlaps the previous step's GPU work.
