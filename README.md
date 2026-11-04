@@ -1,7 +1,8 @@
 # fairsched: fair multi-tenant scheduling for vLLM
 
 **Problem.** Tenants that share one vLLM engine are served in proportion to
-what they send. Under vLLM's FCFS, a 300-request burst from one tenant pushed
+what they send. On one GPU serving one model (Qwen2.5-7B), with synthetic
+seeded traces, a 300-request burst from one tenant under vLLM's FCFS pushed
 another tenant's median time to first token (TTFT) to 29–41 s, and a tenant
 sending three times the other's demand took 75% of the service. Static priority
 helps only if you know in advance who is interactive; between peers it gives
