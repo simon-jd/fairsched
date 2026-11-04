@@ -11,6 +11,19 @@ This page covers what happened, why it happened, and what the current design
 does instead. The earlier design was replaced by the current one and is not
 part of this repository; the outline below shows the part that mattered.
 
+**What this page rests on.** Every count here comes from one committed file,
+[results/livelock/summary.json](../results/livelock/summary.json), which
+`scripts/livelock_summary.py` computed from the run's step log. The step log,
+the client's output and the earlier design's code are not in this repository;
+the file records the SHA-256 of the log and of that code. So the counts
+cannot be recomputed and the run cannot be repeated from here. Besides the
+counts, the file records the model, the step budget, the context length,
+prefix caching, the client timeout, the KV blocks, the policy settings and
+each request's final status. The rest of the setup below (GPU, vLLM version,
+eager and synchronous mode, the four-sequence limit, prompt and output
+lengths), the plain-FCFS failure and the code outline under [Why](#why) are
+not backed by any file in this repository.
+
 ## What we saw
 
 The run used Qwen2.5-1.5B on an RTX 4090 with vLLM 0.31.0: synchronous
@@ -37,8 +50,7 @@ as partial; the step records themselves are contiguous. Over those steps:
 | Decode tokens | 0 |
 
 These are token counts, not GPU-time measurements. vLLM itself preempted
-nothing; all 678 preemptions were the policy's. The log and the earlier
-design's code are not in this repository.
+nothing; all 678 preemptions were the policy's.
 [results/livelock/summary.json](../results/livelock/summary.json) holds the
 counts per request, the policy settings the log records (`w_p = w_d = 1`,
 `charge_recompute = "tenant"`, two guaranteed dispatches, 513 KV blocks
