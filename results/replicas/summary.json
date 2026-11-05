@@ -1,0 +1,8267 @@
+{
+ "table": {
+  "aggressive/fcfs-rr": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.2488,
+    0.251
+   ],
+   "ttft_A_p50_ms": [
+    37014.9753,
+    39460.2738
+   ],
+   "ttft_A_p99_ms": [
+    74135.4022,
+    75148.5387
+   ],
+   "output_tokens_per_s": [
+    1175.9808,
+    1186.6965
+   ],
+   "output_tokens_per_s_median": 1176.9795740797986,
+   "schedule_us_p50": [
+    745.058,
+    767.751
+   ],
+   "sync_apply_us_p50": null,
+   "ttft_B_p50_ms": [
+    36881.1937,
+    37582.3992
+   ],
+   "ttft_B_r0_p50_ms": [
+    36594.6658,
+    37351.8035
+   ],
+   "preemptions": [
+    58,
+    58,
+    58
+   ]
+  },
+  "aggressive/fcfs-sticky": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.2447,
+    0.2487
+   ],
+   "ttft_A_p50_ms": [
+    42813.8213,
+    44722.7041
+   ],
+   "ttft_A_p99_ms": [
+    100170.1203,
+    101252.7149
+   ],
+   "output_tokens_per_s": [
+    912.6608,
+    914.3856
+   ],
+   "output_tokens_per_s_median": 914.2259408631754,
+   "schedule_us_p50": [
+    743.817,
+    775.535
+   ],
+   "sync_apply_us_p50": null,
+   "ttft_B_p50_ms": [
+    35938.8233,
+    36732.7768
+   ],
+   "ttft_B_r0_p50_ms": [
+    42793.2556,
+    43685.1411
+   ],
+   "preemptions": [
+    71,
+    71,
+    71
+   ]
+  },
+  "aggressive/gvtc-rr": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.49,
+    0.4996
+   ],
+   "ttft_A_p50_ms": [
+    10809.2702,
+    11236.8036
+   ],
+   "ttft_A_p99_ms": [
+    38715.0799,
+    39495.512
+   ],
+   "output_tokens_per_s": [
+    1156.5668,
+    1172.3915
+   ],
+   "output_tokens_per_s_median": 1169.6142264873638,
+   "schedule_us_p50": [
+    785.423,
+    805.652
+   ],
+   "sync_apply_us_p50": [
+    2.625,
+    3.306
+   ],
+   "ttft_B_p50_ms": [
+    44838.1492,
+    45330.4434
+   ],
+   "ttft_B_r0_p50_ms": [
+    44507.7446,
+    45539.6624
+   ],
+   "preemptions": [
+    66,
+    58,
+    62
+   ]
+  },
+  "aggressive/gvtc-sticky": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.4998,
+    0.5015
+   ],
+   "ttft_A_p50_ms": [
+    11476.9575,
+    11501.1383
+   ],
+   "ttft_A_p99_ms": [
+    37525.437,
+    37549.9414
+   ],
+   "output_tokens_per_s": [
+    910.3109,
+    913.246
+   ],
+   "output_tokens_per_s_median": 912.5194535024153,
+   "schedule_us_p50": [
+    779.994,
+    813.235
+   ],
+   "sync_apply_us_p50": [
+    2.184,
+    3.256
+   ],
+   "ttft_B_p50_ms": [
+    43801.2689,
+    43841.4914
+   ],
+   "ttft_B_r0_p50_ms": [
+    69902.1019,
+    70154.3682
+   ],
+   "preemptions": [
+    72,
+    75,
+    74
+   ]
+  },
+  "aggressive/gvtc-sticky-kill": {
+   "seeds": [
+    1
+   ],
+   "share_A": [
+    0.3168,
+    0.3168
+   ],
+   "ttft_A_p50_ms": [
+    11059.703,
+    11059.703
+   ],
+   "ttft_A_p99_ms": [
+    65437.5281,
+    65437.5281
+   ],
+   "output_tokens_per_s": [
+    901.2284,
+    901.2284
+   ],
+   "output_tokens_per_s_median": 901.2284132005886,
+   "schedule_us_p50": [
+    780.742,
+    814.636
+   ],
+   "sync_apply_us_p50": [
+    1.253,
+    1.403
+   ],
+   "ttft_B_p50_ms": [
+    41246.3014,
+    41246.3014
+   ],
+   "ttft_B_r0_p50_ms": [
+    72955.1783,
+    72955.1783
+   ],
+   "preemptions": [
+    84
+   ]
+  },
+  "aggressive/gvtc-sticky-t10": {
+   "seeds": [
+    1
+   ],
+   "share_A": [
+    0.5022,
+    0.5022
+   ],
+   "ttft_A_p50_ms": [
+    10798.2338,
+    10798.2338
+   ],
+   "ttft_A_p99_ms": [
+    36081.2219,
+    36081.2219
+   ],
+   "output_tokens_per_s": [
+    945.5643,
+    945.5643
+   ],
+   "output_tokens_per_s_median": 945.5643083209719,
+   "schedule_us_p50": [
+    787.786,
+    806.63
+   ],
+   "sync_apply_us_p50": [
+    3.106,
+    4.077
+   ],
+   "ttft_B_p50_ms": [
+    42288.8433,
+    42288.8433
+   ],
+   "ttft_B_r0_p50_ms": [
+    67495.1035,
+    67495.1035
+   ],
+   "preemptions": [
+    72
+   ]
+  },
+  "aggressive/gvtc-sticky-t10-nodelay": {
+   "seeds": [
+    1
+   ],
+   "share_A": [
+    0.5037,
+    0.5037
+   ],
+   "ttft_A_p50_ms": [
+    11034.5694,
+    11034.5694
+   ],
+   "ttft_A_p99_ms": [
+    36477.7902,
+    36477.7902
+   ],
+   "output_tokens_per_s": [
+    932.0467,
+    932.0467
+   ],
+   "output_tokens_per_s_median": 932.0466539858511,
+   "schedule_us_p50": [
+    801.316,
+    826.514
+   ],
+   "sync_apply_us_p50": [
+    3.036,
+    3.456
+   ],
+   "ttft_B_p50_ms": [
+    42612.3292,
+    42612.3292
+   ],
+   "ttft_B_r0_p50_ms": [
+    67981.3381,
+    67981.3381
+   ],
+   "preemptions": [
+    73
+   ]
+  },
+  "aggressive/gvtc-sticky-t100-nodelay": {
+   "seeds": [
+    1
+   ],
+   "share_A": [
+    0.5053,
+    0.5053
+   ],
+   "ttft_A_p50_ms": [
+    11340.7463,
+    11340.7463
+   ],
+   "ttft_A_p99_ms": [
+    37112.2536,
+    37112.2536
+   ],
+   "output_tokens_per_s": [
+    917.5503,
+    917.5503
+   ],
+   "output_tokens_per_s_median": 917.5502626869346,
+   "schedule_us_p50": [
+    793.69,
+    829.718
+   ],
+   "sync_apply_us_p50": [
+    2.184,
+    2.525
+   ],
+   "ttft_B_p50_ms": [
+    43247.2472,
+    43247.2472
+   ],
+   "ttft_B_r0_p50_ms": [
+    69477.7552,
+    69477.7552
+   ],
+   "preemptions": [
+    75
+   ]
+  },
+  "aggressive/gvtc-sticky-t1000": {
+   "seeds": [
+    1
+   ],
+   "share_A": [
+    0.4906,
+    0.4906
+   ],
+   "ttft_A_p50_ms": [
+    11470.8151,
+    11470.8151
+   ],
+   "ttft_A_p99_ms": [
+    37519.9137,
+    37519.9137
+   ],
+   "output_tokens_per_s": [
+    939.9027,
+    939.9027
+   ],
+   "output_tokens_per_s_median": 939.9026973048068,
+   "schedule_us_p50": [
+    779.751,
+    823.832
+   ],
+   "sync_apply_us_p50": [
+    1.182,
+    1.202
+   ],
+   "ttft_B_p50_ms": [
+    42710.8105,
+    42710.8105
+   ],
+   "ttft_B_r0_p50_ms": [
+    67814.2602,
+    67814.2602
+   ],
+   "preemptions": [
+    73
+   ]
+  },
+  "aggressive/vtc-rr": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.493,
+    0.5
+   ],
+   "ttft_A_p50_ms": [
+    10868.2272,
+    11024.1594
+   ],
+   "ttft_A_p99_ms": [
+    37222.0576,
+    37904.5995
+   ],
+   "output_tokens_per_s": [
+    1172.5037,
+    1182.2755
+   ],
+   "output_tokens_per_s_median": 1181.2134474009858,
+   "schedule_us_p50": [
+    771.708,
+    790.903
+   ],
+   "sync_apply_us_p50": null,
+   "ttft_B_p50_ms": [
+    43776.4312,
+    44462.349
+   ],
+   "ttft_B_r0_p50_ms": [
+    43303.3838,
+    44462.349
+   ],
+   "preemptions": [
+    55,
+    55,
+    60
+   ]
+  },
+  "aggressive/vtc-sticky": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.2741,
+    0.2744
+   ],
+   "ttft_A_p50_ms": [
+    37585.3885,
+    38136.8742
+   ],
+   "ttft_A_p99_ms": [
+    75674.8892,
+    76610.2915
+   ],
+   "output_tokens_per_s": [
+    901.0159,
+    906.8875
+   ],
+   "output_tokens_per_s_median": 906.2341131014795,
+   "schedule_us_p50": [
+    768.302,
+    811.251
+   ],
+   "sync_apply_us_p50": null,
+   "ttft_B_p50_ms": [
+    37493.6001,
+    37655.1445
+   ],
+   "ttft_B_r0_p50_ms": [
+    62298.9563,
+    63514.0648
+   ],
+   "preemptions": [
+    70,
+    70,
+    73
+   ]
+  },
+  "noisy_neighbor/fcfs-rr": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.0044,
+    0.0102
+   ],
+   "ttft_A_p50_ms": [
+    39409.9422,
+    48528.332
+   ],
+   "ttft_A_p99_ms": [
+    101383.503,
+    101645.1963
+   ],
+   "output_tokens_per_s": [
+    691.8009,
+    740.3145
+   ],
+   "output_tokens_per_s_median": 728.0662729441085,
+   "schedule_us_p50": [
+    513.996,
+    533.803
+   ],
+   "sync_apply_us_p50": null,
+   "ttft_B_p50_ms": [
+    43802.6339,
+    44831.3505
+   ],
+   "ttft_B_r0_p50_ms": [
+    43619.5177,
+    44544.4148
+   ],
+   "preemptions": [
+    25,
+    24,
+    27
+   ]
+  },
+  "noisy_neighbor/fcfs-sticky": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.0084,
+    0.0125
+   ],
+   "ttft_A_p50_ms": [
+    47498.2402,
+    57327.1688
+   ],
+   "ttft_A_p99_ms": [
+    90660.8986,
+    100596.7904
+   ],
+   "output_tokens_per_s": [
+    653.9037,
+    688.9038
+   ],
+   "output_tokens_per_s_median": 681.1533438524228,
+   "schedule_us_p50": [
+    506.442,
+    575.05
+   ],
+   "sync_apply_us_p50": null,
+   "ttft_B_p50_ms": [
+    44404.7417,
+    45465.8588
+   ],
+   "ttft_B_r0_p50_ms": [
+    43939.3766,
+    45465.8588
+   ],
+   "preemptions": [
+    44,
+    24,
+    24
+   ]
+  },
+  "noisy_neighbor/gvtc-rr": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.2866,
+    0.3303
+   ],
+   "ttft_A_p50_ms": [
+    990.532,
+    1030.7173
+   ],
+   "ttft_A_p99_ms": [
+    1799.5587,
+    4386.4396
+   ],
+   "output_tokens_per_s": [
+    680.7777,
+    719.8395
+   ],
+   "output_tokens_per_s_median": 704.2330354972016,
+   "schedule_us_p50": [
+    589.697,
+    635.241
+   ],
+   "sync_apply_us_p50": [
+    1.813,
+    2.896
+   ],
+   "ttft_B_p50_ms": [
+    48978.968,
+    50279.1589
+   ],
+   "ttft_B_r0_p50_ms": [
+    48357.3172,
+    50798.5549
+   ],
+   "preemptions": [
+    30,
+    48,
+    46
+   ]
+  },
+  "noisy_neighbor/gvtc-sticky": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.2904,
+    0.3496
+   ],
+   "ttft_A_p50_ms": [
+    823.6837,
+    914.6806
+   ],
+   "ttft_A_p99_ms": [
+    1687.284,
+    2068.8743
+   ],
+   "output_tokens_per_s": [
+    624.7435,
+    655.8185
+   ],
+   "output_tokens_per_s_median": 648.5749487450813,
+   "schedule_us_p50": [
+    537.85,
+    762.228
+   ],
+   "sync_apply_us_p50": [
+    2.274,
+    3.116
+   ],
+   "ttft_B_p50_ms": [
+    48872.559,
+    50861.226
+   ],
+   "ttft_B_r0_p50_ms": [
+    53270.0738,
+    59245.0884
+   ],
+   "preemptions": [
+    35,
+    38,
+    43
+   ]
+  },
+  "noisy_neighbor/vtc-rr": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.1899,
+    0.2199
+   ],
+   "ttft_A_p50_ms": [
+    1207.3797,
+    1418.9984
+   ],
+   "ttft_A_p99_ms": [
+    2278.9139,
+    5128.6397
+   ],
+   "output_tokens_per_s": [
+    668.6575,
+    721.4649
+   ],
+   "output_tokens_per_s_median": 707.2692222873817,
+   "schedule_us_p50": [
+    578.075,
+    636.945
+   ],
+   "sync_apply_us_p50": null,
+   "ttft_B_p50_ms": [
+    48984.8013,
+    50657.1611
+   ],
+   "ttft_B_r0_p50_ms": [
+    48163.4691,
+    51106.4576
+   ],
+   "preemptions": [
+    51,
+    52,
+    51
+   ]
+  },
+  "noisy_neighbor/vtc-sticky": {
+   "seeds": [
+    1,
+    2,
+    3
+   ],
+   "share_A": [
+    0.2011,
+    0.2314
+   ],
+   "ttft_A_p50_ms": [
+    1570.233,
+    1717.1895
+   ],
+   "ttft_A_p99_ms": [
+    6918.4251,
+    8503.1869
+   ],
+   "output_tokens_per_s": [
+    635.3304,
+    671.3068
+   ],
+   "output_tokens_per_s_median": 660.1693464298679,
+   "schedule_us_p50": [
+    530.346,
+    730.91
+   ],
+   "sync_apply_us_p50": null,
+   "ttft_B_p50_ms": [
+    48610.5773,
+    49570.2473
+   ],
+   "ttft_B_r0_p50_ms": [
+    52568.5889,
+    55178.9811
+   ],
+   "preemptions": [
+    52,
+    70,
+    61
+   ]
+  }
+ },
+ "runs": [
+  {
+   "run": "fcfs-rr-s1",
+   "workload": "aggressive",
+   "arm": "fcfs-rr",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 116.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37014.975308,
+       "p90": 70455.139774,
+       "p99": 74135.402236
+      },
+      "e2e_ms": {
+       "p50": 65570.437644,
+       "p99": 85899.62919
+      },
+      "tpot_ms_p50": 111.45282092549019,
+      "output_tokens": 25600,
+      "last_finish_s": 86.257467224
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37319.058248,
+       "p90": 70187.127478,
+       "p99": 74402.919921
+      },
+      "e2e_ms": {
+       "p50": 65910.454272,
+       "p99": 85933.161148
+      },
+      "tpot_ms_p50": 111.39940645882352,
+      "output_tokens": 76800,
+      "last_finish_s": 86.289967419
+     }
+    },
+    "makespan_s": 86.289967419,
+    "output_tokens_per_s": 1186.6964730995223
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 37014.975308,
+      "p99": 74135.402236
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 36808.415604,
+      "p99": 74867.069531
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 36594.665753,
+      "p99": 74133.561333
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 37718.530624,
+      "p99": 75281.804909
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.251,
+     "B": 0.749
+    },
+    "billed": {
+     "A": 138840.0,
+     "B": 414247.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.2499,
+      "B": 0.7501
+     },
+     {
+      "A": 0.2522,
+      "B": 0.7478
+     }
+    ],
+    "seconds": 74.0
+   },
+   "replicas": [
+    {
+     "steps": 807,
+     "schedule_us": {
+      "p50": 745.058,
+      "p99": 1260.7,
+      "mean": 759.5127199504337
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25707.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 21,
+      "A": 8
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2502,
+      "B": 0.7498
+     }
+    },
+    {
+     "steps": 807,
+     "schedule_us": {
+      "p50": 767.751,
+      "p99": 1315.612,
+      "mean": 776.526824039653
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25895.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 23,
+      "A": 6
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2504,
+      "B": 0.7496
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-rr-s2",
+   "workload": "aggressive",
+   "arm": "fcfs-rr",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37119.281086,
+       "p90": 70373.396545,
+       "p99": 75139.993556
+      },
+      "e2e_ms": {
+       "p50": 66148.854786,
+       "p99": 86719.544718
+      },
+      "tpot_ms_p50": 113.0701084509804,
+      "output_tokens": 25600,
+      "last_finish_s": 87.076058493
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37582.399217,
+       "p90": 71330.631129,
+       "p99": 75541.253781
+      },
+      "e2e_ms": {
+       "p50": 66610.686581,
+       "p99": 86718.748662
+      },
+      "tpot_ms_p50": 113.06978639607843,
+      "output_tokens": 76800,
+      "last_finish_s": 87.076248267
+     }
+    },
+    "makespan_s": 87.076248267,
+    "output_tokens_per_s": 1175.9808448110111
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 36416.548123,
+      "p99": 75139.993556
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 37119.281086,
+      "p99": 75960.170381
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 37351.803463,
+      "p99": 75555.155184
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 37582.399217,
+      "p99": 75541.253781
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2488,
+     "B": 0.7512
+    },
+    "billed": {
+     "A": 136386.0,
+     "B": 411780.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.2513,
+      "B": 0.7487
+     },
+     {
+      "A": 0.2464,
+      "B": 0.7536
+     }
+    ],
+    "seconds": 74.7
+   },
+   "replicas": [
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 762.06,
+      "p99": 1153.589,
+      "mean": 760.3012518610421
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 14,
+      "A": 15
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2513,
+      "B": 0.7487
+     }
+    },
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 758.874,
+      "p99": 1037.062,
+      "mean": 745.5657729528536
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 26,
+      "A": 3
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2482,
+      "B": 0.7518
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-rr-s3",
+   "workload": "aggressive",
+   "arm": "fcfs-rr",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 39460.273769,
+       "p90": 71243.091248,
+       "p99": 75148.538718
+      },
+      "e2e_ms": {
+       "p50": 68509.233611,
+       "p99": 86645.177348
+      },
+      "tpot_ms_p50": 113.10798777254902,
+      "output_tokens": 25600,
+      "last_finish_s": 87.002112015
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 36881.193652,
+       "p90": 71236.357899,
+       "p99": 75502.164857
+      },
+      "e2e_ms": {
+       "p50": 65810.671535,
+       "p99": 86643.407626
+      },
+      "tpot_ms_p50": 113.03216525490197,
+      "output_tokens": 76800,
+      "last_finish_s": 87.002359476
+     }
+    },
+    "makespan_s": 87.002359476,
+    "output_tokens_per_s": 1176.9795740797986
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 39256.6527,
+      "p99": 75148.538718
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 39460.273769,
+      "p99": 75920.117127
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 36867.928477,
+      "p99": 75562.681462
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 37052.346251,
+      "p99": 75502.164857
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2497,
+     "B": 0.7503
+    },
+    "billed": {
+     "A": 137912.0,
+     "B": 414353.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.2513,
+      "B": 0.7487
+     },
+     {
+      "A": 0.2481,
+      "B": 0.7519
+     }
+    ],
+    "seconds": 74.8
+   },
+   "replicas": [
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 757.01,
+      "p99": 1137.75,
+      "mean": 752.8063622828784
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 15,
+      "A": 14
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2476,
+      "B": 0.7524
+     }
+    },
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 755.758,
+      "p99": 1269.585,
+      "mean": 755.416081885856
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 21,
+      "A": 8
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2481,
+      "B": 0.7519
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-sticky-s1",
+   "workload": "aggressive",
+   "arm": "fcfs-sticky",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44023.991534,
+       "p90": 80978.077577,
+       "p99": 100170.120304
+      },
+      "e2e_ms": {
+       "p50": 73031.90648,
+       "p99": 111641.889722
+      },
+      "tpot_ms_p50": 113.21428581176471,
+      "output_tokens": 25600,
+      "last_finish_s": 111.974222783
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 36102.070447,
+       "p90": 76661.982935,
+       "p99": 101151.604952
+      },
+      "e2e_ms": {
+       "p50": 64494.070348,
+       "p99": 111725.899093
+      },
+      "tpot_ms_p50": 113.05991209803922,
+      "output_tokens": 76800,
+      "last_finish_s": 112.007322723
+     }
+    },
+    "makespan_s": 112.007322723,
+    "output_tokens_per_s": 914.2259408631754
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 44023.991534,
+      "p99": 100170.120304
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 43072.680317,
+      "p99": 102016.954797
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 17171.004536,
+      "p99": 64219.498623
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2487,
+     "B": 0.7513
+    },
+    "billed": {
+     "A": 145614.0,
+     "B": 439988.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4038,
+      "B": 0.5962
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 100.6
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 773.162,
+      "p99": 1127.211,
+      "mean": 729.6178106060606
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 38801.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 25,
+      "A": 17
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4038,
+      "B": 0.5962
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 753.354,
+      "p99": 1320.852,
+      "mean": 615.5019449423816
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-sticky-s2",
+   "workload": "aggressive",
+   "arm": "fcfs-sticky",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 42813.82129,
+       "p90": 81073.678549,
+       "p99": 100182.556993
+      },
+      "e2e_ms": {
+       "p50": 71735.836683,
+       "p99": 111632.353842
+      },
+      "tpot_ms_p50": 113.11126141960784,
+      "output_tokens": 25600,
+      "last_finish_s": 111.987517341
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 36732.776782,
+       "p90": 76350.635704,
+       "p99": 101106.727394
+      },
+      "e2e_ms": {
+       "p50": 64410.725975,
+       "p99": 111671.943553
+      },
+      "tpot_ms_p50": 112.99998950980392,
+      "output_tokens": 76800,
+      "last_finish_s": 111.987771324
+     }
+    },
+    "makespan_s": 111.987771324,
+    "output_tokens_per_s": 914.3855511128897
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 42813.82129,
+      "p99": 100182.556993
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 43685.141064,
+      "p99": 101597.37228
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 17127.657924,
+      "p99": 64085.525093
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2447,
+     "B": 0.7553
+    },
+    "billed": {
+     "A": 143809.0,
+     "B": 443843.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.3988,
+      "B": 0.6012
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 100.7
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 775.535,
+      "p99": 1189.015,
+      "mean": 723.8693664772727
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 38801.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 26,
+      "A": 16
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.3988,
+      "B": 0.6012
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 744.808,
+      "p99": 1244.038,
+      "mean": 606.641199743918
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-sticky-s3",
+   "workload": "aggressive",
+   "arm": "fcfs-sticky",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44722.704118,
+       "p90": 81193.421272,
+       "p99": 101252.714939
+      },
+      "e2e_ms": {
+       "p50": 73746.252198,
+       "p99": 111839.335024
+      },
+      "tpot_ms_p50": 113.42569629411764,
+      "output_tokens": 25600,
+      "last_finish_s": 112.199189511
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 35938.823336,
+       "p90": 75519.037209,
+       "p99": 101253.597244
+      },
+      "e2e_ms": {
+       "p50": 64427.782594,
+       "p99": 111840.191236
+      },
+      "tpot_ms_p50": 113.23529363529411,
+      "output_tokens": 76800,
+      "last_finish_s": 112.1994033
+     }
+    },
+    "makespan_s": 112.1994033,
+    "output_tokens_per_s": 912.6608251757075
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 44722.704118,
+      "p99": 101252.714939
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 42793.255595,
+      "p99": 101727.225668
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 17126.177319,
+      "p99": 64110.025892
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2462,
+     "B": 0.7538
+    },
+    "billed": {
+     "A": 144665.0,
+     "B": 442987.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4012,
+      "B": 0.5988
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 100.8
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 773.761,
+      "p99": 1300.704,
+      "mean": 738.7152083333333
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 38801.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 26,
+      "B": 16
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4012,
+      "B": 0.5988
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 743.817,
+      "p99": 1317.256,
+      "mean": 610.4335326504481
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "gvtc-rr-s1",
+   "workload": "aggressive",
+   "arm": "gvtc-rr",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11236.803555,
+       "p90": 36663.759355,
+       "p99": 39030.19198
+      },
+      "e2e_ms": {
+       "p50": 41223.175072,
+       "p99": 68025.789603
+      },
+      "tpot_ms_p50": 117.60945138039216,
+      "output_tokens": 25600,
+      "last_finish_s": 68.791045965
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 45330.443437,
+       "p90": 73381.414038,
+       "p99": 77100.763765
+      },
+      "e2e_ms": {
+       "p50": 73980.170607,
+       "p99": 88210.165867
+      },
+      "tpot_ms_p50": 111.9069992,
+      "output_tokens": 76800,
+      "last_finish_s": 88.537907555
+     }
+    },
+    "makespan_s": 88.537907555,
+    "output_tokens_per_s": 1156.5667500825996
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 11236.803555,
+      "p99": 37335.29894
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 10545.036576,
+      "p99": 39494.413142
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 44507.744582,
+      "p99": 75702.165553
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 45788.605521,
+      "p99": 77493.988113
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.4963,
+     "B": 0.5037
+    },
+    "billed": {
+     "A": 134710.0,
+     "B": 136731.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4975,
+      "B": 0.5025
+     },
+     {
+      "A": 0.4951,
+      "B": 0.5049
+     }
+    ],
+    "seconds": 38.1
+   },
+   "replicas": [
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 795.232,
+      "p99": 1142.96,
+      "mean": 789.3250260545906
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 27624.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 6,
+      "B": 26
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.5216,
+      "B": 0.4784
+     }
+    },
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 803.227,
+      "p99": 1101.363,
+      "mean": 789.636723325062
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 29971.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 7,
+      "B": 27
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.495,
+      "B": 0.505
+     }
+    }
+   ],
+   "sync": [
+    {
+     "steps": 806,
+     "rtt_us": {
+      "p50": 361.3,
+      "p99": 1102.4,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.306,
+      "p99": 5.751,
+      "mean": 2.742
+     },
+     "ok": 917,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 226802.0,
+      "A": 76700.0
+     }
+    },
+    {
+     "steps": 806,
+     "rtt_us": {
+      "p50": 402.7,
+      "p99": 899.4,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.785,
+      "p99": 5.54,
+      "mean": 2.646
+     },
+     "ok": 935,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0,
+      "A": 76700.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-rr-s2",
+   "workload": "aggressive",
+   "arm": "gvtc-rr",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 10809.270225,
+       "p90": 35977.685553,
+       "p99": 38715.079861
+      },
+      "e2e_ms": {
+       "p50": 41092.575418,
+       "p99": 67277.069479
+      },
+      "tpot_ms_p50": 114.63985041568627,
+      "output_tokens": 25600,
+      "last_finish_s": 68.040199429
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44869.412252,
+       "p90": 72582.679123,
+       "p99": 75858.871099
+      },
+      "e2e_ms": {
+       "p50": 73618.711208,
+       "p99": 87194.903833
+      },
+      "tpot_ms_p50": 112.24213029803921,
+      "output_tokens": 76800,
+      "last_finish_s": 87.550234668
+     }
+    },
+    "makespan_s": 87.550234668,
+    "output_tokens_per_s": 1169.6142264873638
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 10774.291479,
+      "p99": 39173.159924
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 11412.577603,
+      "p99": 37640.361534
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 44949.394462,
+      "p99": 76331.699397
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 43980.366133,
+      "p99": 75437.985861
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.4996,
+     "B": 0.5004
+    },
+    "billed": {
+     "A": 137812.0,
+     "B": 138036.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.5039,
+      "B": 0.4961
+     },
+     {
+      "A": 0.4955,
+      "B": 0.5045
+     }
+    ],
+    "seconds": 37.8
+   },
+   "replicas": [
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 785.423,
+      "p99": 1114.807,
+      "mean": 782.5623746898262
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 27978.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 19,
+      "A": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.5039,
+      "B": 0.4961
+     }
+    },
+    {
+     "steps": 807,
+     "schedule_us": {
+      "p50": 797.416,
+      "p99": 1199.675,
+      "mean": 794.571425030979
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 22571.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 20,
+      "A": 7
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.5164,
+      "B": 0.4836
+     }
+    }
+   ],
+   "sync": [
+    {
+     "steps": 806,
+     "rtt_us": {
+      "p50": 351.5,
+      "p99": 766.0,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.625,
+      "p99": 5.931,
+      "mean": 2.566
+     },
+     "ok": 921,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0,
+      "A": 76700.0
+     }
+    },
+    {
+     "steps": 807,
+     "rtt_us": {
+      "p50": 385.8,
+      "p99": 782.0,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.075,
+      "p99": 5.29,
+      "mean": 2.63
+     },
+     "ok": 913,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 76700.0,
+      "B": 228980.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-rr-s3",
+   "workload": "aggressive",
+   "arm": "gvtc-rr",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 10981.476276,
+       "p90": 37169.516308,
+       "p99": 39495.511992
+      },
+      "e2e_ms": {
+       "p50": 41067.184431,
+       "p99": 68470.932978
+      },
+      "tpot_ms_p50": 118.12394125490195,
+      "output_tokens": 25600,
+      "last_finish_s": 68.767932978
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44838.149248,
+       "p90": 72810.697694,
+       "p99": 75881.087533
+      },
+      "e2e_ms": {
+       "p50": 73430.977134,
+       "p99": 87017.988799
+      },
+      "tpot_ms_p50": 110.27331016078432,
+      "output_tokens": 76800,
+      "last_finish_s": 87.342836478
+     }
+    },
+    "makespan_s": 87.342836478,
+    "output_tokens_per_s": 1172.3915106168165
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 8314.1559,
+      "p99": 17415.953238
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 16060.311558,
+      "p99": 39499.685138
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 45539.662391,
+      "p99": 76336.135627
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 43945.217509,
+      "p99": 75675.2947
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.49,
+     "B": 0.51
+    },
+    "billed": {
+     "A": 137407.0,
+     "B": 142998.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.5393,
+      "B": 0.4607
+     },
+     {
+      "A": 0.4435,
+      "B": 0.5565
+     }
+    ],
+    "seconds": 38.6
+   },
+   "replicas": [
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 801.023,
+      "p99": 1406.526,
+      "mean": 801.771864764268
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 29148.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 21,
+      "A": 11
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.6353,
+      "B": 0.3647
+     }
+    },
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 805.652,
+      "p99": 1471.472,
+      "mean": 814.3145806451613
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 24062.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 23,
+      "A": 7
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4427,
+      "B": 0.5573
+     }
+    }
+   ],
+   "sync": [
+    {
+     "steps": 806,
+     "rtt_us": {
+      "p50": 373.9,
+      "p99": 837.7,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.825,
+      "p99": 5.029,
+      "mean": 2.511
+     },
+     "ok": 918,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0,
+      "A": 76700.0
+     }
+    },
+    {
+     "steps": 806,
+     "rtt_us": {
+      "p50": 411.1,
+      "p99": 1358.4,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.076,
+      "p99": 5.791,
+      "mean": 2.776
+     },
+     "ok": 913,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 229564.0,
+      "A": 76700.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-kill-s1",
+   "workload": "aggressive",
+   "arm": "gvtc-sticky",
+   "seed": 1,
+   "variant": "kill",
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11059.703029,
+       "p90": 55892.090509,
+       "p99": 65437.528094
+      },
+      "e2e_ms": {
+       "p50": 51774.174784,
+       "p99": 95375.277652
+      },
+      "tpot_ms_p50": 125.73244942352942,
+      "output_tokens": 25600,
+      "last_finish_s": 96.0041294
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 41246.301383,
+       "p90": 91544.056773,
+       "p99": 103267.194121
+      },
+      "e2e_ms": {
+       "p50": 63284.462719,
+       "p99": 113295.247745
+      },
+      "tpot_ms_p50": 110.18138222352941,
+      "output_tokens": 76800,
+      "last_finish_s": 113.622693759
+     }
+    },
+    "makespan_s": 113.622693759,
+    "output_tokens_per_s": 901.2284132005886
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 11059.703029,
+      "p99": 65437.528094
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 72955.178262,
+      "p99": 103601.131821
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16574.740265,
+      "p99": 62272.003878
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.3168,
+     "B": 0.6832
+    },
+    "billed": {
+     "A": 142810.0,
+     "B": 307913.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.6334,
+      "B": 0.3666
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 65.5
+   },
+   "replicas": [
+    {
+     "steps": 1052,
+     "schedule_us": {
+      "p50": 814.636,
+      "p99": 1175.306,
+      "mean": 764.1392195817491
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 47682.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 32,
+      "B": 23
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.6334,
+      "B": 0.3666
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 780.742,
+      "p99": 1214.599,
+      "mean": 631.77819078105
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1052,
+     "rtt_us": {
+      "p50": 382.8,
+      "p99": 427.7,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 1.403,
+      "p99": 3.747,
+      "mean": 1.469
+     },
+     "ok": 181,
+     "failed": 1016,
+     "events": [
+      {
+       "state": "unreachable",
+       "t": 1793897957.4100304,
+       "error": "ConnectionRefusedError(111, 'Connection refused')"
+      }
+     ],
+     "remote_final": {
+      "default": 46.0,
+      "B": 59125.0
+     }
+    },
+    {
+     "steps": 781,
+     "rtt_us": {
+      "p50": 429.4,
+      "p99": 429.9,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 1.253,
+      "p99": 3.406,
+      "mean": 1.377
+     },
+     "ok": 186,
+     "failed": 594,
+     "events": [
+      {
+       "state": "unreachable",
+       "t": 1793897957.4025476,
+       "error": "ConnectionRefusedError(111, 'Connection refused')"
+      }
+     ],
+     "remote_final": {
+      "default": 46.0,
+      "A": 58023.0,
+      "B": 2156.0
+     }
+    }
+   ],
+   "counters_killed_s": 12.0,
+   "global_backlogged_before_kill": {
+    "share": {
+     "A": 0.4992,
+     "B": 0.5008
+    },
+    "billed": {
+     "A": 58072.0,
+     "B": 58268.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.9981,
+      "B": 0.0019
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 11.4
+   },
+   "global_backlogged_after_kill": {
+    "share": {
+     "A": 0.2534,
+     "B": 0.7466
+    },
+    "billed": {
+     "A": 84738.0,
+     "B": 249645.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.5065,
+      "B": 0.4935
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 54.1
+   }
+  },
+  {
+   "run": "gvtc-sticky-s1",
+   "workload": "aggressive",
+   "arm": "gvtc-sticky",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11491.122092,
+       "p90": 35293.858391,
+       "p99": 37549.941414
+      },
+      "e2e_ms": {
+       "p50": 40036.281777,
+       "p99": 66981.228642
+      },
+      "tpot_ms_p50": 111.94156365490196,
+      "output_tokens": 25600,
+      "last_finish_s": 67.749737948
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 43841.491396,
+       "p90": 80882.293451,
+       "p99": 101780.42226
+      },
+      "e2e_ms": {
+       "p50": 68697.518765,
+       "p99": 111889.210564
+      },
+      "tpot_ms_p50": 112.77764329411765,
+      "output_tokens": 76800,
+      "last_finish_s": 112.216785743
+     }
+    },
+    "makespan_s": 112.216785743,
+    "output_tokens_per_s": 912.5194535024153
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 11491.122092,
+      "p99": 37549.941414
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 70006.940247,
+      "p99": 102243.747018
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16964.378465,
+      "p99": 63583.690167
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.4998,
+     "B": 0.5002
+    },
+    "billed": {
+     "A": 136106.0,
+     "B": 136213.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.9985,
+      "B": 0.0015
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 36.7
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 812.674,
+      "p99": 1217.158,
+      "mean": 765.4202367424242
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 38581.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 31,
+      "A": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.9985,
+      "B": 0.0015
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 782.888,
+      "p99": 1265.749,
+      "mean": 642.0589001280409
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1056,
+     "rtt_us": {
+      "p50": 332.8,
+      "p99": 586.3,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.384,
+      "p99": 5.45,
+      "mean": 2.494
+     },
+     "ok": 1182,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0
+     }
+    },
+    {
+     "steps": 781,
+     "rtt_us": {
+      "p50": 368.1,
+      "p99": 973.8,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.256,
+      "p99": 8.105,
+      "mean": 3.048
+     },
+     "ok": 788,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 113280.0,
+      "A": 153400.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-s2",
+   "workload": "aggressive",
+   "arm": "gvtc-sticky",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11501.138283,
+       "p90": 35275.236055,
+       "p99": 37534.775917
+      },
+      "e2e_ms": {
+       "p50": 40017.442696,
+       "p99": 67153.979646
+      },
+      "tpot_ms_p50": 111.82833498039216,
+      "output_tokens": 25600,
+      "last_finish_s": 67.450979646
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 43822.125752,
+       "p90": 81040.60786,
+       "p99": 102054.703397
+      },
+      "e2e_ms": {
+       "p50": 68875.257314,
+       "p99": 112163.169733
+      },
+      "tpot_ms_p50": 112.67396493333332,
+      "output_tokens": 76800,
+      "last_finish_s": 112.489040315
+     }
+    },
+    "makespan_s": 112.489040315,
+    "output_tokens_per_s": 910.3109041845505
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 11501.138283,
+      "p99": 37534.775917
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 70154.368165,
+      "p99": 102515.237721
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16903.702275,
+      "p99": 63550.520901
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.5015,
+     "B": 0.4985
+    },
+    "billed": {
+     "A": 137020.0,
+     "B": 136205.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.9985,
+      "B": 0.0015
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 36.7
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 813.235,
+      "p99": 1441.246,
+      "mean": 770.6315823863637
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 39970.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 34,
+      "A": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.9985,
+      "B": 0.0015
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 779.994,
+      "p99": 1351.428,
+      "mean": 644.8562932138284
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1056,
+     "rtt_us": {
+      "p50": 410.6,
+      "p99": 750.8,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.545,
+      "p99": 6.162,
+      "mean": 2.542
+     },
+     "ok": 1170,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0
+     }
+    },
+    {
+     "steps": 781,
+     "rtt_us": {
+      "p50": 375.3,
+      "p99": 707.7,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.384,
+      "p99": 4.588,
+      "mean": 2.369
+     },
+     "ok": 772,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 153400.0,
+      "B": 111164.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-s3",
+   "workload": "aggressive",
+   "arm": "gvtc-sticky",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11476.95747,
+       "p90": 35277.88069,
+       "p99": 37525.436988
+      },
+      "e2e_ms": {
+       "p50": 39981.068877,
+       "p99": 66914.609091
+      },
+      "tpot_ms_p50": 111.78121487843137,
+      "output_tokens": 25600,
+      "last_finish_s": 67.682758543
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 43801.268945,
+       "p90": 80763.444516,
+       "p99": 101700.159698
+      },
+      "e2e_ms": {
+       "p50": 68629.904269,
+       "p99": 111801.167213
+      },
+      "tpot_ms_p50": 112.73790559999999,
+      "output_tokens": 76800,
+      "last_finish_s": 112.127515683
+     }
+    },
+    "makespan_s": 112.127515683,
+    "output_tokens_per_s": 913.2459537362708
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 11476.95747,
+      "p99": 37525.436988
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 69902.10195,
+      "p99": 102161.064965
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16957.619192,
+      "p99": 63551.014567
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.4998,
+     "B": 0.5002
+    },
+    "billed": {
+     "A": 136102.0,
+     "B": 136215.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.9984,
+      "B": 0.0016
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 36.7
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 801.193,
+      "p99": 1238.708,
+      "mean": 761.3284128787878
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 38608.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 33,
+      "A": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.9984,
+      "B": 0.0016
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 789.11,
+      "p99": 1439.422,
+      "mean": 664.8396453265044
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1056,
+     "rtt_us": {
+      "p50": 393.2,
+      "p99": 1583.3,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.184,
+      "p99": 4.439,
+      "mean": 2.119
+     },
+     "ok": 1181,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0
+     }
+    },
+    {
+     "steps": 781,
+     "rtt_us": {
+      "p50": 401.2,
+      "p99": 1732.0,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.065,
+      "p99": 5.951,
+      "mean": 2.654
+     },
+     "ok": 796,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 153400.0,
+      "B": 113275.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-t10-nodelay-s1",
+   "workload": "aggressive",
+   "arm": "gvtc-sticky",
+   "seed": 1,
+   "variant": "t10-nodelay",
+   "sync_ms": 10.0,
+   "git_commit": "f793fbd22fb0675e4f17613bf2bc752d32ea53ba",
+   "engine_startup_s": 118.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11034.569388,
+       "p90": 34687.356369,
+       "p99": 36477.790179
+      },
+      "e2e_ms": {
+       "p50": 38913.604687,
+       "p99": 65005.160831
+      },
+      "tpot_ms_p50": 109.32880079215687,
+      "output_tokens": 25600,
+      "last_finish_s": 65.758858899
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 42612.329226,
+       "p90": 78942.042741,
+       "p99": 99380.214448
+      },
+      "e2e_ms": {
+       "p50": 66679.948961,
+       "p99": 109507.550152
+      },
+      "tpot_ms_p50": 110.61134358039216,
+      "output_tokens": 76800,
+      "last_finish_s": 109.865744984
+     }
+    },
+    "makespan_s": 109.865744984,
+    "output_tokens_per_s": 932.0466539858511
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 11034.569388,
+      "p99": 36477.790179
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 67981.338139,
+      "p99": 99845.378145
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16507.196463,
+      "p99": 62219.072644
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.5037,
+     "B": 0.4963
+    },
+    "billed": {
+     "A": 136094.0,
+     "B": 134115.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.9984,
+      "B": 0.0016
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 35.6
+   },
+   "replicas": [
+    {
+     "steps": 1057,
+     "schedule_us": {
+      "p50": 826.514,
+      "p99": 1181.977,
+      "mean": 778.7406272469252
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 38916.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 32,
+      "A": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.9984,
+      "B": 0.0016
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 801.316,
+      "p99": 1350.221,
+      "mean": 652.2272279129322
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1057,
+     "rtt_us": {
+      "p50": 313.2,
+      "p99": 507.5,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.456,
+      "p99": 6.292,
+      "mean": 3.666
+     },
+     "ok": 11559,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0
+     }
+    },
+    {
+     "steps": 781,
+     "rtt_us": {
+      "p50": 300.3,
+      "p99": 444.8,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.036,
+      "p99": 7.384,
+      "mean": 3.328
+     },
+     "ok": 7703,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 153400.0,
+      "B": 114550.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-t10-s1",
+   "workload": "aggressive",
+   "arm": "gvtc-sticky",
+   "seed": 1,
+   "variant": "t10",
+   "sync_ms": 10.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 116.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 10798.233787,
+       "p90": 34282.178373,
+       "p99": 36081.221855
+      },
+      "e2e_ms": {
+       "p50": 38471.879144,
+       "p99": 64619.662018
+      },
+      "tpot_ms_p50": 108.5234842745098,
+      "output_tokens": 25600,
+      "last_finish_s": 65.364398254
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 42288.843295,
+       "p90": 77859.184482,
+       "p99": 97957.242517
+      },
+      "e2e_ms": {
+       "p50": 66269.168319,
+       "p99": 107967.559643
+      },
+      "tpot_ms_p50": 109.15248628235294,
+      "output_tokens": 76800,
+      "last_finish_s": 108.295119749
+     }
+    },
+    "makespan_s": 108.295119749,
+    "output_tokens_per_s": 945.5643083209719
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 10798.233787,
+      "p99": 36081.221855
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 67495.103466,
+      "p99": 98398.390067
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16321.311423,
+      "p99": 61809.464194
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.5022,
+     "B": 0.4978
+    },
+    "billed": {
+     "A": 136316.0,
+     "B": 135118.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.9911,
+      "B": 0.0089
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 35.3
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 806.63,
+      "p99": 1155.87,
+      "mean": 759.397934659091
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 37482.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 31,
+      "A": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.9911,
+      "B": 0.0089
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 787.786,
+      "p99": 1372.633,
+      "mean": 639.8149910371319
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1056,
+     "rtt_us": {
+      "p50": 43982.3,
+      "p99": 48024.5,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.106,
+      "p99": 4.729,
+      "mean": 3.095
+     },
+     "ok": 2543,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0
+     }
+    },
+    {
+     "steps": 781,
+     "rtt_us": {
+      "p50": 43980.7,
+      "p99": 48007.3,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 4.077,
+      "p99": 6.051,
+      "mean": 3.985
+     },
+     "ok": 1704,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 153400.0,
+      "B": 115358.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-t100-nodelay-s1",
+   "workload": "aggressive",
+   "arm": "gvtc-sticky",
+   "seed": 1,
+   "variant": "t100-nodelay",
+   "sync_ms": 100.0,
+   "git_commit": "f793fbd22fb0675e4f17613bf2bc752d32ea53ba",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11340.746284,
+       "p90": 34813.987327,
+       "p99": 37112.253609
+      },
+      "e2e_ms": {
+       "p50": 39632.861094,
+       "p99": 66509.749632
+      },
+      "tpot_ms_p50": 110.94904094901962,
+      "output_tokens": 25600,
+      "last_finish_s": 66.806749632
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 43247.247184,
+       "p90": 80277.326509,
+       "p99": 101191.931179
+      },
+      "e2e_ms": {
+       "p50": 68213.349189,
+       "p99": 111273.835241
+      },
+      "tpot_ms_p50": 111.17741232941177,
+      "output_tokens": 76800,
+      "last_finish_s": 111.601515649
+     }
+    },
+    "makespan_s": 111.601515649,
+    "output_tokens_per_s": 917.5502626869346
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 11340.746284,
+      "p99": 37112.253609
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 69477.755236,
+      "p99": 101650.224537
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16679.976631,
+      "p99": 62581.03576
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.5053,
+     "B": 0.4947
+    },
+    "billed": {
+     "A": 137020.0,
+     "B": 134155.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.9985,
+      "B": 0.0015
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 36.2
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 829.718,
+      "p99": 1278.927,
+      "mean": 780.8265416666667
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 39970.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 34,
+      "A": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.9985,
+      "B": 0.0015
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 793.69,
+      "p99": 1113.214,
+      "mean": 637.3146030729833
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1056,
+     "rtt_us": {
+      "p50": 379.6,
+      "p99": 748.6,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.525,
+      "p99": 4.979,
+      "mean": 2.433
+     },
+     "ok": 1177,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 230100.0
+     }
+    },
+    {
+     "steps": 781,
+     "rtt_us": {
+      "p50": 398.6,
+      "p99": 1431.1,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.184,
+      "p99": 5.23,
+      "mean": 2.511
+     },
+     "ok": 783,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 153400.0,
+      "B": 109053.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-t1000-s1",
+   "workload": "aggressive",
+   "arm": "gvtc-sticky",
+   "seed": 1,
+   "variant": "t1000",
+   "sync_ms": 1000.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11470.815132,
+       "p90": 34867.590371,
+       "p99": 37519.913693
+      },
+      "e2e_ms": {
+       "p50": 39006.786402,
+       "p99": 66258.760431
+      },
+      "tpot_ms_p50": 107.98439846666666,
+      "output_tokens": 25600,
+      "last_finish_s": 66.555760431
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 42710.810474,
+       "p90": 78252.967828,
+       "p99": 98607.489225
+      },
+      "e2e_ms": {
+       "p50": 67004.918281,
+       "p99": 108619.972857
+      },
+      "tpot_ms_p50": 110.43488346666666,
+      "output_tokens": 76800,
+      "last_finish_s": 108.947447745
+     }
+    },
+    "makespan_s": 108.947447745,
+    "output_tokens_per_s": 939.9026973048068
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 11470.815132,
+      "p99": 37519.913693
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 67814.260189,
+      "p99": 99052.250725
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16575.654529,
+      "p99": 62275.463353
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.4906,
+     "B": 0.5094
+    },
+    "billed": {
+     "A": 137092.0,
+     "B": 142336.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.9705,
+      "B": 0.0295
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 36.7
+   },
+   "replicas": [
+    {
+     "steps": 1055,
+     "schedule_us": {
+      "p50": 823.832,
+      "p99": 1187.168,
+      "mean": 773.4115582938389
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 37798.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 34,
+      "A": 10
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.9705,
+      "B": 0.0295
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 779.751,
+      "p99": 1106.549,
+      "mean": 626.9612343149807
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1055,
+     "rtt_us": {
+      "p50": 436.6,
+      "p99": 783.2,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 1.202,
+      "p99": 4.469,
+      "mean": 1.516
+     },
+     "ok": 116,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "B": 230100.0,
+      "default": 46.0
+     }
+    },
+    {
+     "steps": 781,
+     "rtt_us": {
+      "p50": 468.7,
+      "p99": 591.5,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 1.182,
+      "p99": 4.288,
+      "mean": 1.428
+     },
+     "ok": 78,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 153400.0,
+      "B": 110799.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "vtc-rr-s1",
+   "workload": "aggressive",
+   "arm": "vtc-rr",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 10868.22719,
+       "p90": 34937.205083,
+       "p99": 37222.05757
+      },
+      "e2e_ms": {
+       "p50": 40088.00383,
+       "p99": 65774.498789
+      },
+      "tpot_ms_p50": 112.72758310980393,
+      "output_tokens": 25600,
+      "last_finish_s": 66.547272887
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 43776.431244,
+       "p90": 71824.62592,
+       "p99": 74882.603029
+      },
+      "e2e_ms": {
+       "p50": 72357.895324,
+       "p99": 86256.833089
+      },
+      "tpot_ms_p50": 111.67240261176471,
+      "output_tokens": 76800,
+      "last_finish_s": 86.612636215
+     }
+    },
+    "makespan_s": 86.612636215,
+    "output_tokens_per_s": 1182.2755255458426
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 10493.456451,
+      "p99": 37183.463204
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 10868.22719,
+      "p99": 37685.973492
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 43303.383804,
+      "p99": 74559.670156
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 43970.021622,
+      "p99": 75358.031367
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.493,
+     "B": 0.507
+    },
+    "billed": {
+     "A": 136132.0,
+     "B": 139980.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4887,
+      "B": 0.5113
+     },
+     {
+      "A": 0.4974,
+      "B": 0.5026
+     }
+    ],
+    "seconds": 36.8
+   },
+   "replicas": [
+    {
+     "steps": 807,
+     "schedule_us": {
+      "p50": 771.708,
+      "p99": 1142.529,
+      "mean": 772.4794758364312
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 24983.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 21,
+      "A": 7
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4967,
+      "B": 0.5033
+     }
+    },
+    {
+     "steps": 807,
+     "schedule_us": {
+      "p50": 774.453,
+      "p99": 1148.39,
+      "mean": 770.9533717472119
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 22909.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 8,
+      "B": 19
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4974,
+      "B": 0.5026
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-rr-s2",
+   "workload": "aggressive",
+   "arm": "vtc-rr",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 10878.270729,
+       "p90": 34906.51316,
+       "p99": 37662.106632
+      },
+      "e2e_ms": {
+       "p50": 40210.12363,
+       "p99": 66274.988663
+      },
+      "tpot_ms_p50": 113.60615566666667,
+      "output_tokens": 25600,
+      "last_finish_s": 66.682551869
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 43976.968129,
+       "p90": 72158.094267,
+       "p99": 75412.739982
+      },
+      "e2e_ms": {
+       "p50": 72734.834561,
+       "p99": 86344.643345
+      },
+      "tpot_ms_p50": 112.0957763490196,
+      "output_tokens": 76800,
+      "last_finish_s": 86.690513239
+     }
+    },
+    "makespan_s": 86.690513239,
+    "output_tokens_per_s": 1181.2134474009858
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 10647.638542,
+      "p99": 37662.106632
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 10878.270729,
+      "p99": 37717.311447
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 43920.015545,
+      "p99": 75414.46529
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 43978.202584,
+      "p99": 75391.928129
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.4965,
+     "B": 0.5035
+    },
+    "billed": {
+     "A": 136084.0,
+     "B": 138008.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4956,
+      "B": 0.5044
+     },
+     {
+      "A": 0.4974,
+      "B": 0.5026
+     }
+    ],
+    "seconds": 36.8
+   },
+   "replicas": [
+    {
+     "steps": 807,
+     "schedule_us": {
+      "p50": 783.319,
+      "p99": 1326.332,
+      "mean": 782.177472118959
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25137.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 21,
+      "A": 7
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4971,
+      "B": 0.5029
+     }
+    },
+    {
+     "steps": 807,
+     "schedule_us": {
+      "p50": 774.112,
+      "p99": 1311.825,
+      "mean": 785.478488228005
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 22909.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 8,
+      "B": 19
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4974,
+      "B": 0.5026
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-rr-s3",
+   "workload": "aggressive",
+   "arm": "vtc-rr",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 50,
+     "http://127.0.0.1:8002": 50
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 11024.159407,
+       "p90": 35945.479541,
+       "p99": 37904.59948
+      },
+      "e2e_ms": {
+       "p50": 40727.76183,
+       "p99": 66622.760306
+      },
+      "tpot_ms_p50": 115.16402048235294,
+      "output_tokens": 25600,
+      "last_finish_s": 67.384916098
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44462.34902,
+       "p90": 72877.157446,
+       "p99": 75976.479291
+      },
+      "e2e_ms": {
+       "p50": 73396.17014,
+       "p99": 86979.24015
+      },
+      "tpot_ms_p50": 112.86743154117647,
+      "output_tokens": 76800,
+      "last_finish_s": 87.334481862
+     }
+    },
+    "makespan_s": 87.334481862,
+    "output_tokens_per_s": 1172.503664266372
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 50,
+      "p50": 11010.820645,
+      "p99": 38248.778899
+     },
+     "r1": {
+      "completed": 50,
+      "p50": 11024.159407,
+      "p99": 37904.59948
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 44462.34902,
+      "p99": 76113.970044
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 44212.358204,
+      "p99": 75786.865132
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.5,
+     "B": 0.5
+    },
+    "billed": {
+     "A": 134869.0,
+     "B": 134886.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.5026,
+      "B": 0.4974
+     },
+     {
+      "A": 0.4974,
+      "B": 0.5026
+     }
+    ],
+    "seconds": 37.0
+   },
+   "replicas": [
+    {
+     "steps": 806,
+     "schedule_us": {
+      "p50": 781.336,
+      "p99": 1226.565,
+      "mean": 781.043594292804
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 28897.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 24,
+      "A": 9
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.5026,
+      "B": 0.4974
+     }
+    },
+    {
+     "steps": 807,
+     "schedule_us": {
+      "p50": 790.903,
+      "p99": 1199.976,
+      "mean": 789.7449851301114
+     },
+     "billed": {
+      "A": 76700.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 22909.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 8,
+      "B": 19
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4974,
+      "B": 0.5026
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-sticky-s1",
+   "workload": "aggressive",
+   "arm": "vtc-sticky",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37585.388526,
+       "p90": 71905.084027,
+       "p99": 75674.889159
+      },
+      "e2e_ms": {
+       "p50": 67298.408774,
+       "p99": 103104.937977
+      },
+      "tpot_ms_p50": 114.65837784705883,
+      "output_tokens": 25600,
+      "last_finish_s": 103.480598863
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37549.795285,
+       "p90": 81439.337771,
+       "p99": 102565.3672
+      },
+      "e2e_ms": {
+       "p50": 64259.942415,
+       "p99": 112586.020526
+      },
+      "tpot_ms_p50": 112.48622816078432,
+      "output_tokens": 76800,
+      "last_finish_s": 112.913674604
+     }
+    },
+    "makespan_s": 112.913674604,
+    "output_tokens_per_s": 906.8874993142102
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 37585.388526,
+      "p99": 75674.889159
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 63431.680276,
+      "p99": 102931.997194
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16988.796381,
+      "p99": 63703.836275
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2744,
+     "B": 0.7256
+    },
+    "billed": {
+     "A": 137212.0,
+     "B": 362859.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4988,
+      "B": 0.5012
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 75.3
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 799.43,
+      "p99": 1307.968,
+      "mean": 759.3706202651515
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 43005.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 27,
+      "A": 14
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4988,
+      "B": 0.5012
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 776.767,
+      "p99": 1152.328,
+      "mean": 622.6361843790013
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-sticky-s2",
+   "workload": "aggressive",
+   "arm": "vtc-sticky",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37662.699735,
+       "p90": 71968.771112,
+       "p99": 75728.246033
+      },
+      "e2e_ms": {
+       "p50": 67298.084155,
+       "p99": 103177.789098
+      },
+      "tpot_ms_p50": 114.71559045490197,
+      "output_tokens": 25600,
+      "last_finish_s": 103.553968257
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37493.600126,
+       "p90": 81547.961003,
+       "p99": 102639.210085
+      },
+      "e2e_ms": {
+       "p50": 64143.245803,
+       "p99": 112667.200349
+      },
+      "tpot_ms_p50": 112.37607145882353,
+      "output_tokens": 76800,
+      "last_finish_s": 112.995084294
+     }
+    },
+    "makespan_s": 112.995084294,
+    "output_tokens_per_s": 906.2341131014795
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 37662.699735,
+      "p99": 75728.246033
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 63514.064784,
+      "p99": 103004.960078
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16913.507345,
+      "p99": 63575.13132
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2744,
+     "B": 0.7256
+    },
+    "billed": {
+     "A": 137212.0,
+     "B": 362859.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4988,
+      "B": 0.5012
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 75.3
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 792.587,
+      "p99": 1228.339,
+      "mean": 758.1031458333333
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 43005.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 27,
+      "A": 14
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4988,
+      "B": 0.5012
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 768.302,
+      "p99": 1173.256,
+      "mean": 627.3301779769527
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-sticky-s3",
+   "workload": "aggressive",
+   "arm": "vtc-sticky",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 100
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 100,
+      "completed": 100,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 38136.874209,
+       "p90": 72363.676208,
+       "p99": 76610.291466
+      },
+      "e2e_ms": {
+       "p50": 68679.662256,
+       "p99": 103845.533979
+      },
+      "tpot_ms_p50": 114.42458634509805,
+      "output_tokens": 25600,
+      "last_finish_s": 104.18145165
+     },
+     "B": {
+      "requests": 300,
+      "completed": 300,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 37655.144514,
+       "p90": 83107.999031,
+       "p99": 102921.071532
+      },
+      "e2e_ms": {
+       "p50": 64171.719867,
+       "p99": 113292.580803
+      },
+      "tpot_ms_p50": 112.5397305882353,
+      "output_tokens": 76800,
+      "last_finish_s": 113.649494651
+     }
+    },
+    "makespan_s": 113.649494651,
+    "output_tokens_per_s": 901.0158849755958
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 100,
+      "p50": 38136.874209,
+      "p99": 76610.291466
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 150,
+      "p50": 62298.956345,
+      "p99": 103676.573432
+     },
+     "r1": {
+      "completed": 150,
+      "p50": 16935.931056,
+      "p99": 63609.321438
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2741,
+     "B": 0.7259
+    },
+    "billed": {
+     "A": 137975.0,
+     "B": 365355.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4994,
+      "B": 0.5006
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 76.2
+   },
+   "replicas": [
+    {
+     "steps": 1056,
+     "schedule_us": {
+      "p50": 811.251,
+      "p99": 1267.061,
+      "mean": 775.7455634469696
+     },
+     "billed": {
+      "A": 153400.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 44902.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29,
+      "A": 15
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4994,
+      "B": 0.5006
+     }
+    },
+    {
+     "steps": 781,
+     "schedule_us": {
+      "p50": 773.691,
+      "p99": 1311.224,
+      "mean": 632.6057439180538
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 230100.0,
+      "default": 0.0,
+      "system": 25948.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 0.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 29
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-rr-s1",
+   "workload": "noisy_neighbor",
+   "arm": "fcfs-rr",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 111,
+     "http://127.0.0.1:8002": 110
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 221,
+      "completed": 221,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 47729.003184,
+       "p90": 90762.461749,
+       "p99": 101383.502982
+      },
+      "e2e_ms": {
+       "p50": 56028.898132,
+       "p99": 113045.877578
+      },
+      "tpot_ms_p50": 66.94524438582677,
+      "output_tokens": 28288,
+      "last_finish_s": 125.331222292
+     },
+     "B": {
+      "requests": 300,
+      "completed": 237,
+      "cancelled": 63,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 43802.633902,
+       "p90": 84903.728946,
+       "p99": 101327.352169
+      },
+      "e2e_ms": {
+       "p50": 75769.732811,
+       "p99": 118031.82808
+      },
+      "tpot_ms_p50": 121.52630044705882,
+      "output_tokens": 60672,
+      "last_finish_s": 128.591913204
+     }
+    },
+    "makespan_s": 128.591913204,
+    "output_tokens_per_s": 691.8008899896575
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 111,
+      "p50": 47360.150984,
+      "p99": 101383.502982
+     },
+     "r1": {
+      "completed": 110,
+      "p50": 47857.061003,
+      "p99": 101145.735498
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 121,
+      "p50": 43619.517736,
+      "p99": 101497.726493
+     },
+     "r1": {
+      "completed": 116,
+      "p50": 43802.633902,
+      "p99": 90584.883589
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.0044,
+     "B": 0.9956
+    },
+    "billed": {
+     "A": 3150.0,
+     "B": 714773.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.0066,
+      "B": 0.9934
+     },
+     {
+      "A": 0.0022,
+      "B": 0.9978
+     }
+    ],
+    "seconds": 101.1
+   },
+   "replicas": [
+    {
+     "steps": 1342,
+     "schedule_us": {
+      "p50": 513.996,
+      "p99": 1199.43,
+      "mean": 477.7425596125186
+     },
+     "billed": {
+      "A": 56610.0,
+      "B": 369084.0,
+      "default": 0.0,
+      "system": 18632.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 116.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 13
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.001,
+      "B": 0.999
+     }
+    },
+    {
+     "steps": 1309,
+     "schedule_us": {
+      "p50": 529.684,
+      "p99": 1170.306,
+      "mean": 478.77391291061883
+     },
+     "billed": {
+      "A": 56100.0,
+      "B": 366564.0,
+      "default": 0.0,
+      "system": 17850.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 136.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 11,
+      "A": 1
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.0015,
+      "B": 0.9985
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-rr-s2",
+   "workload": "noisy_neighbor",
+   "arm": "fcfs-rr",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 133,
+     "http://127.0.0.1:8002": 133
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 266,
+      "completed": 266,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 48528.332008,
+       "p90": 93627.936213,
+       "p99": 101507.81534
+      },
+      "e2e_ms": {
+       "p50": 58636.374955,
+       "p99": 114921.682602
+      },
+      "tpot_ms_p50": 78.27440483464567,
+      "output_tokens": 34048,
+      "last_finish_s": 130.366220414
+     },
+     "B": {
+      "requests": 300,
+      "completed": 244,
+      "cancelled": 56,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44544.414772,
+       "p90": 84563.095416,
+       "p99": 102343.204576
+      },
+      "e2e_ms": {
+       "p50": 74622.629922,
+       "p99": 121507.239834
+      },
+      "tpot_ms_p50": 116.46617625098038,
+      "output_tokens": 62464,
+      "last_finish_s": 130.333470109
+     }
+    },
+    "makespan_s": 130.366220414,
+    "output_tokens_per_s": 740.3144748195492
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 133,
+      "p50": 47191.693739,
+      "p99": 100301.216313
+     },
+     "r1": {
+      "completed": 133,
+      "p50": 49409.15758,
+      "p99": 101685.716426
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 124,
+      "p50": 44544.414772,
+      "p99": 101645.941284
+     },
+     "r1": {
+      "completed": 120,
+      "p50": 44272.756656,
+      "p99": 102525.471102
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.0086,
+     "B": 0.9914
+    },
+    "billed": {
+     "A": 6216.0,
+     "B": 713203.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.0164,
+      "B": 0.9836
+     },
+     {
+      "A": 0.0008,
+      "B": 0.9992
+     }
+    ],
+    "seconds": 101.7
+   },
+   "replicas": [
+    {
+     "steps": 1300,
+     "schedule_us": {
+      "p50": 533.803,
+      "p99": 1314.373,
+      "mean": 520.6526092307693
+     },
+     "billed": {
+      "A": 67830.0,
+      "B": 370596.0,
+      "default": 0.0,
+      "system": 17890.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 104.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.001,
+      "B": 0.999
+     }
+    },
+    {
+     "steps": 1284,
+     "schedule_us": {
+      "p50": 525.628,
+      "p99": 1414.43,
+      "mean": 519.7227102803738
+     },
+     "billed": {
+      "A": 67830.0,
+      "B": 368580.0,
+      "default": 0.0,
+      "system": 17848.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 120.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.0008,
+      "B": 0.9992
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-rr-s3",
+   "workload": "noisy_neighbor",
+   "arm": "fcfs-rr",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 125,
+     "http://127.0.0.1:8002": 125
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 250,
+      "completed": 250,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 39409.942226,
+       "p90": 89106.478455,
+       "p99": 101645.196255
+      },
+      "e2e_ms": {
+       "p50": 48524.839148,
+       "p99": 113898.792621
+      },
+      "tpot_ms_p50": 74.96088103149607,
+      "output_tokens": 32000,
+      "last_finish_s": 127.296975423
+     },
+     "B": {
+      "requests": 300,
+      "completed": 247,
+      "cancelled": 53,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44831.350456,
+       "p90": 84180.7671,
+       "p99": 102564.531016
+      },
+      "e2e_ms": {
+       "p50": 75590.879788,
+       "p99": 120580.96611
+      },
+      "tpot_ms_p50": 114.82362521960785,
+      "output_tokens": 63232,
+      "last_finish_s": 130.801279415
+     }
+    },
+    "makespan_s": 130.801279415,
+    "output_tokens_per_s": 728.0662729441085
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 125,
+      "p50": 38800.089949,
+      "p99": 100500.139691
+     },
+     "r1": {
+      "completed": 125,
+      "p50": 39914.237273,
+      "p99": 101645.196255
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 125,
+      "p50": 44366.907761,
+      "p99": 101560.973795
+     },
+     "r1": {
+      "completed": 122,
+      "p50": 45487.669288,
+      "p99": 103029.71821
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.0102,
+     "B": 0.9898
+    },
+    "billed": {
+     "A": 7376.0,
+     "B": 719161.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.0152,
+      "B": 0.9848
+     },
+     {
+      "A": 0.005,
+      "B": 0.995
+     }
+    ],
+    "seconds": 101.9
+   },
+   "replicas": [
+    {
+     "steps": 1339,
+     "schedule_us": {
+      "p50": 527.01,
+      "p99": 1285.371,
+      "mean": 497.74066840926065
+     },
+     "billed": {
+      "A": 63750.0,
+      "B": 371096.0,
+      "default": 0.0,
+      "system": 16284.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 96.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.0054,
+      "B": 0.9946
+     }
+    },
+    {
+     "steps": 1328,
+     "schedule_us": {
+      "p50": 526.56,
+      "p99": 1320.636,
+      "mean": 499.07297665662657
+     },
+     "billed": {
+      "A": 63750.0,
+      "B": 369588.0,
+      "default": 0.0,
+      "system": 17700.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 112.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 13,
+      "A": 2
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.005,
+      "B": 0.995
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-sticky-s1",
+   "workload": "noisy_neighbor",
+   "arm": "fcfs-sticky",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 221
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 221,
+      "completed": 221,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 50837.188219,
+       "p90": 85786.371922,
+       "p99": 90660.898624
+      },
+      "e2e_ms": {
+       "p50": 62867.454895,
+       "p99": 108564.224644
+      },
+      "tpot_ms_p50": 96.50197472440945,
+      "output_tokens": 28288,
+      "last_finish_s": 136.044502223
+     },
+     "B": {
+      "requests": 300,
+      "completed": 237,
+      "cancelled": 63,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 45465.858803,
+       "p90": 84834.839646,
+       "p99": 102027.221788
+      },
+      "e2e_ms": {
+       "p50": 76819.252303,
+       "p99": 112100.857026
+      },
+      "tpot_ms_p50": 118.1456477882353,
+      "output_tokens": 60672,
+      "last_finish_s": 124.185245355
+     }
+    },
+    "makespan_s": 136.044502223,
+    "output_tokens_per_s": 653.9036752413522
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 221,
+      "p50": 50837.188219,
+      "p99": 90660.898624
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 114,
+      "p50": 45465.858803,
+      "p99": 89486.553094
+     },
+     "r1": {
+      "completed": 123,
+      "p50": 45332.842441,
+      "p99": 102105.241179
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.0125,
+     "B": 0.9875
+    },
+    "billed": {
+     "A": 9025.0,
+     "B": 712496.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.0247,
+      "B": 0.9753
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 101.5
+   },
+   "replicas": [
+    {
+     "steps": 1334,
+     "schedule_us": {
+      "p50": 559.951,
+      "p99": 1402.368,
+      "mean": 570.9020224887556
+     },
+     "billed": {
+      "A": 112710.0,
+      "B": 365556.0,
+      "default": 0.0,
+      "system": 17835.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 144.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 9,
+      "A": 23
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.0028,
+      "B": 0.9972
+     }
+    },
+    {
+     "steps": 1051,
+     "schedule_us": {
+      "p50": 516.101,
+      "p99": 783.747,
+      "mean": 463.79486108468126
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 370092.0,
+      "default": 0.0,
+      "system": 16883.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 108.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-sticky-s2",
+   "workload": "noisy_neighbor",
+   "arm": "fcfs-sticky",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 266
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 266,
+      "completed": 266,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 57327.168848,
+       "p90": 94012.412874,
+       "p99": 100307.718876
+      },
+      "e2e_ms": {
+       "p50": 69794.334276,
+       "p99": 113067.589821
+      },
+      "tpot_ms_p50": 96.05975903937008,
+      "output_tokens": 34048,
+      "last_finish_s": 141.689093757
+     },
+     "B": {
+      "requests": 300,
+      "completed": 244,
+      "cancelled": 56,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 44404.741683,
+       "p90": 83797.362368,
+       "p99": 102623.506224
+      },
+      "e2e_ms": {
+       "p50": 74721.899761,
+       "p99": 127769.424779
+      },
+      "tpot_ms_p50": 118.1580113764706,
+      "output_tokens": 62464,
+      "last_finish_s": 136.862558232
+     }
+    },
+    "makespan_s": 141.689093757,
+    "output_tokens_per_s": 681.1533438524228
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 266,
+      "p50": 57327.168848,
+      "p99": 100307.718876
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 122,
+      "p50": 43939.376559,
+      "p99": 100538.1588
+     },
+     "r1": {
+      "completed": 122,
+      "p50": 44642.551305,
+      "p99": 103063.314824
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.0093,
+     "B": 0.9907
+    },
+    "billed": {
+     "A": 6726.0,
+     "B": 713234.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.0185,
+      "B": 0.9815
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 101.5
+   },
+   "replicas": [
+    {
+     "steps": 1411,
+     "schedule_us": {
+      "p50": 550.663,
+      "p99": 1449.898,
+      "mean": 598.333182140326
+     },
+     "billed": {
+      "A": 135660.0,
+      "B": 369588.0,
+      "default": 0.0,
+      "system": 16377.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 112.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.002,
+      "B": 0.998
+     }
+    },
+    {
+     "steps": 1050,
+     "schedule_us": {
+      "p50": 528.603,
+      "p99": 817.3,
+      "mean": 475.1243638095238
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 369588.0,
+      "default": 0.0,
+      "system": 17544.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 112.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "fcfs-sticky-s3",
+   "workload": "noisy_neighbor",
+   "arm": "fcfs-sticky",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 250
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 250,
+      "completed": 250,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 47498.240206,
+       "p90": 90802.292698,
+       "p99": 100596.790359
+      },
+      "e2e_ms": {
+       "p50": 59668.226093,
+       "p99": 114286.045982
+      },
+      "tpot_ms_p50": 95.24413837795277,
+      "output_tokens": 32000,
+      "last_finish_s": 138.237008725
+     },
+     "B": {
+      "requests": 300,
+      "completed": 247,
+      "cancelled": 53,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 45062.605738,
+       "p90": 84859.554031,
+       "p99": 102245.006831
+      },
+      "e2e_ms": {
+       "p50": 75112.062526,
+       "p99": 127170.177787
+      },
+      "tpot_ms_p50": 116.06206344313725,
+      "output_tokens": 63232,
+      "last_finish_s": 137.446311978
+     }
+    },
+    "makespan_s": 138.237008725,
+    "output_tokens_per_s": 688.9037955779884
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 250,
+      "p50": 47498.240206,
+      "p99": 100596.790359
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 127,
+      "p50": 44036.651671,
+      "p99": 101065.877121
+     },
+     "r1": {
+      "completed": 120,
+      "p50": 45500.008448,
+      "p99": 102736.11496
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.0084,
+     "B": 0.9916
+    },
+    "billed": {
+     "A": 6044.0,
+     "B": 717109.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.0166,
+      "B": 0.9834
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 102.1
+   },
+   "replicas": [
+    {
+     "steps": 1339,
+     "schedule_us": {
+      "p50": 575.05,
+      "p99": 1523.804,
+      "mean": 636.112994025392
+     },
+     "billed": {
+      "A": 127500.0,
+      "B": 372108.0,
+      "default": 0.0,
+      "system": 16022.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 92.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 11
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.0103,
+      "B": 0.9897
+     }
+    },
+    {
+     "steps": 1046,
+     "schedule_us": {
+      "p50": 506.442,
+      "p99": 857.636,
+      "mean": 460.17367304015295
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 368580.0,
+      "default": 0.0,
+      "system": 18838.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 120.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 13
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "gvtc-rr-s1",
+   "workload": "noisy_neighbor",
+   "arm": "gvtc-rr",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 111,
+     "http://127.0.0.1:8002": 110
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 221,
+      "completed": 221,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 1010.396103,
+       "p90": 1409.406479,
+       "p99": 1799.558656
+      },
+      "e2e_ms": {
+       "p50": 15508.206871,
+       "p99": 28314.651777
+      },
+      "tpot_ms_p50": 115.90385703149607,
+      "output_tokens": 28288,
+      "last_finish_s": 126.064557396
+     },
+     "B": {
+      "requests": 300,
+      "completed": 237,
+      "cancelled": 63,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 50279.158856,
+       "p90": 96754.007401,
+       "p99": 110634.039793
+      },
+      "e2e_ms": {
+       "p50": 83562.862965,
+       "p99": 120381.738074
+      },
+      "tpot_ms_p50": 126.00783862352941,
+      "output_tokens": 60672,
+      "last_finish_s": 130.674089407
+     }
+    },
+    "makespan_s": 130.674089407,
+    "output_tokens_per_s": 680.7776538080437
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 111,
+      "p50": 995.942166,
+      "p99": 1754.016826
+     },
+     "r1": {
+      "completed": 110,
+      "p50": 1024.734664,
+      "p99": 1896.343756
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 122,
+      "p50": 49860.379406,
+      "p99": 109972.12672
+     },
+     "r1": {
+      "completed": 115,
+      "p50": 50279.158856,
+      "p99": 111144.815396
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2866,
+     "B": 0.7134
+    },
+    "billed": {
+     "A": 27448.0,
+     "B": 68313.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.3079,
+      "B": 0.6921
+     },
+     {
+      "A": 0.2684,
+      "B": 0.7316
+     }
+    ],
+    "seconds": 12.0
+   },
+   "replicas": [
+    {
+     "steps": 1349,
+     "schedule_us": {
+      "p50": 589.697,
+      "p99": 1019.716,
+      "mean": 504.5431534469978
+     },
+     "billed": {
+      "A": 56610.0,
+      "B": 369588.0,
+      "default": 0.0,
+      "system": 17330.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 112.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 13,
+      "A": 2
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.3831,
+      "B": 0.6169
+     }
+    },
+    {
+     "steps": 1321,
+     "schedule_us": {
+      "p50": 593.904,
+      "p99": 1040.084,
+      "mean": 496.9175344436033
+     },
+     "billed": {
+      "A": 56100.0,
+      "B": 366060.0,
+      "default": 0.0,
+      "system": 16705.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 140.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 13,
+      "A": 2
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.3287,
+      "B": 0.6713
+     }
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1349,
+     "rtt_us": {
+      "p50": 374.6,
+      "p99": 561.4,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 1.893,
+      "p99": 4.829,
+      "mean": 2.212
+     },
+     "ok": 1364,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 56100.0,
+      "B": 365832.0
+     }
+    },
+    {
+     "steps": 1321,
+     "rtt_us": {
+      "p50": 416.2,
+      "p99": 636.3,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 1.813,
+      "p99": 4.95,
+      "mean": 2.385
+     },
+     "ok": 1370,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 56610.0,
+      "B": 369588.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-rr-s2",
+   "workload": "noisy_neighbor",
+   "arm": "gvtc-rr",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 133,
+     "http://127.0.0.1:8002": 133
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 266,
+      "completed": 266,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 1030.717314,
+       "p90": 1522.030855,
+       "p99": 4386.439644
+      },
+      "e2e_ms": {
+       "p50": 16261.163772,
+       "p99": 26840.992991
+      },
+      "tpot_ms_p50": 120.52512661417323,
+      "output_tokens": 34048,
+      "last_finish_s": 129.002949437
+     },
+     "B": {
+      "requests": 300,
+      "completed": 244,
+      "cancelled": 56,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 49282.735827,
+       "p90": 105685.95854,
+       "p99": 115055.7148
+      },
+      "e2e_ms": {
+       "p50": 82101.16027,
+       "p99": 125291.09757
+      },
+      "tpot_ms_p50": 128.84474095686275,
+      "output_tokens": 62464,
+      "last_finish_s": 134.074330587
+     }
+    },
+    "makespan_s": 134.074330587,
+    "output_tokens_per_s": 719.8395067680309
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 133,
+      "p50": 1039.027062,
+      "p99": 5396.527137
+     },
+     "r1": {
+      "completed": 133,
+      "p50": 1009.42753,
+      "p99": 1888.968533
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 126,
+      "p50": 48357.31715,
+      "p99": 114169.688233
+     },
+     "r1": {
+      "completed": 118,
+      "p50": 49976.7762,
+      "p99": 115522.317466
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.3303,
+     "B": 0.6697
+    },
+    "billed": {
+     "A": 55352.0,
+     "B": 112227.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.3264,
+      "B": 0.6736
+     },
+     {
+      "A": 0.3338,
+      "B": 0.6662
+     }
+    ],
+    "seconds": 27.8
+   },
+   "replicas": [
+    {
+     "steps": 1308,
+     "schedule_us": {
+      "p50": 635.241,
+      "p99": 1033.321,
+      "mean": 552.3004518348624
+     },
+     "billed": {
+      "A": 67830.0,
+      "B": 371604.0,
+      "default": 0.0,
+      "system": 25434.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 96.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 17,
+      "A": 6
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.3885,
+      "B": 0.6115
+     }
+    },
+    {
+     "steps": 1290,
+     "schedule_us": {
+      "p50": 633.307,
+      "p99": 1024.575,
+      "mean": 541.5742860465117
+     },
+     "billed": {
+      "A": 67830.0,
+      "B": 367572.0,
+      "default": 0.0,
+      "system": 22363.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 128.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 21,
+      "A": 4
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.3554,
+      "B": 0.6446
+     }
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1308,
+     "rtt_us": {
+      "p50": 369.2,
+      "p99": 850.0,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.455,
+      "p99": 5.56,
+      "mean": 2.492
+     },
+     "ok": 1408,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 67830.0,
+      "B": 366926.0
+     }
+    },
+    {
+     "steps": 1290,
+     "rtt_us": {
+      "p50": 355.9,
+      "p99": 729.2,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.825,
+      "p99": 5.531,
+      "mean": 2.51
+     },
+     "ok": 1413,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 67830.0,
+      "B": 371604.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-rr-s3",
+   "workload": "noisy_neighbor",
+   "arm": "gvtc-rr",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 125,
+     "http://127.0.0.1:8002": 125
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 250,
+      "completed": 250,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 990.531969,
+       "p90": 1503.942828,
+       "p99": 2110.923129
+      },
+      "e2e_ms": {
+       "p50": 15589.378182,
+       "p99": 28558.825462
+      },
+      "tpot_ms_p50": 114.0344746535433,
+      "output_tokens": 32000,
+      "last_finish_s": 129.930647766
+     },
+     "B": {
+      "requests": 300,
+      "completed": 247,
+      "cancelled": 53,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 48978.968015,
+       "p90": 105296.754718,
+       "p99": 114258.468468
+      },
+      "e2e_ms": {
+       "p50": 79412.090095,
+       "p99": 125001.731057
+      },
+      "tpot_ms_p50": 122.89676639215686,
+      "output_tokens": 63232,
+      "last_finish_s": 135.227964608
+     }
+    },
+    "makespan_s": 135.227964608,
+    "output_tokens_per_s": 704.2330354972016
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 125,
+      "p50": 989.663664,
+      "p99": 2492.648413
+     },
+     "r1": {
+      "completed": 125,
+      "p50": 991.390981,
+      "p99": 1843.48356
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 117,
+      "p50": 50798.554943,
+      "p99": 111335.400744
+     },
+     "r1": {
+      "completed": 130,
+      "p50": 46660.153585,
+      "p99": 114743.790353
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.3224,
+     "B": 0.6776
+    },
+    "billed": {
+     "A": 49633.0,
+     "B": 104303.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.3326,
+      "B": 0.6674
+     },
+     {
+      "A": 0.3118,
+      "B": 0.6882
+     }
+    ],
+    "seconds": 24.1
+   },
+   "replicas": [
+    {
+     "steps": 1334,
+     "schedule_us": {
+      "p50": 599.916,
+      "p99": 1147.394,
+      "mean": 523.1388200899551
+     },
+     "billed": {
+      "A": 63750.0,
+      "B": 367062.0,
+      "default": 0.0,
+      "system": 17825.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 126.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 6,
+      "B": 17
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.3876,
+      "B": 0.6124
+     }
+    },
+    {
+     "steps": 1347,
+     "schedule_us": {
+      "p50": 611.277,
+      "p99": 1180.865,
+      "mean": 551.8250133630289
+     },
+     "billed": {
+      "A": 63750.0,
+      "B": 373620.0,
+      "default": 0.0,
+      "system": 22843.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 80.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 17,
+      "A": 6
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4821,
+      "B": 0.5179
+     }
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1334,
+     "rtt_us": {
+      "p50": 366.9,
+      "p99": 832.0,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.174,
+      "p99": 5.04,
+      "mean": 2.302
+     },
+     "ok": 1369,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 63750.0,
+      "B": 369144.0
+     }
+    },
+    {
+     "steps": 1347,
+     "rtt_us": {
+      "p50": 388.1,
+      "p99": 865.3,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.896,
+      "p99": 5.461,
+      "mean": 2.59
+     },
+     "ok": 1414,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 63750.0,
+      "B": 367062.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-s1",
+   "workload": "noisy_neighbor",
+   "arm": "gvtc-sticky",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 221
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 221,
+      "completed": 221,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 914.68055,
+       "p90": 1388.677541,
+       "p99": 1806.608884
+      },
+      "e2e_ms": {
+       "p50": 18359.076487,
+       "p99": 27190.911815
+      },
+      "tpot_ms_p50": 136.87986062204726,
+      "output_tokens": 28288,
+      "last_finish_s": 133.692313628
+     },
+     "B": {
+      "requests": 300,
+      "completed": 237,
+      "cancelled": 63,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 50389.726942,
+       "p90": 100598.927883,
+       "p99": 121421.002489
+      },
+      "e2e_ms": {
+       "p50": 83582.977782,
+       "p99": 132015.504177
+      },
+      "tpot_ms_p50": 122.46578592156862,
+      "output_tokens": 60672,
+      "last_finish_s": 142.394444584
+     }
+    },
+    "makespan_s": 142.394444584,
+    "output_tokens_per_s": 624.743474086319
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 221,
+      "p50": 914.68055,
+      "p99": 1806.608884
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 114,
+      "p50": 53636.885198,
+      "p99": 122066.990503
+     },
+     "r1": {
+      "completed": 123,
+      "p50": 46479.0764,
+      "p99": 103000.016174
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2904,
+     "B": 0.7096
+    },
+    "billed": {
+     "A": 29257.0,
+     "B": 71473.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.5584,
+      "B": 0.4416
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 13.4
+   },
+   "replicas": [
+    {
+     "steps": 1336,
+     "schedule_us": {
+      "p50": 713.958,
+      "p99": 1204.29,
+      "mean": 604.2116788922156
+     },
+     "billed": {
+      "A": 112710.0,
+      "B": 365556.0,
+      "default": 0.0,
+      "system": 24811.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 144.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 22,
+      "A": 1
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.5584,
+      "B": 0.4416
+     }
+    },
+    {
+     "steps": 1053,
+     "schedule_us": {
+      "p50": 544.112,
+      "p99": 822.971,
+      "mean": 489.71161348528017
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 370092.0,
+      "default": 0.0,
+      "system": 18558.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 108.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1336,
+     "rtt_us": {
+      "p50": 397.3,
+      "p99": 770.9,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.046,
+      "p99": 5.009,
+      "mean": 2.51
+     },
+     "ok": 1488,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 370092.0
+     }
+    },
+    {
+     "steps": 1053,
+     "rtt_us": {
+      "p50": 406.6,
+      "p99": 838.8,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.274,
+      "p99": 4.428,
+      "mean": 2.15
+     },
+     "ok": 1290,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 110020.0,
+      "B": 323872.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-s2",
+   "workload": "noisy_neighbor",
+   "arm": "gvtc-sticky",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 266
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 266,
+      "completed": 266,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 887.910046,
+       "p90": 1372.369501,
+       "p99": 1687.284036
+      },
+      "e2e_ms": {
+       "p50": 18308.797098,
+       "p99": 25038.483646
+      },
+      "tpot_ms_p50": 137.01670962204724,
+      "output_tokens": 34048,
+      "last_finish_s": 138.253128632
+     },
+     "B": {
+      "requests": 300,
+      "completed": 244,
+      "cancelled": 56,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 50861.226012,
+       "p90": 107622.437158,
+       "p99": 127594.011144
+      },
+      "e2e_ms": {
+       "p50": 81819.992709,
+       "p99": 138328.852193
+      },
+      "tpot_ms_p50": 116.4600191372549,
+      "output_tokens": 62464,
+      "last_finish_s": 147.162669099
+     }
+    },
+    "makespan_s": 147.162669099,
+    "output_tokens_per_s": 655.818493853723
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 266,
+      "p50": 887.910046,
+      "p99": 1687.284036
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 122,
+      "p50": 59245.088431,
+      "p99": 127913.057732
+     },
+     "r1": {
+      "completed": 122,
+      "p50": 45345.291197,
+      "p99": 102957.228024
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.3496,
+     "B": 0.6504
+    },
+    "billed": {
+     "A": 46339.0,
+     "B": 86194.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.5941,
+      "B": 0.4059
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 20.5
+   },
+   "replicas": [
+    {
+     "steps": 1296,
+     "schedule_us": {
+      "p50": 762.228,
+      "p99": 1380.52,
+      "mean": 679.7113402777778
+     },
+     "billed": {
+      "A": 135660.0,
+      "B": 369588.0,
+      "default": 0.0,
+      "system": 33082.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 112.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 22,
+      "A": 4
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.5941,
+      "B": 0.4059
+     }
+    },
+    {
+     "steps": 1051,
+     "schedule_us": {
+      "p50": 558.819,
+      "p99": 935.64,
+      "mean": 502.0872797335871
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 369588.0,
+      "default": 0.0,
+      "system": 18751.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 112.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1296,
+     "rtt_us": {
+      "p50": 403.6,
+      "p99": 795.6,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.985,
+      "p99": 5.019,
+      "mean": 2.544
+     },
+     "ok": 1547,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 369588.0
+     }
+    },
+    {
+     "steps": 1051,
+     "rtt_us": {
+      "p50": 389.9,
+      "p99": 878.1,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.056,
+      "p99": 5.0,
+      "mean": 2.554
+     },
+     "ok": 1285,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 132154.0,
+      "B": 292443.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "gvtc-sticky-s3",
+   "workload": "noisy_neighbor",
+   "arm": "gvtc-sticky",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": 100.0,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 250
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 250,
+      "completed": 250,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 823.683704,
+       "p90": 1377.66058,
+       "p99": 2068.874254
+      },
+      "e2e_ms": {
+       "p50": 18286.531219,
+       "p99": 26100.422943
+      },
+      "tpot_ms_p50": 135.44035418897639,
+      "output_tokens": 32000,
+      "last_finish_s": 138.889963257
+     },
+     "B": {
+      "requests": 300,
+      "completed": 247,
+      "cancelled": 53,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 48872.558951,
+       "p90": 113237.12853,
+       "p99": 125348.905274
+      },
+      "e2e_ms": {
+       "p50": 82258.353188,
+       "p99": 136650.294882
+      },
+      "tpot_ms_p50": 119.2307665137255,
+      "output_tokens": 63232,
+      "last_finish_s": 146.83268323
+     }
+    },
+    "makespan_s": 146.83268323,
+    "output_tokens_per_s": 648.5749487450813
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 250,
+      "p50": 823.683704,
+      "p99": 2068.874254
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 127,
+      "p50": 53270.07375,
+      "p99": 125781.056267
+     },
+     "r1": {
+      "completed": 120,
+      "p50": 44243.085572,
+      "p99": 102313.636341
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.3052,
+     "B": 0.6948
+    },
+    "billed": {
+     "A": 40457.0,
+     "B": 92116.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.5141,
+      "B": 0.4859
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 20.6
+   },
+   "replicas": [
+    {
+     "steps": 1331,
+     "schedule_us": {
+      "p50": 738.634,
+      "p99": 1257.509,
+      "mean": 660.95056649136
+     },
+     "billed": {
+      "A": 127500.0,
+      "B": 372108.0,
+      "default": 0.0,
+      "system": 28949.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 92.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 23,
+      "A": 8
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.5141,
+      "B": 0.4859
+     }
+    },
+    {
+     "steps": 1048,
+     "schedule_us": {
+      "p50": 537.85,
+      "p99": 844.431,
+      "mean": 483.0499026717557
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 368580.0,
+      "default": 0.0,
+      "system": 16951.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 120.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    {
+     "steps": 1331,
+     "rtt_us": {
+      "p50": 375.3,
+      "p99": 591.7,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 3.116,
+      "p99": 4.759,
+      "mean": 2.558
+     },
+     "ok": 1529,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "B": 368580.0
+     }
+    },
+    {
+     "steps": 1048,
+     "rtt_us": {
+      "p50": 364.3,
+      "p99": 665.1,
+      "from": "last round trip at each step"
+     },
+     "apply_us": {
+      "p50": 2.605,
+      "p99": 5.661,
+      "mean": 2.544
+     },
+     "ok": 1274,
+     "failed": 0,
+     "events": [],
+     "remote_final": {
+      "default": 46.0,
+      "A": 124964.0,
+      "B": 296600.0
+     }
+    }
+   ]
+  },
+  {
+   "run": "vtc-rr-s1",
+   "workload": "noisy_neighbor",
+   "arm": "vtc-rr",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 30.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 111,
+     "http://127.0.0.1:8002": 110
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 221,
+      "completed": 221,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 1207.37972,
+       "p90": 1820.299654,
+       "p99": 2278.913863
+      },
+      "e2e_ms": {
+       "p50": 15562.80696,
+       "p99": 28626.65468
+      },
+      "tpot_ms_p50": 113.217253496063,
+      "output_tokens": 28288,
+      "last_finish_s": 128.076101745
+     },
+     "B": {
+      "requests": 300,
+      "completed": 237,
+      "cancelled": 63,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 49064.502602,
+       "p90": 98267.071374,
+       "p99": 112739.848749
+      },
+      "e2e_ms": {
+       "p50": 83126.82413,
+       "p99": 122752.404075
+      },
+      "tpot_ms_p50": 128.71379901568628,
+      "output_tokens": 60672,
+      "last_finish_s": 133.042699492
+     }
+    },
+    "makespan_s": 133.042699492,
+    "output_tokens_per_s": 668.6575087522879
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 111,
+      "p50": 1249.254524,
+      "p99": 2278.913863
+     },
+     "r1": {
+      "completed": 110,
+      "p50": 1140.418933,
+      "p99": 2207.361872
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 117,
+      "p50": 48163.469064,
+      "p99": 110700.117358
+     },
+     "r1": {
+      "completed": 120,
+      "p50": 49492.211104,
+      "p99": 113215.781448
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.1899,
+     "B": 0.8101
+    },
+    "billed": {
+     "A": 76517.0,
+     "B": 326439.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.1911,
+      "B": 0.8089
+     },
+     {
+      "A": 0.1886,
+      "B": 0.8114
+     }
+    ],
+    "seconds": 52.4
+   },
+   "replicas": [
+    {
+     "steps": 1345,
+     "schedule_us": {
+      "p50": 578.075,
+      "p99": 1045.884,
+      "mean": 495.87322081784384
+     },
+     "billed": {
+      "A": 56610.0,
+      "B": 367068.0,
+      "default": 0.0,
+      "system": 21392.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 132.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 15,
+      "A": 8
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.251,
+      "B": 0.749
+     }
+    },
+    {
+     "steps": 1324,
+     "schedule_us": {
+      "p50": 589.285,
+      "p99": 1147.864,
+      "mean": 507.70776132930513
+     },
+     "billed": {
+      "A": 56100.0,
+      "B": 368580.0,
+      "default": 0.0,
+      "system": 19774.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 120.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 15,
+      "B": 13
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2782,
+      "B": 0.7218
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-rr-s2",
+   "workload": "noisy_neighbor",
+   "arm": "vtc-rr",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 133,
+     "http://127.0.0.1:8002": 133
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 266,
+      "completed": 266,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 1418.998439,
+       "p90": 2113.147754,
+       "p99": 3818.949784
+      },
+      "e2e_ms": {
+       "p50": 16539.584268,
+       "p99": 27892.680737
+      },
+      "tpot_ms_p50": 119.40370157480315,
+      "output_tokens": 34048,
+      "last_finish_s": 128.54493072
+     },
+     "B": {
+      "requests": 300,
+      "completed": 244,
+      "cancelled": 56,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 50657.161088,
+       "p90": 107427.289708,
+       "p99": 114882.111231
+      },
+      "e2e_ms": {
+       "p50": 82643.323805,
+       "p99": 125005.943759
+      },
+      "tpot_ms_p50": 125.75551334509804,
+      "output_tokens": 62464,
+      "last_finish_s": 133.772274711
+     }
+    },
+    "makespan_s": 133.772274711,
+    "output_tokens_per_s": 721.4648940410362
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 133,
+      "p50": 1382.402408,
+      "p99": 3374.913876
+     },
+     "r1": {
+      "completed": 133,
+      "p50": 1454.20712,
+      "p99": 4240.443615
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 121,
+      "p50": 51106.457622,
+      "p99": 113677.147622
+     },
+     "r1": {
+      "completed": 123,
+      "p50": 50272.799951,
+      "p99": 115316.645345
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2199,
+     "B": 0.7801
+    },
+    "billed": {
+     "A": 101623.0,
+     "B": 360409.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.2236,
+      "B": 0.7764
+     },
+     {
+      "A": 0.2165,
+      "B": 0.7835
+     }
+    ],
+    "seconds": 65.0
+   },
+   "replicas": [
+    {
+     "steps": 1305,
+     "schedule_us": {
+      "p50": 620.792,
+      "p99": 1002.013,
+      "mean": 532.562677394636
+     },
+     "billed": {
+      "A": 67830.0,
+      "B": 369082.0,
+      "default": 0.0,
+      "system": 20995.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 114.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 14,
+      "B": 16
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2864,
+      "B": 0.7136
+     }
+    },
+    {
+     "steps": 1297,
+     "schedule_us": {
+      "p50": 636.945,
+      "p99": 1018.833,
+      "mean": 541.510732459522
+     },
+     "billed": {
+      "A": 67830.0,
+      "B": 370092.0,
+      "default": 0.0,
+      "system": 22863.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 108.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 11,
+      "B": 11
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2967,
+      "B": 0.7033
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-rr-s3",
+   "workload": "noisy_neighbor",
+   "arm": "vtc-rr",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 125,
+     "http://127.0.0.1:8002": 125
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 250,
+      "completed": 250,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 1315.013236,
+       "p90": 1904.702645,
+       "p99": 5128.639704
+      },
+      "e2e_ms": {
+       "p50": 16706.289185,
+       "p99": 28715.021856
+      },
+      "tpot_ms_p50": 120.46160877952755,
+      "output_tokens": 32000,
+      "last_finish_s": 129.495296246
+     },
+     "B": {
+      "requests": 300,
+      "completed": 247,
+      "cancelled": 53,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 48984.801342,
+       "p90": 106879.5709,
+       "p99": 114255.513548
+      },
+      "e2e_ms": {
+       "p50": 81069.33598,
+       "p99": 124418.205165
+      },
+      "tpot_ms_p50": 126.19673743529411,
+      "output_tokens": 63232,
+      "last_finish_s": 134.647453896
+     }
+    },
+    "makespan_s": 134.647453896,
+    "output_tokens_per_s": 707.2692222873817
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 125,
+      "p50": 1295.618113,
+      "p99": 5113.736853
+     },
+     "r1": {
+      "completed": 125,
+      "p50": 1408.218627,
+      "p99": 5128.639704
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 124,
+      "p50": 48509.532976,
+      "p99": 111544.514491
+     },
+     "r1": {
+      "completed": 123,
+      "p50": 49016.073006,
+      "p99": 114750.394936
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2088,
+     "B": 0.7912
+    },
+    "billed": {
+     "A": 91257.0,
+     "B": 345721.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.218,
+      "B": 0.782
+     },
+     {
+      "A": 0.2005,
+      "B": 0.7995
+     }
+    ],
+    "seconds": 57.1
+   },
+   "replicas": [
+    {
+     "steps": 1343,
+     "schedule_us": {
+      "p50": 606.979,
+      "p99": 1031.549,
+      "mean": 519.8072002978406
+     },
+     "billed": {
+      "A": 63750.0,
+      "B": 370592.0,
+      "default": 0.0,
+      "system": 18918.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 100.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 13,
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2746,
+      "B": 0.7254
+     }
+    },
+    {
+     "steps": 1337,
+     "schedule_us": {
+      "p50": 607.821,
+      "p99": 1072.826,
+      "mean": 521.8369162303666
+     },
+     "billed": {
+      "A": 63750.0,
+      "B": 370092.0,
+      "default": 0.0,
+      "system": 22463.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 108.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 11,
+      "A": 15
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.2773,
+      "B": 0.7227
+     }
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-sticky-s1",
+   "workload": "noisy_neighbor",
+   "arm": "vtc-sticky",
+   "seed": 1,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 221
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 221,
+      "completed": 221,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 1570.233026,
+       "p90": 4100.766548,
+       "p99": 6918.425115
+      },
+      "e2e_ms": {
+       "p50": 20372.501916,
+       "p99": 33723.839852
+      },
+      "tpot_ms_p50": 141.54419751181103,
+      "output_tokens": 28288,
+      "last_finish_s": 131.694679183
+     },
+     "B": {
+      "requests": 300,
+      "completed": 237,
+      "cancelled": 63,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 49570.247279,
+       "p90": 98694.212413,
+       "p99": 118829.968334
+      },
+      "e2e_ms": {
+       "p50": 82643.918563,
+       "p99": 129747.188825
+      },
+      "tpot_ms_p50": 125.32748718039215,
+      "output_tokens": 60672,
+      "last_finish_s": 140.021629159
+     }
+    },
+    "makespan_s": 140.021629159,
+    "output_tokens_per_s": 635.3304166957124
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 221,
+      "p50": 1570.233026,
+      "p99": 6918.425115
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 114,
+      "p50": 52825.131371,
+      "p99": 119300.303046
+     },
+     "r1": {
+      "completed": 123,
+      "p50": 45899.681284,
+      "p99": 102760.968084
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2011,
+     "B": 0.7989
+    },
+    "billed": {
+     "A": 89472.0,
+     "B": 355355.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.376,
+      "B": 0.624
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 64.9
+   },
+   "replicas": [
+    {
+     "steps": 1336,
+     "schedule_us": {
+      "p50": 689.973,
+      "p99": 1280.581,
+      "mean": 592.149124251497
+     },
+     "billed": {
+      "A": 112710.0,
+      "B": 365556.0,
+      "default": 0.0,
+      "system": 23903.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 144.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 30,
+      "B": 10
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.376,
+      "B": 0.624
+     }
+    },
+    {
+     "steps": 1050,
+     "schedule_us": {
+      "p50": 544.142,
+      "p99": 840.182,
+      "mean": 491.6359723809524
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 370092.0,
+      "default": 0.0,
+      "system": 17519.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 108.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-sticky-s2",
+   "workload": "noisy_neighbor",
+   "arm": "vtc-sticky",
+   "seed": 2,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 266
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 266,
+      "completed": 266,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 1717.189533,
+       "p90": 5605.01102,
+       "p99": 8503.18691
+      },
+      "e2e_ms": {
+       "p50": 20013.266128,
+       "p99": 32619.867961
+      },
+      "tpot_ms_p50": 138.59789262204725,
+      "output_tokens": 34048,
+      "last_finish_s": 137.718422713
+     },
+     "B": {
+      "requests": 300,
+      "completed": 244,
+      "cancelled": 56,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 49082.18521,
+       "p90": 102004.116139,
+       "p99": 124137.702991
+      },
+      "e2e_ms": {
+       "p50": 81786.269769,
+       "p99": 134978.991181
+      },
+      "tpot_ms_p50": 118.39724180392157,
+      "output_tokens": 62464,
+      "last_finish_s": 143.767348283
+     }
+    },
+    "makespan_s": 143.767348283,
+    "output_tokens_per_s": 671.3068102920016
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 266,
+      "p50": 1717.189533,
+      "p99": 8503.18691
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 122,
+      "p50": 55178.981058,
+      "p99": 124603.052484
+     },
+     "r1": {
+      "completed": 122,
+      "p50": 44948.100307,
+      "p99": 101507.340093
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2314,
+     "B": 0.7686
+    },
+    "billed": {
+     "A": 114834.0,
+     "B": 381356.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4186,
+      "B": 0.5814
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 74.4
+   },
+   "replicas": [
+    {
+     "steps": 1303,
+     "schedule_us": {
+      "p50": 729.828,
+      "p99": 1223.906,
+      "mean": 643.4716784343822
+     },
+     "billed": {
+      "A": 135660.0,
+      "B": 369588.0,
+      "default": 0.0,
+      "system": 30303.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 112.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "A": 48,
+      "B": 10
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4186,
+      "B": 0.5814
+     }
+    },
+    {
+     "steps": 1049,
+     "schedule_us": {
+      "p50": 538.672,
+      "p99": 818.122,
+      "mean": 480.5986663489037
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 369588.0,
+      "default": 0.0,
+      "system": 17035.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 112.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  },
+  {
+   "run": "vtc-sticky-s3",
+   "workload": "noisy_neighbor",
+   "arm": "vtc-sticky",
+   "seed": 3,
+   "variant": null,
+   "sync_ms": null,
+   "git_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f",
+   "engine_startup_s": 32.0,
+   "loadgen_returncode": 0,
+   "routing": {
+    "A": {
+     "http://127.0.0.1:8001": 250
+    },
+    "B": {
+     "http://127.0.0.1:8001": 150,
+     "http://127.0.0.1:8002": 150
+    }
+   },
+   "client": {
+    "tenants": {
+     "A": {
+      "requests": 250,
+      "completed": 250,
+      "cancelled": 0,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 1606.336535,
+       "p90": 4536.614892,
+       "p99": 8381.026777
+      },
+      "e2e_ms": {
+       "p50": 21165.817879,
+       "p99": 28502.717843
+      },
+      "tpot_ms_p50": 143.13301717322835,
+      "output_tokens": 32000,
+      "last_finish_s": 138.230254791
+     },
+     "B": {
+      "requests": 300,
+      "completed": 247,
+      "cancelled": 53,
+      "failed": 0,
+      "ttft_ms": {
+       "p50": 48610.577307,
+       "p90": 110987.144124,
+       "p99": 123161.692644
+      },
+      "e2e_ms": {
+       "p50": 80630.882986,
+       "p99": 134035.174211
+      },
+      "tpot_ms_p50": 121.24912236078431,
+      "output_tokens": 63232,
+      "last_finish_s": 144.253895633
+     }
+    },
+    "makespan_s": 144.253895633,
+    "output_tokens_per_s": 660.1693464298679
+   },
+   "ttft_by_replica_ms": {
+    "A": {
+     "r0": {
+      "completed": 250,
+      "p50": 1606.336535,
+      "p99": 8381.026777
+     }
+    },
+    "B": {
+     "r0": {
+      "completed": 127,
+      "p50": 52568.588875,
+      "p99": 123675.546858
+     },
+     "r1": {
+      "completed": 120,
+      "p50": 44884.815088,
+      "p99": 102399.003486
+     }
+    }
+   },
+   "global_backlogged": {
+    "share": {
+     "A": 0.2291,
+     "B": 0.7709
+    },
+    "billed": {
+     "A": 102346.0,
+     "B": 344435.0
+    },
+    "per_replica_share": [
+     {
+      "A": 0.4092,
+      "B": 0.5908
+     },
+     {
+      "A": 0.0,
+      "B": 1.0
+     }
+    ],
+    "seconds": 69.7
+   },
+   "replicas": [
+    {
+     "steps": 1337,
+     "schedule_us": {
+      "p50": 730.91,
+      "p99": 1366.082,
+      "mean": 661.6831219147346
+     },
+     "billed": {
+      "A": 127500.0,
+      "B": 372106.0,
+      "default": 0.0,
+      "system": 34431.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 90.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 16,
+      "A": 33
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": {
+      "A": 0.4092,
+      "B": 0.5908
+     }
+    },
+    {
+     "steps": 1046,
+     "schedule_us": {
+      "p50": 530.346,
+      "p99": 825.686,
+      "mean": 477.8559866156788
+     },
+     "billed": {
+      "A": 0.0,
+      "B": 368580.0,
+      "default": 0.0,
+      "system": 16987.0
+     },
+     "wasted": {
+      "A": 0.0,
+      "B": 120.0,
+      "default": 0.0
+     },
+     "preemptions": {
+      "B": 12
+     },
+     "min_free_blocks": 0,
+     "backlogged_share": null
+    }
+   ],
+   "sync": [
+    null,
+    null
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1689 @@
+{
+  "run_id": "20261105T073437Z-fairsched-aggressive2",
+  "pool": "PORTFOLIO_2XA10_POOL",
+  "instances": 1,
+  "payload": "payloads/fairsched_replicas.py",
+  "pip": [],
+  "args": [
+    "fairsched-src-23ff5d7.tar",
+    "qwen2.5-7b-instruct-a09a354.tar",
+    "aggressive",
+    "90"
+  ],
+  "started_at": "2026-11-05T07:34:37+00:00",
+  "pool_before": {
+    "state": "SUSPENDED",
+    "instance_family": "GPU_NV_2M",
+    "min_nodes": "1",
+    "max_nodes": "1",
+    "active_nodes": "0",
+    "idle_nodes": "0",
+    "num_services": "0",
+    "num_jobs": "0"
+  },
+  "job_id": "PORTFOLIO_LAB.GPU.PF_FAIRSCHED_REPLICAS_FAIRSCHED_AGGRESSIVE2_T6S229YB6W6P",
+  "status_trace": [
+    {
+      "at_s": 8,
+      "job": "PENDING",
+      "containers": [
+        [
+          "PENDING",
+          "Compute pool node(s) are being provisioned"
+        ]
+      ]
+    },
+    {
+      "at_s": 110,
+      "job": "PENDING",
+      "containers": [
+        [
+          "PENDING",
+          "Unschedulable due to insufficient  resources."
+        ]
+      ]
+    },
+    {
+      "at_s": 151,
+      "job": "PENDING",
+      "containers": [
+        [
+          "PENDING",
+          "Waiting to start"
+        ]
+      ]
+    },
+    {
+      "at_s": 171,
+      "job": "RUNNING",
+      "containers": [
+        [
+          "READY",
+          "Running"
+        ]
+      ]
+    },
+    {
+      "at_s": 2978,
+      "job": "PENDING",
+      "containers": [
+        [
+          "DONE",
+          "Completed successfully"
+        ]
+      ]
+    },
+    {
+      "at_s": 2999,
+      "job": "DONE",
+      "containers": [
+        [
+          "DONE",
+          "Completed successfully"
+        ]
+      ]
+    }
+  ],
+  "status": "DONE",
+  "results": [
+    {
+      "step": "node",
+      "node": {
+        "python": "3.12.15",
+        "cpus": 72,
+        "gpus": "GPU 0: NVIDIA A10-24Q (UUID: GPU-73fbec00-d8eb-11f1-bed7-a9e5232e932d)\nGPU 1: NVIDIA A10-24Q (UUID: GPU-74948280-d8eb-11f1-9b3b-0bdfe0487edf)",
+        "topo": "\u001b[4mGPU0\tGPU1\tNIC0\tCPU Affinity\tNUMA Affinity\tGPU NUMA ID\u001b[0m\nGPU0\t X \tSYS\tSYS\t54-71\t3\t\tN/A\nGPU1\tSYS\t X \tNODE\t0-17\t0\t\tN/A\nNIC0\tSYS\tNODE\t X \t\t\t\t\n\nLegend:\n\n  X    = Self\n  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)\n  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node\n  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)\n  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)\n  PIX  = Connection traversing at most a single PCIe bridge\n  NV#  = Connection traversing a bonded set of # NVLinks\n\nNIC Legend:\n\n  NIC0: mlx5_0",
+        "query": "0, NVIDIA A10-24Q, 570.211.01, 24512 MiB, 0 MiB\n1, NVIDIA A10-24Q, 570.211.01, 24512 MiB, 0 MiB"
+      }
+    },
+    {
+      "step": "bootstrap",
+      "bootstrap": {
+        "fetch_s": 108.8,
+        "sha256_mismatch": [],
+        "sha256_s": 11.4,
+        "untar_s": 14.9,
+        "install": {
+          "rc": 0,
+          "wheels": 199,
+          "seconds": 143.6,
+          "err_tail": []
+        },
+        "venv_reused": false,
+        "torch_compat": {
+          "torch": "2.13.0+cu130",
+          "cuda": "13.0",
+          "available": true,
+          "devices": [
+            "NVIDIA A10-24Q",
+            "NVIDIA A10-24Q"
+          ],
+          "matmul_finite": true
+        },
+        "torch_node_driver": {
+          "torch": "2.13.0+cu130",
+          "cuda": "13.0",
+          "available": false
+        },
+        "compat_driver_used": true,
+        "source_commit": "23ff5d71e062fe930be1b9afde2c7dc5eec9262f"
+      }
+    },
+    {
+      "step": "aggressive/fcfs-rr-s1",
+      "aggressive/fcfs-rr-s1": {
+        "rc": 0,
+        "seconds": 204.8,
+        "summary": {
+          "run": "fcfs-rr-s1",
+          "workload": "aggressive",
+          "arm": "fcfs-rr",
+          "seed": 1,
+          "variant": null,
+          "startup_s": 116.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.251,
+            "B": 0.749
+          },
+          "share_per_replica": [
+            {
+              "A": 0.2499,
+              "B": 0.7501
+            },
+            {
+              "A": 0.2522,
+              "B": 0.7478
+            }
+          ],
+          "backlogged_s": 74.0,
+          "ttft_A_ms": {
+            "p50": 37014.975308,
+            "p90": 70455.139774,
+            "p99": 74135.402236
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1186.7,
+          "makespan_s": 86.3,
+          "sched_us_p50": [
+            745.058,
+            767.751
+          ],
+          "preemptions": [
+            {
+              "B": 21,
+              "A": 8
+            },
+            {
+              "B": 23,
+              "A": 6
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4234302
+      }
+    },
+    {
+      "step": "aggressive/fcfs-rr-s1 put",
+      "aggressive/fcfs-rr-s1 put": {
+        "aggressive--fcfs-rr-s1.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/vtc-rr-s1",
+      "aggressive/vtc-rr-s1": {
+        "rc": 0,
+        "seconds": 119.5,
+        "summary": {
+          "run": "vtc-rr-s1",
+          "workload": "aggressive",
+          "arm": "vtc-rr",
+          "seed": 1,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.493,
+            "B": 0.507
+          },
+          "share_per_replica": [
+            {
+              "A": 0.4887,
+              "B": 0.5113
+            },
+            {
+              "A": 0.4974,
+              "B": 0.5026
+            }
+          ],
+          "backlogged_s": 36.8,
+          "ttft_A_ms": {
+            "p50": 10868.22719,
+            "p90": 34937.205083,
+            "p99": 37222.05757
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1182.3,
+          "makespan_s": 86.6,
+          "sched_us_p50": [
+            771.708,
+            774.453
+          ],
+          "preemptions": [
+            {
+              "B": 21,
+              "A": 7
+            },
+            {
+              "A": 8,
+              "B": 19
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4236163
+      }
+    },
+    {
+      "step": "aggressive/vtc-rr-s1 put",
+      "aggressive/vtc-rr-s1 put": {
+        "aggressive--vtc-rr-s1.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/gvtc-rr-s1",
+      "aggressive/gvtc-rr-s1": {
+        "rc": 0,
+        "seconds": 121.3,
+        "summary": {
+          "run": "gvtc-rr-s1",
+          "workload": "aggressive",
+          "arm": "gvtc-rr",
+          "seed": 1,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.4963,
+            "B": 0.5037
+          },
+          "share_per_replica": [
+            {
+              "A": 0.4975,
+              "B": 0.5025
+            },
+            {
+              "A": 0.4951,
+              "B": 0.5049
+            }
+          ],
+          "backlogged_s": 38.1,
+          "ttft_A_ms": {
+            "p50": 11236.803555,
+            "p90": 36663.759355,
+            "p99": 39030.19198
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1156.6,
+          "makespan_s": 88.5,
+          "sched_us_p50": [
+            795.232,
+            803.227
+          ],
+          "preemptions": [
+            {
+              "A": 6,
+              "B": 26
+            },
+            {
+              "A": 7,
+              "B": 27
+            }
+          ],
+          "sync": [
+            {
+              "apply_us": {
+                "p50": 3.306,
+                "p99": 5.751,
+                "mean": 2.742
+              },
+              "rtt_us": {
+                "p50": 361.3,
+                "p99": 1102.4,
+                "from": "last round trip at each step"
+              },
+              "ok": 917,
+              "failed": 0,
+              "events": []
+            },
+            {
+              "apply_us": {
+                "p50": 2.785,
+                "p99": 5.54,
+                "mean": 2.646
+              },
+              "rtt_us": {
+                "p50": 402.7,
+                "p99": 899.4,
+                "from": "last round trip at each step"
+              },
+              "ok": 935,
+              "failed": 0,
+              "events": []
+            }
+          ]
+        },
+        "archive_bytes": 4257181
+      }
+    },
+    {
+      "step": "aggressive/gvtc-rr-s1 put",
+      "aggressive/gvtc-rr-s1 put": {
+        "aggressive--gvtc-rr-s1.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/fcfs-sticky-s1",
+      "aggressive/fcfs-sticky-s1": {
+        "rc": 0,
+        "seconds": 144.6,
+        "summary": {
+          "run": "fcfs-sticky-s1",
+          "workload": "aggressive",
+          "arm": "fcfs-sticky",
+          "seed": 1,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.2487,
+            "B": 0.7513
+          },
+          "share_per_replica": [
+            {
+              "A": 0.4038,
+              "B": 0.5962
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 100.6,
+          "ttft_A_ms": {
+            "p50": 44023.991534,
+            "p90": 80978.077577,
+            "p99": 100170.120304
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 914.2,
+          "makespan_s": 112.0,
+          "sched_us_p50": [
+            773.162,
+            753.354
+          ],
+          "preemptions": [
+            {
+              "B": 25,
+              "A": 17
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4241961
+      }
+    },
+    {
+      "step": "aggressive/fcfs-sticky-s1 put",
+      "aggressive/fcfs-sticky-s1 put": {
+        "aggressive--fcfs-sticky-s1.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/vtc-sticky-s1",
+      "aggressive/vtc-sticky-s1": {
+        "rc": 0,
+        "seconds": 147.7,
+        "summary": {
+          "run": "vtc-sticky-s1",
+          "workload": "aggressive",
+          "arm": "vtc-sticky",
+          "seed": 1,
+          "variant": null,
+          "startup_s": 32.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.2744,
+            "B": 0.7256
+          },
+          "share_per_replica": [
+            {
+              "A": 0.4988,
+              "B": 0.5012
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 75.3,
+          "ttft_A_ms": {
+            "p50": 37585.388526,
+            "p90": 71905.084027,
+            "p99": 75674.889159
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 906.9,
+          "makespan_s": 112.9,
+          "sched_us_p50": [
+            799.43,
+            776.767
+          ],
+          "preemptions": [
+            {
+              "B": 27,
+              "A": 14
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4246549
+      }
+    },
+    {
+      "step": "aggressive/vtc-sticky-s1 put",
+      "aggressive/vtc-sticky-s1 put": {
+        "aggressive--vtc-sticky-s1.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/gvtc-sticky-s1",
+      "aggressive/gvtc-sticky-s1": {
+        "rc": 0,
+        "seconds": 147.1,
+        "summary": {
+          "run": "gvtc-sticky-s1",
+          "workload": "aggressive",
+          "arm": "gvtc-sticky",
+          "seed": 1,
+          "variant": null,
+          "startup_s": 32.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.4998,
+            "B": 0.5002
+          },
+          "share_per_replica": [
+            {
+              "A": 0.9985,
+              "B": 0.0015
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 36.7,
+          "ttft_A_ms": {
+            "p50": 11491.122092,
+            "p90": 35293.858391,
+            "p99": 37549.941414
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 912.5,
+          "makespan_s": 112.2,
+          "sched_us_p50": [
+            812.674,
+            782.888
+          ],
+          "preemptions": [
+            {
+              "B": 31,
+              "A": 12
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            {
+              "apply_us": {
+                "p50": 2.384,
+                "p99": 5.45,
+                "mean": 2.494
+              },
+              "rtt_us": {
+                "p50": 332.8,
+                "p99": 586.3,
+                "from": "last round trip at each step"
+              },
+              "ok": 1182,
+              "failed": 0,
+              "events": []
+            },
+            {
+              "apply_us": {
+                "p50": 3.256,
+                "p99": 8.105,
+                "mean": 3.048
+              },
+              "rtt_us": {
+                "p50": 368.1,
+                "p99": 973.8,
+                "from": "last round trip at each step"
+              },
+              "ok": 788,
+              "failed": 0,
+              "events": []
+            }
+          ]
+        },
+        "archive_bytes": 4253394
+      }
+    },
+    {
+      "step": "aggressive/gvtc-sticky-s1 put",
+      "aggressive/gvtc-sticky-s1 put": {
+        "aggressive--gvtc-sticky-s1.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/vtc-rr-s2",
+      "aggressive/vtc-rr-s2": {
+        "rc": 0,
+        "seconds": 121.2,
+        "summary": {
+          "run": "vtc-rr-s2",
+          "workload": "aggressive",
+          "arm": "vtc-rr",
+          "seed": 2,
+          "variant": null,
+          "startup_s": 32.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.4965,
+            "B": 0.5035
+          },
+          "share_per_replica": [
+            {
+              "A": 0.4956,
+              "B": 0.5044
+            },
+            {
+              "A": 0.4974,
+              "B": 0.5026
+            }
+          ],
+          "backlogged_s": 36.8,
+          "ttft_A_ms": {
+            "p50": 10878.270729,
+            "p90": 34906.51316,
+            "p99": 37662.106632
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1181.2,
+          "makespan_s": 86.7,
+          "sched_us_p50": [
+            783.319,
+            774.112
+          ],
+          "preemptions": [
+            {
+              "B": 21,
+              "A": 7
+            },
+            {
+              "A": 8,
+              "B": 19
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4228206
+      }
+    },
+    {
+      "step": "aggressive/vtc-rr-s2 put",
+      "aggressive/vtc-rr-s2 put": {
+        "aggressive--vtc-rr-s2.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/gvtc-rr-s2",
+      "aggressive/gvtc-rr-s2": {
+        "rc": 0,
+        "seconds": 120.2,
+        "summary": {
+          "run": "gvtc-rr-s2",
+          "workload": "aggressive",
+          "arm": "gvtc-rr",
+          "seed": 2,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.4996,
+            "B": 0.5004
+          },
+          "share_per_replica": [
+            {
+              "A": 0.5039,
+              "B": 0.4961
+            },
+            {
+              "A": 0.4955,
+              "B": 0.5045
+            }
+          ],
+          "backlogged_s": 37.8,
+          "ttft_A_ms": {
+            "p50": 10809.270225,
+            "p90": 35977.685553,
+            "p99": 38715.079861
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1169.6,
+          "makespan_s": 87.6,
+          "sched_us_p50": [
+            785.423,
+            797.416
+          ],
+          "preemptions": [
+            {
+              "B": 19,
+              "A": 12
+            },
+            {
+              "B": 20,
+              "A": 7
+            }
+          ],
+          "sync": [
+            {
+              "apply_us": {
+                "p50": 2.625,
+                "p99": 5.931,
+                "mean": 2.566
+              },
+              "rtt_us": {
+                "p50": 351.5,
+                "p99": 766.0,
+                "from": "last round trip at each step"
+              },
+              "ok": 921,
+              "failed": 0,
+              "events": []
+            },
+            {
+              "apply_us": {
+                "p50": 3.075,
+                "p99": 5.29,
+                "mean": 2.63
+              },
+              "rtt_us": {
+                "p50": 385.8,
+                "p99": 782.0,
+                "from": "last round trip at each step"
+              },
+              "ok": 913,
+              "failed": 0,
+              "events": []
+            }
+          ]
+        },
+        "archive_bytes": 4249216
+      }
+    },
+    {
+      "step": "aggressive/gvtc-rr-s2 put",
+      "aggressive/gvtc-rr-s2 put": {
+        "aggressive--gvtc-rr-s2.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/fcfs-sticky-s2",
+      "aggressive/fcfs-sticky-s2": {
+        "rc": 0,
+        "seconds": 145.0,
+        "summary": {
+          "run": "fcfs-sticky-s2",
+          "workload": "aggressive",
+          "arm": "fcfs-sticky",
+          "seed": 2,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.2447,
+            "B": 0.7553
+          },
+          "share_per_replica": [
+            {
+              "A": 0.3988,
+              "B": 0.6012
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 100.7,
+          "ttft_A_ms": {
+            "p50": 42813.82129,
+            "p90": 81073.678549,
+            "p99": 100182.556993
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 914.4,
+          "makespan_s": 112.0,
+          "sched_us_p50": [
+            775.535,
+            744.808
+          ],
+          "preemptions": [
+            {
+              "B": 26,
+              "A": 16
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4222491
+      }
+    },
+    {
+      "step": "aggressive/fcfs-sticky-s2 put",
+      "aggressive/fcfs-sticky-s2 put": {
+        "aggressive--fcfs-sticky-s2.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/vtc-sticky-s2",
+      "aggressive/vtc-sticky-s2": {
+        "rc": 0,
+        "seconds": 146.0,
+        "summary": {
+          "run": "vtc-sticky-s2",
+          "workload": "aggressive",
+          "arm": "vtc-sticky",
+          "seed": 2,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.2744,
+            "B": 0.7256
+          },
+          "share_per_replica": [
+            {
+              "A": 0.4988,
+              "B": 0.5012
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 75.3,
+          "ttft_A_ms": {
+            "p50": 37662.699735,
+            "p90": 71968.771112,
+            "p99": 75728.246033
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 906.2,
+          "makespan_s": 113.0,
+          "sched_us_p50": [
+            792.587,
+            768.302
+          ],
+          "preemptions": [
+            {
+              "B": 27,
+              "A": 14
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4236105
+      }
+    },
+    {
+      "step": "aggressive/vtc-sticky-s2 put",
+      "aggressive/vtc-sticky-s2 put": {
+        "aggressive--vtc-sticky-s2.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/gvtc-sticky-s2",
+      "aggressive/gvtc-sticky-s2": {
+        "rc": 0,
+        "seconds": 145.5,
+        "summary": {
+          "run": "gvtc-sticky-s2",
+          "workload": "aggressive",
+          "arm": "gvtc-sticky",
+          "seed": 2,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.5015,
+            "B": 0.4985
+          },
+          "share_per_replica": [
+            {
+              "A": 0.9985,
+              "B": 0.0015
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 36.7,
+          "ttft_A_ms": {
+            "p50": 11501.138283,
+            "p90": 35275.236055,
+            "p99": 37534.775917
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 910.3,
+          "makespan_s": 112.5,
+          "sched_us_p50": [
+            813.235,
+            779.994
+          ],
+          "preemptions": [
+            {
+              "B": 34,
+              "A": 12
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            {
+              "apply_us": {
+                "p50": 2.545,
+                "p99": 6.162,
+                "mean": 2.542
+              },
+              "rtt_us": {
+                "p50": 410.6,
+                "p99": 750.8,
+                "from": "last round trip at each step"
+              },
+              "ok": 1170,
+              "failed": 0,
+              "events": []
+            },
+            {
+              "apply_us": {
+                "p50": 2.384,
+                "p99": 4.588,
+                "mean": 2.369
+              },
+              "rtt_us": {
+                "p50": 375.3,
+                "p99": 707.7,
+                "from": "last round trip at each step"
+              },
+              "ok": 772,
+              "failed": 0,
+              "events": []
+            }
+          ]
+        },
+        "archive_bytes": 4247569
+      }
+    },
+    {
+      "step": "aggressive/gvtc-sticky-s2 put",
+      "aggressive/gvtc-sticky-s2 put": {
+        "aggressive--gvtc-sticky-s2.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/fcfs-rr-s2",
+      "aggressive/fcfs-rr-s2": {
+        "rc": 0,
+        "seconds": 121.7,
+        "summary": {
+          "run": "fcfs-rr-s2",
+          "workload": "aggressive",
+          "arm": "fcfs-rr",
+          "seed": 2,
+          "variant": null,
+          "startup_s": 32.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.2488,
+            "B": 0.7512
+          },
+          "share_per_replica": [
+            {
+              "A": 0.2513,
+              "B": 0.7487
+            },
+            {
+              "A": 0.2464,
+              "B": 0.7536
+            }
+          ],
+          "backlogged_s": 74.7,
+          "ttft_A_ms": {
+            "p50": 37119.281086,
+            "p90": 70373.396545,
+            "p99": 75139.993556
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1176.0,
+          "makespan_s": 87.1,
+          "sched_us_p50": [
+            762.06,
+            758.874
+          ],
+          "preemptions": [
+            {
+              "B": 14,
+              "A": 15
+            },
+            {
+              "B": 26,
+              "A": 3
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4229461
+      }
+    },
+    {
+      "step": "aggressive/fcfs-rr-s2 put",
+      "aggressive/fcfs-rr-s2 put": {
+        "aggressive--fcfs-rr-s2.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/gvtc-rr-s3",
+      "aggressive/gvtc-rr-s3": {
+        "rc": 0,
+        "seconds": 120.6,
+        "summary": {
+          "run": "gvtc-rr-s3",
+          "workload": "aggressive",
+          "arm": "gvtc-rr",
+          "seed": 3,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.49,
+            "B": 0.51
+          },
+          "share_per_replica": [
+            {
+              "A": 0.5393,
+              "B": 0.4607
+            },
+            {
+              "A": 0.4435,
+              "B": 0.5565
+            }
+          ],
+          "backlogged_s": 38.6,
+          "ttft_A_ms": {
+            "p50": 10981.476276,
+            "p90": 37169.516308,
+            "p99": 39495.511992
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1172.4,
+          "makespan_s": 87.3,
+          "sched_us_p50": [
+            801.023,
+            805.652
+          ],
+          "preemptions": [
+            {
+              "B": 21,
+              "A": 11
+            },
+            {
+              "B": 23,
+              "A": 7
+            }
+          ],
+          "sync": [
+            {
+              "apply_us": {
+                "p50": 2.825,
+                "p99": 5.029,
+                "mean": 2.511
+              },
+              "rtt_us": {
+                "p50": 373.9,
+                "p99": 837.7,
+                "from": "last round trip at each step"
+              },
+              "ok": 918,
+              "failed": 0,
+              "events": []
+            },
+            {
+              "apply_us": {
+                "p50": 3.076,
+                "p99": 5.791,
+                "mean": 2.776
+              },
+              "rtt_us": {
+                "p50": 411.1,
+                "p99": 1358.4,
+                "from": "last round trip at each step"
+              },
+              "ok": 913,
+              "failed": 0,
+              "events": []
+            }
+          ]
+        },
+        "archive_bytes": 4240671
+      }
+    },
+    {
+      "step": "aggressive/gvtc-rr-s3 put",
+      "aggressive/gvtc-rr-s3 put": {
+        "aggressive--gvtc-rr-s3.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/fcfs-sticky-s3",
+      "aggressive/fcfs-sticky-s3": {
+        "rc": 0,
+        "seconds": 145.1,
+        "summary": {
+          "run": "fcfs-sticky-s3",
+          "workload": "aggressive",
+          "arm": "fcfs-sticky",
+          "seed": 3,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.2462,
+            "B": 0.7538
+          },
+          "share_per_replica": [
+            {
+              "A": 0.4012,
+              "B": 0.5988
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 100.8,
+          "ttft_A_ms": {
+            "p50": 44722.704118,
+            "p90": 81193.421272,
+            "p99": 101252.714939
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 912.7,
+          "makespan_s": 112.2,
+          "sched_us_p50": [
+            773.761,
+            743.817
+          ],
+          "preemptions": [
+            {
+              "A": 26,
+              "B": 16
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4216799
+      }
+    },
+    {
+      "step": "aggressive/fcfs-sticky-s3 put",
+      "aggressive/fcfs-sticky-s3 put": {
+        "aggressive--fcfs-sticky-s3.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/vtc-sticky-s3",
+      "aggressive/vtc-sticky-s3": {
+        "rc": 0,
+        "seconds": 148.5,
+        "summary": {
+          "run": "vtc-sticky-s3",
+          "workload": "aggressive",
+          "arm": "vtc-sticky",
+          "seed": 3,
+          "variant": null,
+          "startup_s": 32.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.2741,
+            "B": 0.7259
+          },
+          "share_per_replica": [
+            {
+              "A": 0.4994,
+              "B": 0.5006
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 76.2,
+          "ttft_A_ms": {
+            "p50": 38136.874209,
+            "p90": 72363.676208,
+            "p99": 76610.291466
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 901.0,
+          "makespan_s": 113.6,
+          "sched_us_p50": [
+            811.251,
+            773.691
+          ],
+          "preemptions": [
+            {
+              "B": 29,
+              "A": 15
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4217524
+      }
+    },
+    {
+      "step": "aggressive/vtc-sticky-s3 put",
+      "aggressive/vtc-sticky-s3 put": {
+        "aggressive--vtc-sticky-s3.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/gvtc-sticky-s3",
+      "aggressive/gvtc-sticky-s3": {
+        "rc": 0,
+        "seconds": 147.0,
+        "summary": {
+          "run": "gvtc-sticky-s3",
+          "workload": "aggressive",
+          "arm": "gvtc-sticky",
+          "seed": 3,
+          "variant": null,
+          "startup_s": 32.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 100
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.4998,
+            "B": 0.5002
+          },
+          "share_per_replica": [
+            {
+              "A": 0.9984,
+              "B": 0.0016
+            },
+            {
+              "A": 0.0,
+              "B": 1.0
+            }
+          ],
+          "backlogged_s": 36.7,
+          "ttft_A_ms": {
+            "p50": 11476.95747,
+            "p90": 35277.88069,
+            "p99": 37525.436988
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 913.2,
+          "makespan_s": 112.1,
+          "sched_us_p50": [
+            801.193,
+            789.11
+          ],
+          "preemptions": [
+            {
+              "B": 33,
+              "A": 12
+            },
+            {
+              "B": 29
+            }
+          ],
+          "sync": [
+            {
+              "apply_us": {
+                "p50": 2.184,
+                "p99": 4.439,
+                "mean": 2.119
+              },
+              "rtt_us": {
+                "p50": 393.2,
+                "p99": 1583.3,
+                "from": "last round trip at each step"
+              },
+              "ok": 1181,
+              "failed": 0,
+              "events": []
+            },
+            {
+              "apply_us": {
+                "p50": 3.065,
+                "p99": 5.951,
+                "mean": 2.654
+              },
+              "rtt_us": {
+                "p50": 401.2,
+                "p99": 1732.0,
+                "from": "last round trip at each step"
+              },
+              "ok": 796,
+              "failed": 0,
+              "events": []
+            }
+          ]
+        },
+        "archive_bytes": 4238798
+      }
+    },
+    {
+      "step": "aggressive/gvtc-sticky-s3 put",
+      "aggressive/gvtc-sticky-s3 put": {
+        "aggressive--gvtc-sticky-s3.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/fcfs-rr-s3",
+      "aggressive/fcfs-rr-s3": {
+        "rc": 0,
+        "seconds": 119.9,
+        "summary": {
+          "run": "fcfs-rr-s3",
+          "workload": "aggressive",
+          "arm": "fcfs-rr",
+          "seed": 3,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.2497,
+            "B": 0.7503
+          },
+          "share_per_replica": [
+            {
+              "A": 0.2513,
+              "B": 0.7487
+            },
+            {
+              "A": 0.2481,
+              "B": 0.7519
+            }
+          ],
+          "backlogged_s": 74.8,
+          "ttft_A_ms": {
+            "p50": 39460.273769,
+            "p90": 71243.091248,
+            "p99": 75148.538718
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1177.0,
+          "makespan_s": 87.0,
+          "sched_us_p50": [
+            757.01,
+            755.758
+          ],
+          "preemptions": [
+            {
+              "B": 15,
+              "A": 14
+            },
+            {
+              "B": 21,
+              "A": 8
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4214788
+      }
+    },
+    {
+      "step": "aggressive/fcfs-rr-s3 put",
+      "aggressive/fcfs-rr-s3 put": {
+        "aggressive--fcfs-rr-s3.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "aggressive/vtc-rr-s3",
+      "aggressive/vtc-rr-s3": {
+        "rc": 0,
+        "seconds": 120.4,
+        "summary": {
+          "run": "vtc-rr-s3",
+          "workload": "aggressive",
+          "arm": "vtc-rr",
+          "seed": 3,
+          "variant": null,
+          "startup_s": 30.0,
+          "loadgen_rc": 0,
+          "routing": {
+            "A": {
+              "http://127.0.0.1:8001": 50,
+              "http://127.0.0.1:8002": 50
+            },
+            "B": {
+              "http://127.0.0.1:8001": 150,
+              "http://127.0.0.1:8002": 150
+            }
+          },
+          "share": {
+            "A": 0.5,
+            "B": 0.5
+          },
+          "share_per_replica": [
+            {
+              "A": 0.5026,
+              "B": 0.4974
+            },
+            {
+              "A": 0.4974,
+              "B": 0.5026
+            }
+          ],
+          "backlogged_s": 37.0,
+          "ttft_A_ms": {
+            "p50": 11024.159407,
+            "p90": 35945.479541,
+            "p99": 37904.59948
+          },
+          "completed": {
+            "A": 100,
+            "B": 300
+          },
+          "tokens_per_s": 1172.5,
+          "makespan_s": 87.3,
+          "sched_us_p50": [
+            781.336,
+            790.903
+          ],
+          "preemptions": [
+            {
+              "B": 24,
+              "A": 9
+            },
+            {
+              "A": 8,
+              "B": 19
+            }
+          ],
+          "sync": [
+            null,
+            null
+          ]
+        },
+        "archive_bytes": 4219106
+      }
+    },
+    {
+      "step": "aggressive/vtc-rr-s3 put",
+      "aggressive/vtc-rr-s3 put": {
+        "aggressive--vtc-rr-s3.tar.gz": "UPLOADED"
+      }
+    },
+    {
+      "step": "elapsed_s",
+      "elapsed_s": 2798.2
+    }
+  ],
+  "seconds": 2999.3,
+  "stop": [
+    "ALTER COMPUTE POOL PORTFOLIO_2XA10_POOL STOP ALL: ok",
+    "ALTER COMPUTE POOL PORTFOLIO_2XA10_POOL SUSPEND: ok"
+  ],
+  "pool_after": {
+    "state": "STOPPING",
+    "instance_family": "GPU_NV_2M",
+    "min_nodes": "1",
+    "max_nodes": "1",
+    "active_nodes": "0",
+    "idle_nodes": "1",
+    "num_services": "0",
+    "num_jobs": "0"
+  },
+  "credits_estimate": 2.916
+}

@@ -1,0 +1,28 @@
+{
+  "listen": "127.0.0.1:8080",
+  "write_timeout_ms": 900000,
+  "upstreams": [
+    "http://127.0.0.1:8001",
+    "http://127.0.0.1:8002"
+  ],
+  "routing": "round_robin",
+  "api_keys": {
+    "key-A": "A",
+    "key-B": "B"
+  },
+  "tenants": {
+    "A": {
+      "default_deadline_ms": 0,
+      "max_inflight": 1024,
+      "max_queued": 1024,
+      "class": "interactive"
+    },
+    "B": {
+      "default_deadline_ms": 0,
+      "max_inflight": 1024,
+      "max_queued": 1024,
+      "class": "batch"
+    }
+  },
+  "log_path": "/tmp/pf-fairsched/runs/noisy_neighbor/fcfs-rr-s2/proxy.jsonl"
+}

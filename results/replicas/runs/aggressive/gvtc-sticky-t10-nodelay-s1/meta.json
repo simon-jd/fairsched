@@ -1,0 +1,52 @@
+{
+  "workload": "aggressive",
+  "arm": "gvtc-sticky",
+  "seed": 1,
+  "variant": "t10-nodelay",
+  "replicas": 2,
+  "gpus": [
+    "0",
+    "1"
+  ],
+  "model": "/tmp/pf-fairsched/model/models--Qwen--Qwen2.5-7B-Instruct/snapshots/a09a35458c702b33eeacc393d103063234e8bc28",
+  "served_model": "Qwen/Qwen2.5-7B-Instruct",
+  "git_commit": "f793fbd22fb0675e4f17613bf2bc752d32ea53ba",
+  "sync_ms": 10.0,
+  "kill_counters_at_s": null,
+  "pinned_sessions": {
+    "A": 0
+  },
+  "trace_sha256": "8b361c347aff74b7042c9e89469d3ff4f36f3a8532c6ce53537ee4eb9bfb0023",
+  "engine_command": [
+    "/tmp/pf-fairsched/venv/bin/vllm",
+    "serve",
+    "/tmp/pf-fairsched/model/models--Qwen--Qwen2.5-7B-Instruct/snapshots/a09a35458c702b33eeacc393d103063234e8bc28",
+    "--served-model-name",
+    "Qwen/Qwen2.5-7B-Instruct",
+    "--dtype",
+    "bfloat16",
+    "--max-model-len",
+    "8192",
+    "--gpu-memory-utilization",
+    "0.88",
+    "--max-num-seqs",
+    "128",
+    "--max-num-batched-tokens",
+    "2048",
+    "--enable-prefix-caching",
+    "--generation-config",
+    "vllm",
+    "--scheduler-cls",
+    "fairsched.TenantAsyncScheduler",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "8001",
+    "--kv-cache-memory-bytes=4831838208"
+  ],
+  "nvidia_smi": "GPU 0: NVIDIA A10-24Q (UUID: GPU-16df5500-d942-11f1-bca2-98076bc97da5)\nGPU 1: NVIDIA A10-24Q (UUID: GPU-1777eb80-d942-11f1-ba55-46ff17863e7b)",
+  "engine_startup_s": 118.0,
+  "trace_start_unix": 1793901872.1349287,
+  "trace_end_unix": 1793901982.0953543,
+  "loadgen_returncode": 0
+}

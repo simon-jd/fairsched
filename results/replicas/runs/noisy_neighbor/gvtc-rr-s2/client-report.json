@@ -1,0 +1,80 @@
+{
+  "arrivals": 566,
+  "duration_seconds": 134.074330587,
+  "tenants": {
+    "A": {
+      "arrivals": 266,
+      "states": {
+        "completed": 266
+      },
+      "completed": 266,
+      "success_rate": 1,
+      "rejection_rate": 0,
+      "timeout_rate": 0,
+      "slo_met": 0,
+      "slo_measured": 0,
+      "slo_goodput_per_second": 0,
+      "slo_success_fraction_all_arrivals": 0,
+      "ttft": {
+        "samples": 266,
+        "p50_ms": 1029.689411,
+        "p99_ms": 4385.358967
+      },
+      "mean_tpot": {
+        "samples": 266,
+        "p50_ms": 120.52512661417323,
+        "p99_ms": 208.81725385039368
+      },
+      "dispatch_lag": {
+        "samples": 266,
+        "p50_ms": 0.683354,
+        "p99_ms": 1.996179
+      },
+      "completion_tokens": 34048,
+      "missing_token_usage": 0,
+      "output_chunks": 34048,
+      "observed_output_tokens": 34048
+    },
+    "B": {
+      "arrivals": 300,
+      "states": {
+        "cancelled": 56,
+        "completed": 244
+      },
+      "completed": 244,
+      "success_rate": 0.8133333333333334,
+      "rejection_rate": 0,
+      "timeout_rate": 0,
+      "slo_met": 0,
+      "slo_measured": 0,
+      "slo_goodput_per_second": 0,
+      "slo_success_fraction_all_arrivals": 0,
+      "ttft": {
+        "samples": 300,
+        "p50_ms": 50653.749424,
+        "p99_ms": 114577.46703
+      },
+      "mean_tpot": {
+        "samples": 244,
+        "p50_ms": 128.84474095686275,
+        "p99_ms": 156.12972781568627
+      },
+      "dispatch_lag": {
+        "samples": 300,
+        "p50_ms": 1.09742,
+        "p99_ms": 25.727359
+      },
+      "completion_tokens": 62464,
+      "missing_token_usage": 56,
+      "output_chunks": 62576,
+      "observed_output_tokens": 62576
+    }
+  },
+  "notes": [
+    "SSE output chunks are not model tokens; completion_tokens uses server usage only.",
+    "p99 is omitted for fewer than 100 samples. TTFT is measured only from streaming content/tool output.",
+    "mean_tpot uses (last output chunk time - first output chunk time)/(completion_tokens - 1); it is a per-request estimate, not individual token latency.",
+    "Every arrival is included in success/rejection/timeout/SLO denominators. TTFT samples include requests that later fail.",
+    "Non-streaming requests cannot expose client-observed TTFT and are excluded from SLO successes."
+  ]
+}
