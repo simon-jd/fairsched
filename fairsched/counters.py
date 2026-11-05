@@ -88,6 +88,9 @@ class CounterStore:
 
 class _Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"      # keep-alive, so a sync is one round trip on an open socket
+    # The reply goes out as two writes (headers, then body). With Nagle on, the body waits for the
+    # client's delayed ACK of the headers: about 40 ms per sync at a 10 ms period.
+    disable_nagle_algorithm = True
     store: CounterStore
     open_sockets: set
 

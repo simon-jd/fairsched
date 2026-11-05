@@ -116,6 +116,19 @@ class SyncTest(unittest.TestCase):
         self.assertGreaterEqual(sync.ok, 5)
         self.assertEqual(self.service.store.snapshot()["replicas"]["r0"], {"A": 1.0})
 
+    def test_fast_syncs_are_not_held_by_delayed_acks(self):
+        # Without TCP_NODELAY on the service, a 10 ms period gave a ~42 ms round trip.
+        sync = CounterSync(self.service.url, "r0", period_s=0.01).start()
+        try:
+            for i in range(40):
+                sync.exchange({"A": float(i)})
+                time.sleep(0.01)
+        finally:
+            sync.stop()
+        rtt = sorted(sync.rtt_us)
+        self.assertGreater(len(rtt), 10)
+        self.assertLess(rtt[len(rtt) // 2], 20_000)
+
     def test_bad_settings_are_refused(self):
         for url in ("https://127.0.0.1:1", "http://127.0.0.1:1/v1", "127.0.0.1:1"):
             with self.assertRaises(ValueError):
