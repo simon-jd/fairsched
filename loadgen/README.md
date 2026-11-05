@@ -25,6 +25,10 @@ is no concurrency gate. Dispatch lag is measured, so overloaded generators are
 visible in reports. Every arrival yields a terminal result, including rejected,
 failed, timed-out, and arrivals not sent because the whole run was cancelled.
 
+`session` (optional, at most 128 printable ASCII bytes) is sent as
+`X-Fairsched-Session-ID`, which the gateway's sticky routing hashes to pick a
+replica; it confers no tenant authority either.
+
 `stream` defaults to true, and usage streaming is requested. `return_token_ids`
 defaults to true using the verified vLLM v0.31.0 request field. Set
 `cancel_after_ms` for elapsed-time cancellation or `cancel_after_output_chunks`

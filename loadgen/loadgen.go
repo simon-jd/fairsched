@@ -33,6 +33,8 @@ type Arrival struct {
 	ReadDelayMS             int64           `json:"read_delay_ms,omitempty"`
 	ReadChunkBytes          int             `json:"read_chunk_bytes,omitempty"`
 	HalfCloseAfterMS        *int64          `json:"half_close_after_ms,omitempty"`
+	// Session is sent as X-Fairsched-Session-ID; the gateway's sticky routing hashes it.
+	Session string `json:"session,omitempty"`
 }
 type Token struct {
 	ChoiceIndex int   `json:"choice_index"`
@@ -97,6 +99,14 @@ func ReadTrace(r io.Reader) ([]Arrival, error) {
 			}
 		}
 		seen[a.ID] = true
+		if len(a.Session) > 128 {
+			return nil, fmt.Errorf("line %d: session must be at most 128 printable ASCII bytes", line)
+		}
+		for _, b := range []byte(a.Session) {
+			if b < 32 || b > 126 {
+				return nil, fmt.Errorf("line %d: session must be printable ASCII", line)
+			}
+		}
 		if a.AtMS < 0 || a.AtMS > int64((7*24*time.Hour)/time.Millisecond) || a.TimeoutMS < 0 || a.TimeoutMS > int64((24*time.Hour)/time.Millisecond) || a.DeadlineMS < 0 || a.CancelAfterOutputChunks < 0 || (a.CancelAfterMS != nil && (*a.CancelAfterMS < 0 || *a.CancelAfterMS > int64((24*time.Hour)/time.Millisecond))) {
 			return nil, fmt.Errorf("line %d: invalid timing", line)
 		}
@@ -274,6 +284,9 @@ func runOne(parent context.Context, a Arrival, due time.Time, opt Options) Resul
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+a.APIKey)
 	req.Header.Set("X-Fairsched-Client-ID", a.ID)
+	if a.Session != "" {
+		req.Header.Set("X-Fairsched-Session-ID", a.Session)
+	}
 	client := opt.Client
 	if a.HalfCloseAfterMS != nil {
 		client, finishHalfClose, err = halfCloseClient(req, client, time.Duration(*a.HalfCloseAfterMS)*time.Millisecond)
