@@ -82,6 +82,30 @@ def routing(run: Path) -> dict[str, dict[str, int]]:
     return {t: dict(sorted(v.items())) for t, v in sorted(out.items())}
 
 
+def ttft_by_upstream(client: list[dict], terminals: list[dict], upstreams: list[str]) -> dict:
+    """Each tenant's completed requests per replica (``r<index in upstreams>``): count, median and p99 TTFT (ms).
+
+    ``terminals`` are the gateway's ``request_terminal`` records, which name the upstream of each request ID.
+    """
+    where = {t["rid"]: t.get("upstream") for t in terminals}
+    groups: dict[str, dict[str, list[float]]] = defaultdict(lambda: defaultdict(list))
+    for r in client:
+        upstream = where.get(r.get("rid"))
+        if r["state"] != "completed" or not r.get("first_output_unix_ns") or upstream not in upstreams:
+            continue
+        groups[r["tenant"]][f"r{upstreams.index(upstream)}"].append(
+            (r["first_output_unix_ns"] - r["scheduled_unix_ns"]) / 1e6)
+    return {tenant: {replica: {"completed": len(v), "p50": percentile(v, 50), "p99": percentile(v, 99)}
+                     for replica, v in sorted(by.items())} for tenant, by in sorted(groups.items())}
+
+
+def _terminals(run: Path) -> list[dict]:
+    path = run / "proxy.jsonl"
+    if not path.exists():
+        return []
+    return [rec for rec in map(json.loads, path.read_text().splitlines()) if rec.get("event") == "request_terminal"]
+
+
 def sync_summary(steps: list[dict], since: float | None) -> dict | None:
     rows = [s for s in steps if s.get("type") == "step" and s.get("sync_ns") is not None
             and (since is None or s["t"] >= since)]
@@ -109,7 +133,11 @@ def summarise_run(run: Path) -> dict:
            "variant": meta.get("variant"), "sync_ms": meta.get("sync_ms"), "git_commit": meta.get("git_commit"),
            "engine_startup_s": meta.get("engine_startup_s"), "loadgen_returncode": meta.get("loadgen_returncode"),
            "routing": routing(run)}
-    out["client"] = client_summary(load_client(run / "client.jsonl"))
+    client = load_client(run / "client.jsonl")
+    out["client"] = client_summary(client)
+    if (run / "proxy.json").exists():
+        out["ttft_by_replica_ms"] = ttft_by_upstream(client, _terminals(run),
+                                                     json.loads((run / "proxy.json").read_text())["upstreams"])
     out["global_backlogged"] = global_share(replicas, since=since)
     out["replicas"] = [step_summary(steps, since) for steps in replicas]
     out["sync"] = [sync_summary(steps, since) for steps in replicas]
@@ -145,6 +173,8 @@ def table(runs: list[dict]) -> dict:
             "output_tokens_per_s_median": statistics.median(r["client"]["output_tokens_per_s"] for r in rows),
             "schedule_us_p50": _range(sched),
             "sync_apply_us_p50": _range(apply_us),
+            "ttft_B_r0_p50_ms": _range([r.get("ttft_by_replica_ms", {}).get("B", {}).get("r0", {}).get("p50")
+                                        for r in rows]),
             "preemptions": [sum(sum((s or {}).get("preemptions", {}).values()) for s in r["replicas"]) for r in rows],
         }
     return out

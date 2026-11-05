@@ -90,6 +90,23 @@ class ReplicaBenchTest(unittest.TestCase):
         self.assertEqual(out["share"], {"A": 0.3333, "B": 0.6667})
         self.assertEqual(global_share([r0, r1], until=1.2)["billed"], {"A": 10.0, "B": 10.0})
 
+    def test_ttft_by_upstream_splits_each_tenant_by_the_gateways_choice(self):
+        from bench.replica_report import ttft_by_upstream
+
+        def client(rid, tenant, ttft_ms, state="completed"):
+            return {"rid": rid, "tenant": tenant, "state": state, "scheduled_unix_ns": 0,
+                    "first_output_unix_ns": int(ttft_ms * 1e6)}
+        ups = ["http://e0", "http://e1"]
+        rows = [client("1", "A", 10), client("2", "B", 100), client("3", "B", 300), client("4", "B", 20),
+                client("5", "B", 5, state="failed"), client("6", "B", 7)]
+        terminals = [{"rid": "1", "upstream": "http://e0"}, {"rid": "2", "upstream": "http://e0"},
+                     {"rid": "3", "upstream": "http://e0"}, {"rid": "4", "upstream": "http://e1"},
+                     {"rid": "5", "upstream": "http://e1"}]          # rid 6 never reached an upstream
+        out = ttft_by_upstream(rows, terminals, ups)
+        self.assertEqual(out["A"], {"r0": {"completed": 1, "p50": 10.0, "p99": 10.0}})
+        self.assertEqual(out["B"], {"r0": {"completed": 2, "p50": 100.0, "p99": 300.0},
+                                    "r1": {"completed": 1, "p50": 20.0, "p99": 20.0}})
+
     def test_replica_arms_set_routing_mode_and_counter_url(self):
         from bench import replicas
         args = replicas.parser().parse_args(["aggressive", "gvtc-sticky", "--model", "/m", "--sync-ms", "10"])
