@@ -173,6 +173,7 @@ def table(runs: list[dict]) -> dict:
             "output_tokens_per_s_median": statistics.median(r["client"]["output_tokens_per_s"] for r in rows),
             "schedule_us_p50": _range(sched),
             "sync_apply_us_p50": _range(apply_us),
+            "ttft_B_p50_ms": _range([r["client"]["tenants"].get("B", {}).get("ttft_ms", {}).get("p50") for r in rows]),
             "ttft_B_r0_p50_ms": _range([r.get("ttft_by_replica_ms", {}).get("B", {}).get("r0", {}).get("p50")
                                         for r in rows]),
             "preemptions": [sum(sum((s or {}).get("preemptions", {}).values()) for s in r["replicas"]) for r in rows],
