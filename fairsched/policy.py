@@ -109,7 +109,11 @@ def request_metadata(request: Any, config: PolicyConfig) -> dict[str, Any]:
 
 
 class PolicyState:
-    """Counters, accounts and the per-step charge ledger for one engine."""
+    """Counters, accounts and the per-step charge ledger for one engine.
+
+    With replicas sharing counters (``fairsched.counters``), ``remote`` holds
+    the other replicas' service and every ordering decision adds it in.
+    """
 
     def __init__(self, config: PolicyConfig | None = None):
         self.config = config or PolicyConfig()
@@ -131,6 +135,12 @@ class PolicyState:
         self.last_left = 0.0
         # Requests that named a tenant the policy does not list (served as DEFAULT).
         self.unknown_requests = 0
+        # Weighted billed service per tenant (the counter increments from
+        # charge(), without lifts): what this engine publishes to other replicas.
+        self.served = {tenant: 0.0 for tenant in self.config.tenants}
+        # Other replicas' served totals, from the counter service; empty for a
+        # single engine. Ordering, lift and victim choice see counter + remote.
+        self.remote: dict[str, float] = {}
 
     def weight(self, tenant: str) -> float:
         policy = self.config.tenants.get(tenant)
@@ -142,10 +152,27 @@ class PolicyState:
         self.accounts[tenant] = 0.0
         self.wasted[tenant] = 0.0
         self.waiting[tenant] = 0
+        self.served[tenant] = 0.0
+
+    def set_remote(self, remote: dict[str, float]) -> None:
+        """Take other replicas' served totals from the counter service.
+
+        Service already given is never taken back: each value only rises, so a
+        restarted service or a late reply cannot lower a tenant's counter.
+        """
+        for tenant, value in remote.items():
+            if value > self.remote.get(tenant, 0.0):
+                self.remote[tenant] = float(value)
+
+    def _view(self, tenant: str) -> float:
+        return self.counters[tenant] + self.remote.get(tenant, 0.0)
 
     @property
     def effective_counters(self) -> dict[str, float]:
         result = self.counters.copy()
+        if self.remote:
+            for tenant in result:
+                result[tenant] += self.remote.get(tenant, 0.0)
         for request_id, reservation in self.reservations.items():
             result[self.requests[request_id]["tenant"]] += reservation
         return result
@@ -169,8 +196,11 @@ class PolicyState:
         if "claimed_tenant" in meta:
             self.unknown_requests += 1
         if not self.waiting[tenant]:
-            queued = [self.counters[t] for t, n in self.waiting.items() if n]
-            self.counters[tenant] = max(self.counters[tenant], min(queued) if queued else self.last_left)
+            # With remote totals the lift compares counter + remote; only the
+            # local counter moves, and lifts are never published.
+            queued = [self._view(t) for t, n in self.waiting.items() if n]
+            floor = (min(queued) if queued else self.last_left) - self.remote.get(tenant, 0.0)
+            self.counters[tenant] = max(self.counters[tenant], floor)
         self.requests[request_id] = meta
         return meta
 
@@ -232,6 +262,7 @@ class PolicyState:
             self.accounts[SYSTEM] += system
         delta = billed / self.weight(tenant)
         self.counters[tenant] += delta
+        self.served[tenant] += delta
         if self.reservations:
             self.reservations.pop(request_id, None)
         record = {"request_id": request_id, "tenant": tenant, "step_seq": self.step_seq,

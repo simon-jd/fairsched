@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import unittest
 
 HAVE_VLLM = importlib.util.find_spec("vllm") is not None
@@ -178,6 +179,75 @@ class SchedulerInVllmTest(unittest.TestCase):
             engine.run_step()
         a, b = s.fairsched.accounts["A"], s.fairsched.accounts["B"]
         self.assertAlmostEqual(a / b, 2.0, delta=0.3)
+
+    def shared_pair(self, sync_ms="3600000"):
+        """Two real schedulers sharing counters through a live counter service."""
+        from fairsched.counters import CounterService
+        service = CounterService().start()
+        self.addCleanup(service.stop)
+        schedulers = []
+        try:
+            for replica in ("r0", "r1"):
+                os.environ.update(FAIRSCHED_COUNTER_URL=service.url, FAIRSCHED_SYNC_MS=sync_ms,
+                                  FAIRSCHED_REPLICA=replica)
+                schedulers.append(make_scheduler(mode="vtc", budget=512))
+        finally:
+            for name in ("FAIRSCHED_COUNTER_URL", "FAIRSCHED_SYNC_MS", "FAIRSCHED_REPLICA"):
+                os.environ.pop(name, None)
+        for s in schedulers:
+            s.fairsched_sync.stop()      # the tests below sync by hand, deterministically
+        return service, schedulers
+
+    def test_service_on_another_replica_reorders_admission(self):
+        service, (s0, s1) = self.shared_pair()
+        e1 = Engine(s1)
+        for _ in range(4):
+            e1.add(make_request("B", 256, max_tokens=4))
+        e1.run_until_idle()
+        s1.fairsched_sync.exchange(dict(s1.fairsched.served))
+        self.assertTrue(s1.fairsched_sync.sync_once())
+        self.assertTrue(s0.fairsched_sync.sync_once())
+        e0 = Engine(s0)
+        b, a = make_request("B", 600, max_tokens=2), make_request("A", 600, max_tokens=2)
+        e0.add(b)
+        e0.add(a)
+        e0.run_until_idle()
+        self.assertGreater(s0.fairsched.remote["B"], 0)
+        self.assertEqual(s0.fairsched.served["B"] + s1.fairsched.served["B"],
+                         s0.fairsched.remote["B"] + s0.fairsched.served["B"])
+        # B arrived first, but B was served on the other replica, so A is admitted first.
+        self.assertLess(e0.first_scheduled[a.request_id], e0.first_scheduled[b.request_id])
+        s0.shutdown()
+        records = [json.loads(line) for line in open(s0.fairsched_log.path)]
+        self.assertEqual(records[0]["counter_sync"]["replica"], "r0")
+        self.assertIn("remote", [r for r in records if r["type"] == "step"][-1])
+
+    def test_unreachable_service_is_logged_and_local_counters_go_on(self):
+        service, (s0, _) = self.shared_pair()
+        service.stop()
+        self.assertFalse(s0.fairsched_sync.sync_once())
+        engine = Engine(s0)
+        b, a = make_request("B", 600, max_tokens=2), make_request("A", 600, max_tokens=2)
+        engine.add(b)
+        engine.add(a)
+        engine.run_until_idle()
+        # No remote service known: the single-engine order (B arrived first).
+        self.assertLess(engine.first_scheduled[b.request_id], engine.first_scheduled[a.request_id])
+        s0.shutdown()
+        records = [json.loads(line) for line in open(s0.fairsched_log.path)]
+        events = [r for r in records if r["type"] == "counter_sync"]
+        self.assertEqual([e["state"] for e in events], ["unreachable"])
+        self.assertEqual(records[-2]["type"], "counter_sync_end")
+
+    def test_counter_sync_is_off_by_default_and_needs_vtc(self):
+        s = make_scheduler(mode="vtc")
+        self.assertIsNone(s.fairsched_sync)
+        os.environ["FAIRSCHED_COUNTER_URL"] = "http://127.0.0.1:9"
+        try:
+            with self.assertRaises(ValueError):
+                make_scheduler(mode="passthrough")
+        finally:
+            os.environ.pop("FAIRSCHED_COUNTER_URL")
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 root=$(pwd)
 
-python3 -m unittest tests.test_policy tests.test_report tests.test_audit tests.test_bench tests.test_gpu_time tests.test_paired
+python3 -m unittest tests.test_policy tests.test_report tests.test_audit tests.test_bench tests.test_gpu_time tests.test_paired tests.test_counters
 
 if [[ "${1:-}" != "--no-go" ]]; then
   go_image=$(python3 -c 'import json; print(json.load(open("configs/pins.json"))["go_image"])')

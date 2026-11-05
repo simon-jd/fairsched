@@ -24,6 +24,7 @@ from vllm.v1.core.sched.async_scheduler import AsyncScheduler
 from vllm.v1.core.sched.scheduler import Scheduler
 
 from .audit import StepLog
+from .counters import CounterSync
 from .policy import SYSTEM, PolicyConfig, PolicyState
 from .intervals import merge as _merge, overlap as _overlap
 from .queue import TenantRequestQueue
@@ -37,6 +38,10 @@ class TenantSchedulerMixin:
     ``FAIRSCHED_MODE=vtc`` enables fair ordering. ``FAIRSCHED_MODE=passthrough``
     keeps the native policy (FCFS or priority) but records the same per-tenant
     accounting, so baselines and VTC are measured identically.
+
+    ``FAIRSCHED_COUNTER_URL`` (VTC only) shares counters with other replicas
+    through ``fairsched.counters``; ``FAIRSCHED_REPLICA`` names this engine and
+    ``FAIRSCHED_SYNC_MS`` sets the sync period (default 100 ms).
     """
 
     def __init__(self, *args, **kwargs):
@@ -59,6 +64,17 @@ class TenantSchedulerMixin:
             native, self.waiting = self.waiting, TenantRequestQueue(self.fairsched)
             for request in native:
                 self.waiting.add_request(request)
+        # Counters shared with other replicas (off unless FAIRSCHED_COUNTER_URL is set).
+        self.fairsched_sync: CounterSync | None = None
+        self.fairsched_sync_ns: int | None = None
+        sync_url = os.environ.get("FAIRSCHED_COUNTER_URL")
+        sync = None
+        if sync_url:
+            if self.fairsched_mode != "vtc":
+                raise ValueError("FAIRSCHED_COUNTER_URL needs FAIRSCHED_MODE=vtc")
+            sync = {"url": sync_url, "replica": os.environ.get("FAIRSCHED_REPLICA") or f"pid-{os.getpid()}",
+                    "period_ms": float(os.environ.get("FAIRSCHED_SYNC_MS", "100"))}
+            self.fairsched_sync = CounterSync(sync["url"], sync["replica"], period_s=sync["period_ms"] / 1000)
         output = Path(os.environ.get("FAIRSCHED_OUTPUT", "fairsched-output"))
         self.fairsched_log = StepLog(output / f"steps-{os.getpid()}.jsonl")
         self.fairsched_log.write({"type": "start", "mode": self.fairsched_mode,
@@ -66,7 +82,10 @@ class TenantSchedulerMixin:
                                   "native_policy": self.scheduler_config.policy,
                                   "token_budget": self.max_num_scheduled_tokens,
                                   "num_blocks": len(self.kv_cache_manager.block_pool.blocks),
-                                  "block_size": self.block_size, "async": isinstance(self, AsyncScheduler)})
+                                  "block_size": self.block_size, "async": isinstance(self, AsyncScheduler),
+                                  **({"counter_sync": sync} if sync else {})})
+        if self.fairsched_sync is not None:
+            self.fairsched_sync.start()
         self.fairsched_executed: dict[str, list[tuple[int, int]]] = {}   # request -> executed positions
         self.fairsched_pending: dict[int, int] = {}                      # id(SchedulerOutput) -> step
         self.fairsched_preempted: dict[str, int] = {}
@@ -87,10 +106,19 @@ class TenantSchedulerMixin:
         self.fairsched_preempted = {}
         self.fairsched_work = {}
         started = time.perf_counter_ns()
+        sync_ns = None
+        if self.fairsched_sync is not None:
+            # Hand the sync thread this engine's totals and take the latest
+            # remote ones; no network I/O on this thread.
+            remote = self.fairsched_sync.exchange(dict(self.fairsched.served))
+            if remote is not None:
+                self.fairsched.set_remote(remote)
+            sync_ns = time.perf_counter_ns() - started
         if self.fairsched_mode == "vtc":
             self.running[:] = self.fairsched.order_running(self.running)
         output = super().schedule(throttle_prefills=throttle_prefills)
         elapsed = time.perf_counter_ns() - started
+        self.fairsched_sync_ns = sync_ns
         self.fairsched.settle_step()
         if output.num_scheduled_tokens:
             # Keyed by object identity: the engine holds this output until it
@@ -102,6 +130,9 @@ class TenantSchedulerMixin:
             self.fairsched_pending[id(output)] = step
         else:
             self.fairsched.release_step(step)   # nothing billed; the engine may never report it
+        if self.fairsched_sync is not None:
+            for event in self.fairsched_sync.events():
+                self.fairsched_log.write({**event, "step": step})
         if output.num_scheduled_tokens or self.fairsched_preempted:
             self._fairsched_log_step(step, elapsed)
         return output
@@ -169,6 +200,15 @@ class TenantSchedulerMixin:
         try:
             return super().shutdown()
         finally:
+            if self.fairsched_sync is not None:
+                self.fairsched_sync.stop()
+                for event in self.fairsched_sync.events():
+                    self.fairsched_log.write(event)
+                rtt = sorted(self.fairsched_sync.rtt_us)
+                self.fairsched_log.write({"type": "counter_sync_end", "ok": self.fairsched_sync.ok,
+                                          "failed": self.fairsched_sync.failed,
+                                          "rtt_us": {"p50": rtt[len(rtt) // 2], "p99": rtt[int(len(rtt) * 0.99)]}
+                                          if rtt else None})
             self.fairsched_log.close()
 
     # Logging -----------------------------------------------------------------
@@ -190,7 +230,14 @@ class TenantSchedulerMixin:
             "preempted": self.fairsched_preempted, "counters": dict(self.fairsched.counters),
             "accounts": dict(self.fairsched.accounts), "wasted": dict(self.fairsched.wasted),
             "free_blocks": self.kv_cache_manager.block_pool.get_num_free_blocks(),
-            **({"unknown_requests": self.fairsched.unknown_requests} if self.fairsched.unknown_requests else {})})
+            **({"unknown_requests": self.fairsched.unknown_requests} if self.fairsched.unknown_requests else {}),
+            **(self._fairsched_sync_record() if self.fairsched_sync is not None else {})})
+
+    def _fairsched_sync_record(self) -> dict:
+        sync = self.fairsched_sync
+        return {"remote": dict(self.fairsched.remote), "sync_ns": self.fairsched_sync_ns,
+                "sync": {"ok": sync.ok, "failed": sync.failed, "reachable": sync.reachable,
+                         "rtt_us": round(sync.rtt_us[-1], 1) if sync.rtt_us else None}}
 
     def _fairsched_count(self, requests) -> dict[str, int]:
         counts: dict[str, int] = {}
