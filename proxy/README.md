@@ -13,6 +13,18 @@ the service. `upstream` is a base URL without `/v1`; only POST
 liveness endpoint. No client headers are forwarded. Set `upstream_api_key` only
 when the engine requires a separate credential.
 
+To spread requests over several engine replicas, set `upstreams` (a list of
+base URLs) instead of `upstream`, and `routing`: `round_robin` alternates
+each tenant's requests over the upstreams (per tenant, so one tenant's
+arrival pattern cannot alias with another's), and `sticky` sends each request
+to upstream `FNV-1a-64(session) mod n`, where the session is the client's
+`X-Fairsched-Session-ID` header (at most 128 printable ASCII bytes, untrusted,
+used only for routing and never forwarded). A request without a session falls
+back to round-robin. Tenant limits stay per gateway, across all upstreams.
+The terminal record's `upstream` names the replica that served the request.
+Each engine keeps its own VTC counters unless they share them through
+`fairsched.counters` (see the main README).
+
 The JSON config binds API keys to tenant IDs, and tenant IDs to class, TTFT
 deadline in milliseconds, `max_inflight`, `max_queued`, and optional baseline
 priority. Limits apply per tenant, with a bounded FIFO queue. The deadline starts

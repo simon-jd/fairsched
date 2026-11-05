@@ -22,6 +22,9 @@ ordering. Terminal copies are `context_cancel_observed_unix_ms` plus
 Event and terminal copies represent the same observation and must not be counted
 twice. Each observation type occurs at most once per request.
 
+The terminal record's `upstream` is the engine base URL the request was sent
+to (absent when it was rejected before routing).
+
 Context reason `request_context_cancelled` is deliberately ambiguous: Go's HTTP
 server cancels request contexts for peer disconnects and local socket read/write
 failures. Proven causes retain `ttft_deadline_exceeded`, `proxy_shutdown`,

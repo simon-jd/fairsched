@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"hash/fnv"
 	"io"
 	"math"
 	"net/http"
@@ -39,6 +40,7 @@ type Terminal struct {
 	Tenant                           string `json:"tenant,omitempty"`
 	Class                            string `json:"class,omitempty"`
 	ArrivedUnixMS                    int64  `json:"arrived_unix_ms"`
+	Upstream                         string `json:"upstream,omitempty"`
 	UpstreamStartedUnixMS            int64  `json:"upstream_started_unix_ms,omitempty"`
 	FirstTokenUnixMS                 int64  `json:"first_token_unix_ms,omitempty"`
 	FinishedUnixMS                   int64  `json:"finished_unix_ms"`
@@ -67,6 +69,8 @@ type Handler struct {
 	failOpen  atomic.Uint64
 	logErrors atomic.Uint64
 	active    sync.WaitGroup
+	upstreams []string
+	rr        map[string]*atomic.Uint64 // per-tenant round-robin position
 }
 
 func New(c Config, client *http.Client, log io.Writer) (*Handler, error) {
@@ -81,11 +85,34 @@ func New(c Config, client *http.Client, log io.Writer) (*Handler, error) {
 	if log == nil {
 		log = io.Discard
 	}
-	h := &Handler{cfg: c, client: &copyClient, log: log, gates: map[string]*gate{}}
+	h := &Handler{cfg: c, client: &copyClient, log: log, gates: map[string]*gate{},
+		upstreams: c.UpstreamURLs(), rr: map[string]*atomic.Uint64{}}
 	for t, p := range c.Tenants {
 		h.gates[t] = &gate{max: p.MaxInflight, capacity: p.MaxQueued}
+		h.rr[t] = &atomic.Uint64{}
 	}
 	return h, nil
+}
+
+// SessionHash is FNV-1a 64 of the session ID; sticky routing sends a session
+// to upstream SessionHash(id) mod len(upstreams). bench/workloads.py computes
+// the same hash to place sessions.
+func SessionHash(session string) uint64 {
+	f := fnv.New64a()
+	_, _ = f.Write([]byte(session))
+	return f.Sum64()
+}
+
+// route picks the upstream for one admitted request of a known tenant.
+func (h *Handler) route(tenant, session string) string {
+	n := uint64(len(h.upstreams))
+	if n == 1 {
+		return h.upstreams[0]
+	}
+	if h.cfg.Routing == RoutingSticky && session != "" {
+		return h.upstreams[SessionHash(session)%n]
+	}
+	return h.upstreams[(h.rr[tenant].Add(1)-1)%n]
 }
 func (h *Handler) SnapshotFailOpenCount() uint64 { return h.failOpen.Load() }
 func (h *Handler) LogErrorCount() uint64         { return h.logErrors.Load() }
@@ -443,7 +470,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	request["stream"] = true
 	request["stream_options"] = map[string]any{"include_usage": true}
 	body, _ = json.Marshal(request)
-	up, err := http.NewRequestWithContext(ctx, "POST", strings.TrimRight(h.cfg.Upstream, "/")+r.URL.Path, bytes.NewReader(body))
+	rec.Upstream = h.route(tenant, clientID(r.Header.Get("X-Fairsched-Session-ID")))
+	up, err := http.NewRequestWithContext(ctx, "POST", strings.TrimRight(rec.Upstream, "/")+r.URL.Path, bytes.NewReader(body))
 	if err != nil {
 		fail(500, "error", "invalid_upstream_request")
 		return
