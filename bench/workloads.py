@@ -56,8 +56,9 @@ WORKLOADS = {
 }
 
 
-def _row(rng: random.Random, rid: str, at_s: float, tenant: str, prompt: int, output: int, **extra) -> dict:
-    body = {"model": MODEL, "prompt": [rng.randrange(1000, 100_000) for _ in range(prompt)],
+def _row(rng: random.Random, model: str, rid: str, at_s: float, tenant: str, prompt: int, output: int,
+         **extra) -> dict:
+    body = {"model": model, "prompt": [rng.randrange(1000, 100_000) for _ in range(prompt)],
             "max_tokens": output, "ignore_eos": True, "temperature": 0.0, "stream": True}
     return {"id": rid, "at_ms": int(at_s * 1000), "tenant": tenant, "api_key": f"key-{tenant}",
             "path": "/v1/completions", "timeout_ms": 900_000, "body": body, **extra}
@@ -72,47 +73,98 @@ def _poisson(rng: random.Random, rate: float, start: float, end: float):
         yield t
 
 
-def generate(name: str, seed: int) -> list[dict]:
+def generate(name: str, seed: int, model: str = MODEL) -> list[dict]:
+    """The trace's rows; ``model`` is the served model name in each body."""
     rng = random.Random(seed)
     rows: list[dict] = []
     if name == "smoke":
         for i in range(20):
-            rows.append(_row(rng, f"A-{i}", i * 0.5, "A", 128, 32))
-            rows.append(_row(rng, f"B-{i}", i * 0.05, "B", 512, 64, **(
+            rows.append(_row(rng, model, f"A-{i}", i * 0.5, "A", 128, 32))
+            rows.append(_row(rng, model, f"B-{i}", i * 0.05, "B", 512, 64, **(
                 {"cancel_after_output_chunks": 2} if i % 5 == 0 else {})))
     elif name == "noisy_neighbor":
         for i, t in enumerate(_poisson(rng, 2.0, 0.0, 120.0)):
-            rows.append(_row(rng, f"A-{i}", t, "A", 256, 128))
+            rows.append(_row(rng, model, f"A-{i}", t, "A", 256, 128))
         for i in range(300):
             extra = {"cancel_after_output_chunks": 2} if rng.random() < 0.2 else {}
-            rows.append(_row(rng, f"B-{i}", 10.0 + i * 0.001, "B", 2048, 256, **extra))
+            rows.append(_row(rng, model, f"B-{i}", 10.0 + i * 0.001, "B", 2048, 256, **extra))
     elif name == "aggressive":
         for i in range(100):
-            rows.append(_row(rng, f"A-{i}", i * 0.003, "A", 1024, 256))
+            rows.append(_row(rng, model, f"A-{i}", i * 0.003, "A", 1024, 256))
         for i in range(300):
-            rows.append(_row(rng, f"B-{i}", i * 0.001, "B", 1024, 256))
+            rows.append(_row(rng, model, f"B-{i}", i * 0.001, "B", 1024, 256))
     elif name == "weighted":
         for i in range(200):
-            rows.append(_row(rng, f"A-{i}", i * 0.002, "A", 1024, 256))
-            rows.append(_row(rng, f"B-{i}", i * 0.002 + 0.001, "B", 1024, 256))
+            rows.append(_row(rng, model, f"A-{i}", i * 0.002, "A", 1024, 256))
+            rows.append(_row(rng, model, f"B-{i}", i * 0.002 + 0.001, "B", 1024, 256))
     elif name == "mixed_shapes":
         for i in range(200):
-            rows.append(_row(rng, f"A-{i}", i * 0.002, "A", 2048, 32))
-            rows.append(_row(rng, f"B-{i}", i * 0.002 + 0.001, "B", 128, 512))
+            rows.append(_row(rng, model, f"A-{i}", i * 0.002, "A", 2048, 32))
+            rows.append(_row(rng, model, f"B-{i}", i * 0.002 + 0.001, "B", 128, 512))
     elif name == "long_prompt":
         for i in range(6):
-            rows.append(_row(rng, f"B-{i}", i * 0.01, "B", 6144, 128))
+            rows.append(_row(rng, model, f"B-{i}", i * 0.01, "B", 6144, 128))
         for i, t in enumerate(_poisson(rng, 1.0, 0.5, 60.0)):
-            rows.append(_row(rng, f"A-{i}", t, "A", 128, 64))
+            rows.append(_row(rng, model, f"A-{i}", t, "A", 128, 64))
     else:
         raise KeyError(name)
     rows.sort(key=lambda r: (r["at_ms"], r["id"]))
     return rows
 
 
-def write(name: str, seed: int, path: Path) -> Path:
+def session_hash(session: str) -> int:
+    """FNV-1a 64, the gateway's sticky-routing hash (proxy.SessionHash)."""
+    h = 0xcbf29ce484222325
+    for byte in session.encode():
+        h = ((h ^ byte) * 0x100000001b3) & 0xFFFFFFFFFFFFFFFF
+    return h
+
+
+def session_names(tenant: str, count: int, replicas: int, pinned: int | None = None) -> list[str]:
+    """``count`` session IDs for a tenant that sticky routing sends all to
+    replica ``pinned``, or, with ``pinned`` None, evenly over the replicas."""
+    names: list[str] = []
+    per = [0] * replicas
+    k = 0
+    while len(names) < count:
+        name = f"{tenant}-s{k}"
+        k += 1
+        replica = session_hash(name) % replicas
+        if (replica == pinned) if pinned is not None else per[replica] < -(-count // replicas):
+            names.append(name)
+            per[replica] += 1
+    return names
+
+
+def assign_sessions(rows: list[dict], replicas: int, per_tenant: int = 8,
+                    pinned: dict[str, int] | None = None) -> list[dict]:
+    """Give each row a session; a tenant's i-th request uses its (i mod per_tenant)-th session.
+
+    Tenants named in ``pinned`` get sessions that all hash to that replica
+    (the case where one tenant's traffic has affinity to one replica); the
+    others' sessions are spread evenly. Only sticky routing reads sessions.
+    """
+    pinned = pinned or {}
+    names: dict[str, list[str]] = {}
+    seen: dict[str, int] = {}
+    for row in rows:
+        tenant = row["tenant"]
+        if tenant not in names:
+            names[tenant] = session_names(tenant, per_tenant, replicas, pinned.get(tenant))
+        i = seen.get(tenant, 0)
+        seen[tenant] = i + 1
+        row["session"] = names[tenant][i % per_tenant]
+    return rows
+
+
+def write(name: str, seed: int, path: Path, model: str = MODEL, replicas: int = 1,
+          pinned: dict[str, int] | None = None) -> Path:
+    """Write the trace; with ``replicas`` > 1 each row also gets a session (``assign_sessions``)."""
     path.parent.mkdir(parents=True, exist_ok=True)
+    rows = generate(name, seed, model)
+    if replicas > 1:
+        assign_sessions(rows, replicas, pinned=pinned)
     with path.open("w") as f:
-        for row in generate(name, seed):
+        for row in rows:
             f.write(json.dumps(row, separators=(",", ":")) + "\n")
     return path

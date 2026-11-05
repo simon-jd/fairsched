@@ -569,17 +569,28 @@ there because vLLM is not installed, so a change that
 breaks the plugin's vLLM integration passes CI. Run `scripts/test.sh` before
 relying on such a change.
 
-- **Policy, report, step log, runner, step-time fit and paired comparison**
+- **Policy, report, step log, runners, step-time fit and paired comparison**
   (`tests/test_policy.py`, `tests/test_report.py`, `tests/test_audit.py`,
   `tests/test_bench.py`, `tests/test_gpu_time.py`, `tests/test_paired.py`,
   pure Python): the lift rule
   (waiting queue only), weighted shares, recompute and waste attribution,
   unlisted tenants, queue semantics matching vLLM's `FCFSRequestQueue`, the
   report's percentiles, shares and timelines, dropped-record reporting, the
-  runner's gateway and image settings, and the paired differences' intervals
-  and run positions.
+  runner's gateway and image settings, the replica runner's routing and
+  counter settings, sticky session placement, the cross-replica share, and
+  the paired differences' intervals and run positions.
+- **Shared counters** (`tests/test_counters.py`, pure Python): the counter
+  service's replace-with-cumulative semantics and input checks; the engine-side
+  sync against a live service (each new remote total handed over once, a
+  periodic thread, a timeout on a hung service); the fallback (an unreachable
+  service is logged once, local counting goes on with the other replicas'
+  totals held, a restarted service is whole again after one round, a remote
+  total never decreases); remote service in selection, lift and victim order,
+  lifts never published; and a two-replica simulation in which shared
+  counters move A's share from 0.25 to 0.50.
 - **Go** (`go test ./...`): the gateway's header stripping and tenant
-  injection, streaming, cancellation, and the load generator.
+  injection, streaming, cancellation, round-robin and sticky routing over
+  several upstreams, and the load generator (including its session header).
 - **Real vLLM scheduler on CPU** (`tests/test_scheduler_vllm.py`), in the
   pinned container with no GPU. It builds the real vLLM 0.31.0
   `AsyncScheduler`, KV cache manager, block pool and prefix cache, replaces
@@ -597,7 +608,11 @@ relying on such a change.
     as wasted;
   - prefix-cache hits are not billed;
   - the step log records each tenant's prefill, decode and attention work;
-  - 2:1 weights give a 2:1 split.
+  - 2:1 weights give a 2:1 split;
+  - with two schedulers sharing a live counter service, service on one
+    replica reorders admission on the other, and with the service down the
+    engine logs it and keeps the single-engine order; with no counter URL
+    nothing is shared, and passthrough mode refuses one.
 
 ## Repository layout
 
@@ -607,9 +622,10 @@ relying on such a change.
 | `fairsched/policy.py` | VTC counters, lift rule, cost model, accounts |
 | `fairsched/queue.py` | per-tenant waiting queue behind vLLM's `RequestQueue` interface |
 | `fairsched/audit.py` | per-step JSONL log |
+| `fairsched/counters.py` | counters shared across replicas: the service and the engine-side sync (off by default) |
 | `proxy/`, `cmd/fairsched-proxy` | Go gateway: API key → tenant, trusted `vllm_xargs`, streaming, cancellation |
 | `loadgen/`, `cmd/fairsched-loadgen` | Go open-arrival load generator with per-chunk timestamps |
-| `bench/` | workloads, experiment runner, report, plots, step-time fit, paired comparison, hook overhead |
+| `bench/` | workloads, experiment runner, report, plots, step-time fit, paired comparison, hook overhead; `replicas.py` and `replica_report.py` for runs on several engines |
 | `docs/` | [design](docs/design.md), [design trade-offs](docs/design-tradeoffs.md), [livelock post-mortem](docs/livelock.md) |
 
 ## Limitations

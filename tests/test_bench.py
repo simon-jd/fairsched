@@ -52,3 +52,57 @@ class BenchConfigTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ReplicaBenchTest(unittest.TestCase):
+    def test_session_hash_matches_the_gateway(self):
+        from bench.workloads import session_hash
+        # The same reference values as proxy.TestSessionHashIsFNV1a64.
+        self.assertEqual(session_hash(""), 0xcbf29ce484222325)
+        self.assertEqual(session_hash("a"), 0xaf63dc4c8601ec8c)
+
+    def test_sticky_sessions_pin_A_and_spread_B(self):
+        from collections import Counter
+        from bench.workloads import assign_sessions, session_hash
+        rows = assign_sessions(generate("aggressive", 1), 2, pinned={"A": 0})
+        placed = Counter((r["tenant"], session_hash(r["session"]) % 2) for r in rows)
+        self.assertEqual(placed, {("A", 0): 100, ("B", 0): 150, ("B", 1): 150})
+        self.assertEqual(len({r["session"] for r in rows if r["tenant"] == "A"}), 8)
+
+    def test_served_model_name_changes_only_the_body(self):
+        default, other = generate("aggressive", 2), generate("aggressive", 2, model="m")
+        self.assertEqual([r["body"]["prompt"] for r in default], [r["body"]["prompt"] for r in other])
+        self.assertEqual({r["body"]["model"] for r in other}, {"m"})
+
+    def test_global_share_counts_service_while_both_tenants_wait_anywhere(self):
+        from bench.replica_report import global_share
+
+        def step(t, waiting, a, b):
+            return {"type": "step", "t": t, "waiting": waiting, "accounts": {"A": a, "B": b}}
+        # Replica 0 has A and B waiting and splits evenly; replica 1 has only B.
+        r0 = [step(0, {"A": 1, "B": 1}, 0, 0), step(1, {"A": 1, "B": 1}, 10, 10), step(2, {"A": 0, "B": 1}, 20, 20),
+              step(3, {"A": 0, "B": 0}, 20, 40)]
+        r1 = [step(0.5, {"B": 1}, 0, 0), step(1.5, {"B": 1}, 0, 20), step(2.5, {"B": 1}, 0, 40)]
+        out = global_share([r0, r1])
+        # Counted: r0 at t=1 and 2 (A 20, B 20), r1 at 1.5 (B 20); r0's step at 3 and
+        # r1's at 2.5 come after A's queue emptied.
+        self.assertEqual(out["billed"], {"A": 20.0, "B": 40.0})
+        self.assertEqual(out["share"], {"A": 0.3333, "B": 0.6667})
+        self.assertEqual(global_share([r0, r1], until=1.2)["billed"], {"A": 10.0, "B": 10.0})
+
+    def test_replica_arms_set_routing_mode_and_counter_url(self):
+        from bench import replicas
+        args = replicas.parser().parse_args(["aggressive", "gvtc-sticky", "--model", "/m", "--sync-ms", "10"])
+        run = Path(tempfile.mkdtemp(prefix="fairsched-replicas-"))
+        self.addCleanup(shutil.rmtree, run)
+        config = json.loads(replicas.proxy_config(args, "gvtc-sticky", run, 2).read_text())
+        self.assertEqual((config["routing"], len(config["upstreams"])), ("sticky", 2))
+        env = replicas.engine_env(args, "gvtc-sticky", run, 1, "1")
+        self.assertEqual((env["FAIRSCHED_MODE"], env["FAIRSCHED_REPLICA"], env["FAIRSCHED_SYNC_MS"],
+                          env["CUDA_VISIBLE_DEVICES"]), ("vtc", "r1", "10.0", "1"))
+        self.assertEqual(env["FAIRSCHED_COUNTER_URL"], "http://127.0.0.1:8090")
+        local = replicas.engine_env(args, "vtc-rr", run, 0, "0")
+        self.assertNotIn("FAIRSCHED_COUNTER_URL", local)
+        self.assertEqual(replicas.engine_env(args, "fcfs-rr", run, 0, "0")["FAIRSCHED_MODE"], "passthrough")
+        rr = json.loads(replicas.proxy_config(args, "vtc-rr", run, 2).read_text())
+        self.assertEqual(rr["routing"], "round_robin")
