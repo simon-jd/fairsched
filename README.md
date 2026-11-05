@@ -16,7 +16,8 @@ only the tokens that actually ran, and never preempts a request on its own.
 A small Go gateway maps API keys to tenants.
 
 **Scope:** one RTX 4090; Qwen2.5-7B-Instruct BF16 on vLLM 0.31.0 (vLLM is
-not modified); synthetic, seeded two-tenant traces.
+not modified); synthetic, seeded two-tenant traces. Row 7 ran two engines on
+two A10-24Q vGPUs in one Snowflake node.
 
 Ranges are over seeds; bold marks the better side:
 
@@ -28,12 +29,14 @@ Ranges are over seeds; bold marks the better side:
 | Same burst: A's median TTFT | 0.39 – 0.50 s | **0.15 – 0.36 s**, gateway cap of 32 requests per tenant | 5 |
 | Same burst: A's p99 TTFT | **0.86 – 1.43 s** | 4.17 – 6.06 s, gateway cap of 32 | 5 |
 | Saturating trace: output tokens/s, median over seeds | 1,311 | **1,317**, FCFS | 6, arm order rotated |
+| Two replicas, all of A's sessions routed to one: A's share of billed service | **0.50**, counters shared | 0.27, per-replica counters | 3 |
 
 Rows 1–3 come from `results/aggressive/summary.json` and
 `results/noisy_neighbor/summary.json`, rows 4–5 from
 `results/cap_sweep/summary.json` (against the same seeds' VTC runs), row 6
-from `results/overhead_rotated/paired.json`. FCFS is vLLM's scheduler with
-the plugin in passthrough mode.
+from `results/overhead_rotated/paired.json`, and row 7 from
+`results/replicas/summary.json`. FCFS is vLLM's scheduler with the plugin in
+passthrough mode.
 
 **Limitations**
 - Not the fastest option for the interactive tenant (rows 3–5). Static
@@ -48,7 +51,10 @@ the plugin in passthrough mode.
 - VTC's billing weights are not this GPU's costs. With a prefill-heavy and a
   decode-heavy tenant, an even billed split gave the prefill-heavy one 53–54%
   of the fitted GPU time ([request shapes](#different-request-shapes-and-what-a-token-costs)).
-- One GPU, one model, synthetic traces, pinned to vLLM 0.31.0
+- Shared counters give a tenant routed to one replica its overall share by
+  making the other tenant wait on that replica: B's median TTFT there rose
+  from 62.3–63.5 s to 69.9–70.2 s ([two replicas](#two-replicas-per-replica-and-shared-counters)).
+- One GPU per engine, one model, synthetic traces, pinned to vLLM 0.31.0
   ([all limitations](#limitations)).
 
 [How it works](#how-it-works) · [Design trade-offs](docs/design-tradeoffs.md) ·
@@ -522,6 +528,114 @@ is called unresolved.
   set's no-plugin median is 1.0% above this set's), so compare arms within
   one set.
 
+### Two replicas: per-replica and shared counters
+
+Each engine keeps its own counters, so fairness is per replica. When routing
+has affinity, a tenant spread over several replicas can take more than its
+share: the replica it shares with another tenant is split evenly, and the
+others serve it alone. With `FAIRSCHED_COUNTER_URL` set, engines share their
+counters through a small service ([design trade-off](docs/design-tradeoffs.md#counters-in-memory-shared-across-replicas-only-when-asked)).
+
+**Setup**
+- Two NVIDIA A10-24Q vGPUs (sm_86) in one Snowflake node, a trial compute
+  pool: driver 570 with the CUDA 13.2 forward-compatibility driver, no NVLink
+  or P2P, clocks not locked.
+- One vLLM 0.31.0 engine per GPU, started with `vllm serve` and the plugin
+  from a frozen wheelhouse (not the container), serving Qwen2.5-7B-Instruct
+  BF16 at the pinned revision. Engine limits as above, with the KV cache fixed
+  at 4.5 GiB (84,256 tokens) per engine by `--kv-cache-memory-bytes`.
+- The gateway (two upstreams), the counter service and the load generator
+  run on the same node. Traces: `aggressive` and `noisy_neighbor` ("burst")
+  as above, 3 seeds. A seed's six arms ran in one job, in an order rotated by
+  seed.
+- Routing:
+  - **round-robin** alternates each tenant's requests over the two engines;
+  - **sticky** hashes a session header, and the trace gives all of A's
+    sessions to engine 0 and spreads B's over both engines.
+- Arms:
+  - **FCFS** (passthrough);
+  - **per-replica VTC**, each engine with its own counters (the default);
+  - **shared VTC**, where each engine posts its billed service to the counter
+    service every 100 ms and orders by its own counters plus the other
+    engine's totals.
+- "Share" is A's fraction of the billed service summed over both engines,
+  while each tenant had a request waiting on some engine.
+
+| Workload, routing: measure | FCFS | Per-replica VTC | Shared VTC |
+|---|---|---|---|
+| Aggressive, round-robin: A's share | 0.25 | **0.49 – 0.50** | **0.49 – 0.50** |
+| Aggressive, sticky: A's share | 0.24 – 0.25 | 0.27 | **0.50** |
+| Aggressive, sticky: A's TTFT, median / p99 | 42.8 – 44.7 / 100 – 101 s | 37.6 – 38.1 / 75.7 – 76.6 s | **11.5 / 37.5 s** |
+| Aggressive, sticky: B's median TTFT, all / on engine 0 | **35.9 – 36.7 / 42.8 – 43.7 s** | 37.5 – 37.7 / 62.3 – 63.5 s | 43.8 / 69.9 – 70.2 s |
+| Aggressive: output tokens/s, median, round-robin / sticky | 1,177 / 914 | 1,181 / 906 | 1,170 / 913 |
+| Burst, round-robin: A's median TTFT | 39.4 – 48.5 s | 1.21 – 1.42 s | **0.99 – 1.03 s** |
+| Burst, sticky: A's TTFT, median / p99 | 47.5 – 57.3 / 90.7 – 100.6 s | 1.57 – 1.72 / 6.9 – 8.5 s | **0.82 – 0.91 / 1.69 – 2.07 s** |
+| Burst, sticky: B's median TTFT, all / on engine 0 | **44.4 – 45.5 / 43.9 – 45.5 s** | 48.6 – 49.6 / 52.6 – 55.2 s | 48.9 – 50.9 / 53.3 – 59.2 s |
+
+From `results/replicas/summary.json`; ranges are over seeds.
+- **With round-robin, per-replica counters are already fair.** Each engine
+  sees the same mix, so sharing changed A's share by nothing measurable and
+  A's burst TTFT by 0.2–0.4 s.
+- **With sticky routing, per-replica VTC is fair on each engine but not
+  overall.** Engine 0 split evenly and engine 1 served only B, so A got 0.27.
+  Shared counters gave 0.50: while A was behind, engine 0 gave it 99.8% of
+  its service, to make up for B's service on engine 1. A's median TTFT fell
+  from 38 s to 11.5 s, as low as with round-robin.
+
+**What it costs**
+- **B waits longer on A's engine.** In `aggressive`, B's median TTFT on
+  engine 0 rose from 62.3–63.5 s to 69.9–70.2 s, and over all of B's
+  requests from 37.5–37.7 s to 43.8 s. That is the policy working: B had
+  been getting three times A's service. But a tenant whose requests land on
+  a contended replica pays for it.
+- **Throughput.** On the saturating `aggressive` trace, shared counters
+  against per-replica counters, seed for seed, were −2.2%, −1.0% and 0.0%
+  with round-robin, and +0.5%, +0.6% and +1.4% with sticky routing: no
+  consistent cost at this resolution. On the burst with sticky routing,
+  shared counters were 1.7–2.3% lower in every seed (round-robin: −0.4% to
+  +1.8%). That trace is open-loop and saturates the engines only during B's
+  burst, and the cause is not established.
+- **Sticky routing itself cost 22–23% of throughput** in every arm, because
+  engine 1 ran out of work while engine 0 still had A's requests. That cost
+  comes from the routing, not the counters.
+- **Sync cost.** Each step swaps in the latest remote totals, 1.2–4.1 µs at
+  the median, against a `schedule()` median of 0.54–0.83 ms. The HTTP round
+  trip (median 0.33–0.43 ms at a 100 ms period) runs on a separate thread.
+
+**Sync period and losing the service** (`aggressive`, sticky routing, seed 1):
+
+| | T = 10 ms | T = 100 ms | T = 1,000 ms | T = 100 ms, service killed 12 s in |
+|---|---|---|---|---|
+| A's share | 0.50 | 0.50 – 0.51 | 0.49 | 0.32: 0.50 before the kill, 0.25 after |
+
+- The share hardly depends on T here, because both tenants stay backlogged
+  for 35–37 s, far longer than one period.
+- **The first 10 ms run held each sync about 44 ms.** The service wrote the
+  headers and the body of a reply separately, so Nagle's algorithm waited
+  for the client's delayed ACK. The service now sets `TCP_NODELAY`. The
+  10 ms run was repeated, with a 100 ms run on the same node: median round
+  trip 0.30–0.31 ms, and engine 0 made 11,559 syncs instead of 2,543. A's
+  share was 0.504 (0.505 at 100 ms; the table's T = 10 ms cell is this run).
+  The 100 ms runs before the fix had 0.33–0.43 ms round trips, so the stall
+  did not affect them.
+- **Killing the service mid-run.** Each engine logged one `unreachable`
+  event and went on with its own counters plus the other engine's last
+  known totals. A's share was 0.50 over the 11.4 s before the kill and 0.25
+  over the 54.1 s after, the per-replica result. A's backlog lasted 65.5 s
+  instead of 36.7 s, and all 400 requests completed.
+- The same arm's throughput differed by up to 3.6% between jobs (separate
+  nodes), so this table compares shares, not throughput.
+
+The first job ran with `--gpu-memory-utilization 0.90` and the profiled KV
+size. Every run after the first loaded the torch.compile cache, profiled
+0.77 GiB more KV than a fresh compile, and ran out of memory at its first
+requests. Its records are in `results/replicas/jobs/` and none of its runs
+are in the table. To rerun one arm on two local GPUs:
+`python3 -m bench.replicas aggressive gvtc-sticky --seed 1 --model <dir>
+--gpus 0,1 --engine-arg=--kv-cache-memory-bytes=4831838208`. That needs
+vLLM 0.31.0 installed on the host and the binaries from `scripts/build-go.sh`.
+`results/replicas/jobs/payload.py` is the Snowflake job that ran these.
+
 ## Reproduce
 
 Requirements: Linux with Docker and the NVIDIA Container Toolkit, one 24 GB
@@ -577,12 +691,14 @@ relying on such a change.
   unlisted tenants, queue semantics matching vLLM's `FCFSRequestQueue`, the
   report's percentiles, shares and timelines, dropped-record reporting, the
   runner's gateway and image settings, the replica runner's routing and
-  counter settings, sticky session placement, the cross-replica share, and
+  counter settings, sticky session placement, the cross-replica share, TTFT
+  per replica, and
   the paired differences' intervals and run positions.
 - **Shared counters** (`tests/test_counters.py`, pure Python): the counter
   service's replace-with-cumulative semantics and input checks; the engine-side
   sync against a live service (each new remote total handed over once, a
-  periodic thread, a timeout on a hung service); the fallback (an unreachable
+  periodic thread, a timeout on a hung service, no delayed-ACK stall at a
+  10 ms period); the fallback (an unreachable
   service is logged once, local counting goes on with the other replicas'
   totals held, a restarted service is whole again after one round, a remote
   total never decreases); remote service in selection, lift and victim order,
@@ -632,8 +748,10 @@ relying on such a change.
 
 - The plugin hooks vLLM internals, so it is pinned to vLLM 0.31.0. The CPU
   scheduler tests are the upgrade check.
-- Single engine and GPU. Counters live in memory and reset when the engine
-  restarts.
+- One GPU per engine. Counters live in memory and reset when an engine
+  restarts. Sharing them across replicas was measured only with two engines
+  in one node, two tenants and one counter service with no replication;
+  every other result is from a single engine.
 - It refuses to run with speculative decoding, LoRA or KV connectors.
 - The cost model is VTC's linear one, with weights 1 for prefill and 2 for
   decode. It does not model attention cost growing with context length.

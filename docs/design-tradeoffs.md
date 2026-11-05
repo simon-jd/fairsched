@@ -197,18 +197,45 @@ work nobody will read and the plugin can account it as wasted.
 **Cost.** One more streaming hop, and the key-to-tenant map is static
 configuration.
 
-## Counters in memory, for one engine
+## Counters in memory, shared across replicas only when asked
 
-**Decision.** Counters and accounts live in the engine process.
+**Decision.** Counters and accounts live in the engine process. With
+`FAIRSCHED_COUNTER_URL` set, a thread in each engine posts the engine's
+cumulative billed service per tenant to a small counter service every
+`FAIRSCHED_SYNC_MS` (100 ms by default) and reads back the other replicas'
+totals. Ordering, lifts and victim choice then use the engine's own counter
+plus the others' totals. Without the URL nothing changes: one engine, local
+counters.
 
-**Alternatives.** Persist them, or share them across replicas.
+**Alternatives.** Persist the counters; a central scheduler that admits for
+every replica; a synchronous exchange inside `schedule()`; publishing
+increments instead of totals.
 
 **Why.** Fairness is defined over one engine's lifetime, and persistence
-would put I/O into the scheduling step.
+would put I/O into the scheduling step. Per-replica counters break down when
+routing has affinity. With A's sessions all on one of two engines and B
+spread over both, each engine splits its own service evenly, so A got 0.27
+of the global service instead of 0.50
+([Two replicas](../README.md#two-replicas-per-replica-and-shared-counters)).
+The exchange is off the scheduling thread: each step only swaps in the
+latest totals the sync thread fetched. Cumulative totals make a lost or
+repeated post harmless, and a restarted service is whole again after one
+round. Lifts stay local, because only billed service is published.
 
-**Cost.** Counters reset when the engine restarts, and there is no fairness
-across replicas or GPUs; multi-GPU, speculative decoding, LoRA and KV
-connectors are refused at startup.
+**Cost.** Measured on two A10-24Q vGPUs in one Snowflake node. Counters
+still reset when an engine restarts, and the others' totals are up to one
+period (plus a round trip) old. The step pays 1.2–4.1 µs at the median to
+swap totals, against a `schedule()` median of 0.54–0.83 ms; the HTTP round
+trip runs on the sync thread. If the service is unreachable, the engine logs
+it once and keeps scheduling on its own counters plus the others' last known
+totals, so fairness falls back to per-replica: with the service killed
+mid-run, A's share went from 0.50 to 0.25. Shared counters move service; they
+do not create it. The engine that holds a tenant's affinity traffic serves
+that tenant almost alone while it is behind, so the other tenant's requests
+on that engine wait longer: B's median TTFT there was 69.9–70.2 s, against
+62.3–63.5 s with per-replica counters. The service is one process with no
+replication, tested with two engines in one node. Multi-GPU engines,
+speculative decoding, LoRA and KV connectors are still refused at startup.
 
 ## Log every step, off the scheduling thread
 

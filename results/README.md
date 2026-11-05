@@ -24,6 +24,7 @@ revision of the code (see [`source_tree`](#source_tree)).
 | `livelock/summary.json` | `c8bb1a2` | 2026-11-02 | Counts from the earlier design's step log; the log and that design's code are not committed | 1 run |
 | `overhead_rotated/`, `kv_victim_rotated/` | `2d7a9c2` | 2026-11-02 | `aggressive` with the arm order rotated: no plugin, passthrough and VTC; VTC and VTC with `kv_share`; `paired.json` | 1–6 |
 | `cap_sweep/summary.json` | `0b20d12` | 2026-11-02 | Noisy neighbour with the gateway cap at 4, 8, 16 and 32, arm order rotated | 1–5 |
+| `replicas/` | `12e188b` | 2026-11-05 | Two engines on two A10-24Q vGPUs in one Snowflake node: FCFS, per-replica VTC and shared VTC, each with round-robin and sticky routing, on `aggressive` and `noisy_neighbor`; on seed 1 the sync period at 10 and 1,000 ms, the counter service killed, and 10 and 100 ms after the `TCP_NODELAY` fix | 1–3 |
 
 ## Files
 
@@ -72,6 +73,23 @@ revision of the code (see [`source_tree`](#source_tree)).
   quantum-preemption design's livelocked run ([docs/livelock.md](../docs/livelock.md)),
   written by `scripts/livelock_summary.py`. The log and that design's code are
   not in this repository; the file records their SHA-256.
+- `replicas/`: two engines, one per A10-24Q vGPU in one Snowflake node, behind
+  the gateway (`bench/replicas.py`). `summary.json` is from
+  `python3 -m bench.replica_report <raw>/aggressive <raw>/noisy_neighbor
+  --out results/replicas --compact`: one entry per run, and per workload and
+  arm the ranges over seeds. `runs/<workload>/<run>/` holds the records each
+  summary is computed from, compressed: per-request client records with
+  their session and upstream, each engine's step log, `meta.json`, the
+  gateway and policy configs, and `nvidia-smi` samples. The raw run
+  directories (engine logs, traces) are not committed. Arms are
+  `fcfs`, `vtc` (per-replica counters) and `gvtc` (shared counters), each
+  `-rr` or `-sticky`. Variants: `t10` and `t1000` (sync period), `kill`
+  (counter service killed 12 s in), and `t10-nodelay` and `t100-nodelay`
+  (rerun after the service got `TCP_NODELAY`). `jobs/<run_id>/` holds each
+  Snowflake job's `report.json` (status trace, arguments, credit estimate)
+  and its `RESULT` lines. `jobs/payload.py` is the job script at its last
+  version; the first job ran an earlier one with `--gpu-memory-utilization
+  0.90` and no fixed KV size.
 - `hook_overhead.jsonl`: the CPU microbenchmark from `bench/hook_overhead.py`,
   five runs from `scripts/hook-overhead.sh`, one row per run and batch size,
   each with the commit, tree hashes, the order the variants ran in and the

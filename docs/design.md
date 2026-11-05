@@ -201,8 +201,9 @@ service timelines in the README.
 * The plugin is pinned to vLLM 0.31.0 internals: `running`/`waiting`, the
   hook names, and `num_computed_tokens` semantics. Each upgrade needs the
   compatibility tests rerun.
-* A single engine and a single GPU. Counters live in memory and reset when
-  the engine restarts.
+* One GPU per engine. Counters live in memory and reset when the engine
+  restarts; replicas share them only through the optional counter service
+  (`fairsched/counters.py`).
 * The cost model is the paper's linear `w_p`/`w_d`. It does not model
   attention cost growing with context length.
 * Running requests are always scheduled before waiting ones (that is vLLM's
